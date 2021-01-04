@@ -1,0 +1,15 @@
+site_name: Fuzz Up
+theme:
+  name: "material"
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          setup_commands:
+            - import sys
+            - sys.path.append("src")
+
+nav:
+    - Home: index.md

@@ -49,7 +49,7 @@ def compute_fuzzy_matrix(strings: list, ratio: Callable = None) -> pd.DataFrame:
 
 def compute_clusters(df: pd.DataFrame, 
                      metric: str = 'euclidean', 
-                     flatten_coef: float = 0.5) -> dict:
+                     flatten_coef: float = 0.5) -> list:
     """Compute clusters of strings
 
     Computes clusters of strings from fuzzy ratios using 
@@ -64,7 +64,7 @@ def compute_clusters(df: pd.DataFrame,
             Defaults to 0.5.
 
     Returns:
-        dict: clusters of strings.
+        list: clusters of strings.
 
     Examples:
         >>> from fuzzup.gear import compute_fuzzy_matrix, compute_clusters

@@ -8,6 +8,6 @@ def test_compute_clusters_runs():
 output = compute_clusters(ratios)
 
 def test_compute_clusters_format():
-    assert isinstance(output, dict)
+    assert isinstance(output, list)
 
 

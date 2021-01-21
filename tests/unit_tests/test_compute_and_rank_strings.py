@@ -8,6 +8,6 @@ def test_cluster_and_rank_strings_runs():
 output = cluster_and_rank_strings(strings) 
 
 def test_cluster_and_rank_strings_format():
-    assert isinstance(output, dict)
+    assert isinstance(output, list)
 
 

@@ -6,7 +6,7 @@ from scipy.stats import rankdata
 from itertools import compress
 from typing import Callable
 
-def compute_fuzzy_matrix(strings: list, ratio: Callable = fuzz.ratio) -> pd.DataFrame:
+def compute_fuzzy_matrix(strings: list, ratio: Callable = None) -> pd.DataFrame:
     """Compute Matrix with Fuzzy Ratios
 
     Computes matrix with mutual fuzzy ratios for strings.
@@ -15,7 +15,8 @@ def compute_fuzzy_matrix(strings: list, ratio: Callable = fuzz.ratio) -> pd.Data
         strings (list): Strings to compute mutual fuzzy ratios
             for.
         ratio (Callable, optional): What type of fuzzy ratios
-            to compute. Defaults to fuzzywuzzy.fuzz.ratio.
+            to compute. Defaults to None, in which case 
+            fuzz.ratio from fuzzywuzzy is applied.
 
     Returns:
         pd.DataFrame: Cross-tabular matrix with mutual fuzzy
@@ -27,6 +28,9 @@ def compute_fuzzy_matrix(strings: list, ratio: Callable = fuzz.ratio) -> pd.Data
         >>> compute_fuzzy_matrix(strings) 
 
     """  
+
+    if ratio is None:
+        ratio = fuzz.ratio
 
     # subset unique strings.
     strings = list(set(strings))
@@ -91,31 +95,36 @@ def compute_clusters(df: pd.DataFrame,
 
     return clusters
 
-def cluster_and_weight_strings(strings: list, 
-                               ratio: Callable = fuzz.ratio, 
+def cluster_and_rank_strings(strings: list, 
+                               ratio: Callable = None, 
                                metric: str = 'euclidean',
                                flatten_coef: float = 0.5) -> list:
-    """Cluster and weight strings
+    """Cluster and rank strings
 
-    Clusters and weight strings using Fuzzy Matching in conjunction with
-    hierarchical clustering.
+    Clusters and ranks strings using Fuzzy Matching in conjunction with
+    hierarchical clustering. Clusters are ranked by counting number of
+    string (occurences) in cluster.
     
     Args:
         strings (list): strings.
-        ratio (function, optional): Fuzzy ratio to apply. Defaults to fuzz.ratio.
+        ratio (function, optional): Defaults to None, in which case 
+            fuzz.ratio from fuzzywuzzy is applied.
         metric (str, optional): Metric to compute distances for clustering. 
         Defaults to 'euclidean'.
         flatten_coef (float, optional): Coefficient for hierarchical clustering. 
         Defaults to 0.5.
 
     Returns:
-        list: clusters of entities.
+        list: clusters of strings.
 
     Examples:
-        >>> from fuzzup.gear import cluster_and_weight_strings
+        >>> from fuzzup.gear import cluster_and_rank_strings
         >>> strings = ['biden', 'joe biden', 'donald trump']
-        >>> cluster_and_weight_strings(strings) 
+        >>> cluster_and_rank_strings(strings) 
     """
+
+    if ratio is None:
+        ratio = fuzz.ratio
 
     # extract unique strings
     strings_unique = list(set(strings))
@@ -143,4 +152,4 @@ def cluster_and_weight_strings(strings: list,
 
 if __name__ == '__main__':
     strings = ['biden', 'joe biden', 'donald trump']
-    cluster_and_weight_strings(strings) 
+    cluster_and_rank_strings(strings) 

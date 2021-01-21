@@ -6,6 +6,9 @@ __pycache__/
 # Data and models
 /data
 src/*.pickle
+src/*.pkl
+*.csv
+*.pickle
 
 # C extensions
 *.so
@@ -143,3 +146,4 @@ runs/
 
 # tensor board results
 .DS_Store
+.vscode

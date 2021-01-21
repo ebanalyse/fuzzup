@@ -16,4 +16,5 @@ plugins:
 
 nav:
     - Home: index.md
+    - Workflow: workflow.ipynb
     - Code Reference: code_reference.md

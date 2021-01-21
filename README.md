@@ -6,8 +6,10 @@
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/fuzzup?color=green)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 
-`fuzzup` offers a simple approach for clustering strings using
-[Fuzzy Matching](https://en.wikipedia.org/wiki/Fuzzy_matching_(computer-assisted_translation)). 
+`fuzzup` offers a simple approach for clustering strings based on 
+[Levenshtein Distance](https://en.wikipedia.org/wiki/Levenshtein_distance) using
+[Fuzzy Matching](https://en.wikipedia.org/wiki/Fuzzy_matching_(computer-assisted_translation))
+in conjunction with [Hierarchical Clustering](https://en.wikipedia.org/wiki/Hierarchical_clustering). 
 
 ## Installation guide
 `fuzzup` can be installed from the Python Package Index (PyPI) by:

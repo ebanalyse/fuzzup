@@ -16,7 +16,7 @@ def compute_fuzzy_matrix(strings: list, ratio: Callable = None) -> pd.DataFrame:
             for.
         ratio (Callable, optional): What type of fuzzy ratios
             to compute. Defaults to None, in which case 
-            fuzz.ratio from fuzzywuzzy is applied.
+            `fuzz.partial_ratio` from `fuzzywuzzy` is applied.
 
     Returns:
         pd.DataFrame: Cross-tabular matrix with mutual fuzzy
@@ -30,7 +30,7 @@ def compute_fuzzy_matrix(strings: list, ratio: Callable = None) -> pd.DataFrame:
     """  
 
     if ratio is None:
-        ratio = fuzz.ratio
+        ratio = fuzz.partial_ratio
 
     # subset unique strings.
     strings = list(set(strings))
@@ -47,40 +47,56 @@ def compute_fuzzy_matrix(strings: list, ratio: Callable = None) -> pd.DataFrame:
 
     return ct
 
-def compute_clusters(df: pd.DataFrame, 
-                     metric: str = 'euclidean', 
-                     flatten_coef: float = 0.5) -> list:
-    """Compute clusters of strings
+def form_clusters(df: pd.DataFrame, 
+                  args_cluster: dict = {'criterion': 'distance'},
+                  args_linkage: dict = {'method': 'complete',
+                                        'metric': 'euclidean'},
+                  args_pdist: dict = {'metric': 'euclidean'}, 
+                  flatten_coef: float = 0.5) -> list:
+    """Forms Clusters of Strings
 
-    Computes clusters of strings from fuzzy ratios using 
+    Forms clusters of strings from fuzzy ratios using 
     hierarchical clustering.
 
     Args:
         df (pd.DataFrame): Matrix with mutual fuzzy ratios between
-            strings,
-        metric (str, optional): Metric used for clustering. Defaults
-            to 'euclidean'.
-        flatten_coef (float, optional): Coefficient for flattening.
+            strings.
+        args_cluster (dict, optional): Arbitrary arguments for 
+            hierarchical clustering algorithm 
+            `scipy.cluster.hierarchy.fcluster`.
+            Defaults to {'criterion': 'distance'}.
+        args_linkage (dict, optional): Arguments for how to
+            compute linkage between clusters with 
+            `scipy.cluster.hierarchy.linkage`. Defaults to 
+            {'method': 'complete', 'metric': 'euclidean'}.
+        args_pdist (dict, optional): Arguments for how to
+            compute pairwise distances between observations with
+            `scipy.cluster.hierarchy.distance.pdist`. Defaults 
+            to {'metric': 'euclidean'}.
+        flatten_coef (float, optional): Threshold value for deciding 
+            the number of clusters to form. The generic threshold
+            is computed as this coefficient multiplied with the 
+            maximum pairwise distance between two observations. 
             Defaults to 0.5.
 
     Returns:
         list: clusters of strings.
 
     Examples:
-        >>> from fuzzup.gear import compute_fuzzy_matrix, compute_clusters
+        >>> from fuzzup.gear import compute_fuzzy_matrix, form_clusters
         >>> strings = ['biden', 'joe biden', 'donald trump', 'D. Trump']
         >>> ratios = compute_fuzzy_matrix(strings) 
-        >>> compute_clusters(ratios)
+        >>> form_clusters(ratios)
     """
 
     # compute pairwise distances between observations.
-    pdist = spc.distance.pdist(df.values, metric = 'euclidean')
+    pdist = spc.distance.pdist(df.values, **args_pdist)
     
     # perform hierarchical clustering.
-    linkage = spc.linkage(pdist, method = 'complete')    
-
+    linkage = spc.linkage(pdist, **args_linkage)
+    
     # form flat clusters from hierarchical clustering.
-    cluster_idx = spc.fcluster(linkage, flatten_coef * pdist.max(), 'distance')
+    cluster_idx = spc.fcluster(linkage, flatten_coef * pdist.max(), **args_cluster)
 
     # extract entities from column names.
     ents = df.columns.values
@@ -95,36 +111,53 @@ def compute_clusters(df: pd.DataFrame,
 
     return clusters
 
-def cluster_and_rank_strings(strings: list, 
-                               ratio: Callable = None, 
-                               metric: str = 'euclidean',
-                               flatten_coef: float = 0.5) -> list:
-    """Cluster and rank strings
+def form_clusters_and_rank(strings: list, 
+                           ratio: Callable = None, 
+                           args_cluster: dict = {'criterion': 'distance'},
+                           args_linkage: dict = {'method': 'complete',
+                                                 'metric': 'euclidean'},
+                           args_pdist: dict = {'metric': 'euclidean'},
+                           flatten_coef: float = 0.5) -> list:
+    """Form and Rank Clusters of Strings
 
-    Clusters and ranks strings using Fuzzy Matching in conjunction with
-    hierarchical clustering. Clusters are ranked by counting number of
-    string (occurences) in cluster.
+    Form clusters of strings using Fuzzy Matching in 
+    conjunction with hierarchical clustering. Clusters are
+    then ranked by counting number of nodes (strings) in 
+    each cluster.
     
     Args:
-        strings (list): strings.
+        strings (list): strings to form clusters from.
         ratio (function, optional): Defaults to None, in which case 
-            fuzz.ratio from fuzzywuzzy is applied.
-        metric (str, optional): Metric to compute distances for clustering. 
-        Defaults to 'euclidean'.
-        flatten_coef (float, optional): Coefficient for hierarchical clustering. 
-        Defaults to 0.5.
-
+            `fuzz.partial_ratio` from `fuzzywuzzy` is applied. 
+        args_cluster (dict, optional): Arbitrary arguments for 
+            hierarchical clustering algorithm 
+            `scipy.cluster.hierarchy.fcluster`.
+            Defaults to {'criterion': 'distance'}.
+        args_linkage (dict, optional): Arguments for how to
+            compute linkage between clusters with 
+            `scipy.cluster.hierarchy.linkage`. Defaults to 
+            {'method': 'complete', 'metric': 'euclidean'}.
+        args_pdist (dict, optional): Arguments for how to
+            compute pairwise distances between observations with
+            `scipy.cluster.hierarchy.distance.pdist`. Defaults 
+            to {'metric': 'euclidean'}.
+        flatten_coef (float, optional): Threshold value for deciding 
+            the number of clusters to form. The generic threshold
+            is computed as this coefficient multiplied with the 
+            maximum pairwise distance between two observations. 
+            Defaults to 0.5.
+        
     Returns:
         list: clusters of strings.
 
     Examples:
-        >>> from fuzzup.gear import cluster_and_rank_strings
+        >>> from fuzzup.gear import form_clusters_and_rank
         >>> strings = ['biden', 'joe biden', 'donald trump']
-        >>> cluster_and_rank_strings(strings) 
+        >>> form_clusters_and_rank(strings) 
     """
 
     if ratio is None:
-        ratio = fuzz.ratio
+        ratio = fuzz.partial_ratio
 
     # extract unique strings
     strings_unique = list(set(strings))
@@ -133,7 +166,11 @@ def cluster_and_rank_strings(strings: list,
         # compute matrix with fuzzy ratios.
         fuzzy_matrix = compute_fuzzy_matrix(strings_unique, ratio)
     
-        strings_clusters = compute_clusters(fuzzy_matrix, metric = metric, flatten_coef = flatten_coef)
+        strings_clusters = form_clusters(fuzzy_matrix, 
+                                         args_cluster = args_cluster,
+                                         args_pdist = args_pdist,
+                                         args_linkage = args_linkage,
+                                         flatten_coef = flatten_coef)
     else:
         # handle trivial case of only one entity.
         strings_clusters = [strings]
@@ -152,4 +189,4 @@ def cluster_and_rank_strings(strings: list,
 
 if __name__ == '__main__':
     strings = ['biden', 'joe biden', 'donald trump']
-    cluster_and_rank_strings(strings) 
+    form_clusters_and_rank(strings) 

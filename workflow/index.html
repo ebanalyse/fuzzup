@@ -1,0 +1,939 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      <link rel="shortcut icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.2.5">
+    
+    
+      
+        <title>Workflow - Fuzz Up</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.15aa0b43.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.75751829.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="../css/ansi-colours.css">
+    
+      <link rel="stylesheet" href="../css/jupyter-cells.css">
+    
+      <link rel="stylesheet" href="../css/pandas-dataframe.css">
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+      
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#workflow" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href=".." title="Fuzz Up" class="md-header-nav__button md-logo" aria-label="Fuzz Up">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      <div class="md-header-nav__ellipsis">
+        <div class="md-header-nav__topic">
+          <span class="md-ellipsis">
+            Fuzz Up
+          </span>
+        </div>
+        <div class="md-header-nav__topic">
+          <span class="md-ellipsis">
+            
+              Workflow
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <label class="md-header-nav__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Fuzz Up" class="md-nav__button md-logo" aria-label="Fuzz Up">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    Fuzz Up
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Workflow
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Workflow
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#use-case" class="md-nav__link">
+    Use-case
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solution" class="md-nav__link">
+    Solution
+  </a>
+  
+    <nav class="md-nav" aria-label="Solution">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-compute-string-distances" class="md-nav__link">
+    Step 1: Compute String Distances
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-forming-clusters" class="md-nav__link">
+    Step 2: Forming Clusters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-rank-clusters" class="md-nav__link">
+    Step 3: Rank Clusters
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+      
+
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../code_reference/" class="md-nav__link">
+        Code Reference
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#use-case" class="md-nav__link">
+    Use-case
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solution" class="md-nav__link">
+    Solution
+  </a>
+  
+    <nav class="md-nav" aria-label="Solution">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-compute-string-distances" class="md-nav__link">
+    Step 1: Compute String Distances
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-forming-clusters" class="md-nav__link">
+    Step 2: Forming Clusters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-rank-clusters" class="md-nav__link">
+    Step 3: Rank Clusters
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script>
+(function() {
+  function addWidgetsRenderer() {
+    var mimeElement = document.querySelector('script[type="application/vnd.jupyter.widget-view+json"]');
+    var scriptElement = document.createElement('script');
+    var widgetRendererSrc = 'https://unpkg.com/@jupyter-widgets/html-manager@*/dist/embed-amd.js';
+    var widgetState;
+
+    // Fallback for older version:
+    try {
+      widgetState = mimeElement && JSON.parse(mimeElement.innerHTML);
+
+      if (widgetState && (widgetState.version_major < 2 || !widgetState.version_major)) {
+        widgetRendererSrc = 'jupyter-js-widgets@*/dist/embed.js';
+      }
+    } catch(e) {}
+
+    scriptElement.src = widgetRendererSrc;
+    document.body.appendChild(scriptElement);
+  }
+
+  document.addEventListener('DOMContentLoaded', addWidgetsRenderer);
+}());
+</script>
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="workflow">Workflow</h1>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><code>fuzzup</code> offers a simple approach for clustering strings based on 
+<a href="https://en.wikipedia.org/wiki/Levenshtein_distance">Levenshtein Distance</a> using
+<a href="https://en.wikipedia.org/wiki/Fuzzy_matching_(computer-assisted_translation)">Fuzzy Matching</a>
+in conjunction with <a href="https://en.wikipedia.org/wiki/Hierarchical_clustering">Hierarchical Clustering</a>. In this section we will go through the nuts and bolts of <code>fuzzup</code> by applying it to a realistic use-case.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="use-case">Use-case</h2>
+<p>Say, we have used an algorithm to extract person names from a news article. The output from the algorithm is a list of strings and looks like this.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+
+<pre><code class="language-python">strings = ['Donald Trump', 'Donald Trump', 'J. biden', 'joe biden', 'Biden', 'Bide', 'mark esper', 'Christopher c . miller', 'jim mattis', 'Nancy Pelosi', 'trumps', 'Trump', 'Donald', 'miller']
+
+</code></pre>
+
+
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>As you can see, the output is rather messy (partly due to the stochastic nature of the algorithm). Another reason for the output looking messy is, that for instance 'Joe Biden' has been mentioned a lot of times but in different ways, i.e. 'Joe Biden', 'J. Biden' and 'Biden'. </p>
+<p>We want to implement a meaningful structure of these strings entities by forming meaningful clusters from them, in which the entities are closely related. Also we want to this using Machine Learning, i.e. apply an algorithmic approach, that learns from the data and is able to form clusters without any human interaction what so ever.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="solution">Solution</h2>
+<p>The solution <code>fuzzup</code> offers for this task consists of three steps</p>
+<ol>
+<li>Compute all of the mutual string distances (Levensteihn Distances/fuzzy ratios) between the strings</li>
+<li>Form clusters of strings based on the distances from (1)</li>
+<li>Rank the clusters by simply counting the number of nodes(strings) in each cluster</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="step-1-compute-string-distances">Step 1: Compute String Distances</h3>
+<p>First, we compute all of the mutual <a href="">fuzzy ratios</a> for the strings.</p>
+<p><a href="https://en.wikipedia.org/wiki/Fuzzy_matching_(computer-assisted_translation)">Fuzzy ratios</a> are numbers between 0 and 100 are measures of similarity between strings. They are derived from the <a href="https://en.wikipedia.org/wiki/Levenshtein_distance">Levenshtein distance</a> - a string metric, that measures the distance between strings. </p>
+<p>In short the Levenshtein distance between two words is the minimum number of single-character edits (insertions, deletions or substitutions) required to change one word into the other. </p>
+<p><code>fuzzup</code> has a function <code>compute_fuzzy_matrix</code> for this, that presents the output - the mutual fuzzy ratios - as a cross-tabular matrix with all ratios. We have chosen <code>partial_ratio</code> from the <code>fuzzywuzzy</code> package to do this. As the name suggests, it matches strings partially.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+
+<pre><code class="language-python">from fuzzup.gear import compute_fuzzy_matrix, form_clusters, form_clusters_and_rank
+from fuzzywuzzy import fuzz
+fuzzy_matrix = compute_fuzzy_matrix(strings, ratio = fuzz.partial_ratio)
+fuzzy_matrix
+</code></pre>
+
+
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="scoped">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th>strings</th>
+<th>Bide</th>
+<th>Biden</th>
+<th>Christopher c . miller</th>
+<th>Donald</th>
+<th>Donald Trump</th>
+<th>J. biden</th>
+<th>Nancy Pelosi</th>
+<th>Trump</th>
+<th>jim mattis</th>
+<th>joe biden</th>
+<th>mark esper</th>
+<th>miller</th>
+<th>trumps</th>
+</tr>
+<tr>
+<th>strings</th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>Bide</th>
+<td>100</td>
+<td>100</td>
+<td>25</td>
+<td>29</td>
+<td>25</td>
+<td>75</td>
+<td>33</td>
+<td>0</td>
+<td>25</td>
+<td>75</td>
+<td>25</td>
+<td>50</td>
+<td>0</td>
+</tr>
+<tr>
+<th>Biden</th>
+<td>100</td>
+<td>100</td>
+<td>40</td>
+<td>25</td>
+<td>20</td>
+<td>80</td>
+<td>29</td>
+<td>0</td>
+<td>20</td>
+<td>80</td>
+<td>20</td>
+<td>40</td>
+<td>0</td>
+</tr>
+<tr>
+<th>Christopher c . miller</th>
+<td>25</td>
+<td>40</td>
+<td>100</td>
+<td>17</td>
+<td>25</td>
+<td>50</td>
+<td>25</td>
+<td>20</td>
+<td>30</td>
+<td>33</td>
+<td>50</td>
+<td>100</td>
+<td>33</td>
+</tr>
+<tr>
+<th>Donald</th>
+<td>29</td>
+<td>25</td>
+<td>17</td>
+<td>100</td>
+<td>100</td>
+<td>22</td>
+<td>20</td>
+<td>0</td>
+<td>17</td>
+<td>22</td>
+<td>17</td>
+<td>20</td>
+<td>0</td>
+</tr>
+<tr>
+<th>Donald Trump</th>
+<td>25</td>
+<td>20</td>
+<td>25</td>
+<td>100</td>
+<td>100</td>
+<td>12</td>
+<td>18</td>
+<td>100</td>
+<td>14</td>
+<td>22</td>
+<td>33</td>
+<td>25</td>
+<td>73</td>
+</tr>
+<tr>
+<th>J. biden</th>
+<td>75</td>
+<td>80</td>
+<td>50</td>
+<td>22</td>
+<td>12</td>
+<td>100</td>
+<td>25</td>
+<td>0</td>
+<td>25</td>
+<td>75</td>
+<td>25</td>
+<td>36</td>
+<td>0</td>
+</tr>
+<tr>
+<th>Nancy Pelosi</th>
+<td>33</td>
+<td>29</td>
+<td>25</td>
+<td>20</td>
+<td>12</td>
+<td>25</td>
+<td>100</td>
+<td>0</td>
+<td>17</td>
+<td>31</td>
+<td>40</td>
+<td>25</td>
+<td>17</td>
+</tr>
+<tr>
+<th>Trump</th>
+<td>0</td>
+<td>0</td>
+<td>20</td>
+<td>0</td>
+<td>100</td>
+<td>0</td>
+<td>0</td>
+<td>100</td>
+<td>20</td>
+<td>0</td>
+<td>20</td>
+<td>29</td>
+<td>80</td>
+</tr>
+<tr>
+<th>jim mattis</th>
+<td>25</td>
+<td>20</td>
+<td>30</td>
+<td>17</td>
+<td>14</td>
+<td>25</td>
+<td>17</td>
+<td>20</td>
+<td>100</td>
+<td>33</td>
+<td>38</td>
+<td>33</td>
+<td>40</td>
+</tr>
+<tr>
+<th>joe biden</th>
+<td>75</td>
+<td>80</td>
+<td>33</td>
+<td>22</td>
+<td>22</td>
+<td>75</td>
+<td>31</td>
+<td>0</td>
+<td>33</td>
+<td>100</td>
+<td>25</td>
+<td>36</td>
+<td>0</td>
+</tr>
+<tr>
+<th>mark esper</th>
+<td>25</td>
+<td>20</td>
+<td>50</td>
+<td>17</td>
+<td>33</td>
+<td>25</td>
+<td>40</td>
+<td>20</td>
+<td>30</td>
+<td>25</td>
+<td>100</td>
+<td>33</td>
+<td>33</td>
+</tr>
+<tr>
+<th>miller</th>
+<td>50</td>
+<td>40</td>
+<td>100</td>
+<td>17</td>
+<td>25</td>
+<td>36</td>
+<td>25</td>
+<td>29</td>
+<td>33</td>
+<td>36</td>
+<td>33</td>
+<td>100</td>
+<td>25</td>
+</tr>
+<tr>
+<th>trumps</th>
+<td>0</td>
+<td>0</td>
+<td>33</td>
+<td>0</td>
+<td>73</td>
+<td>0</td>
+<td>17</td>
+<td>80</td>
+<td>40</td>
+<td>0</td>
+<td>33</td>
+<td>22</td>
+<td>100</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>As you see, the different string representations of e.g. Donald Trump and Joe Biden have high mutual fuzzy ratios. In comparision representations of different persons have relatively small fuzzy ratios.</p>
+<p>You can think of this matrix as a correlation matrix, that shows the correlation between strings.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="step-2-forming-clusters">Step 2: Forming Clusters</h3>
+<p>We can now use unsupervised learning to form clusters of the strings, if we treat the individual strings as observations with the mutual fuzzy ratios (in our <code>fuzzy_matrix</code>) as features.</p>
+<p>We will apply hierarchical clustering (see <a href="https://statlearning.com/ISLR%20Seventh%20Printing.pdf">ISLR p. 390-396</a> for a good description of hierarchical clustering).</p>
+<p>The clustering algorithm will form the clusters in order to minimize pairwise string distances intra-cluster. This is done by invoking the <code>form_clusters</code> function, i.e.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+
+<pre><code class="language-python">form_clusters(
+    fuzzy_matrix,
+    args_linkage = {'method': 'average',
+                    'metric': 'euclidean'},
+)
+</code></pre>
+
+
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="output_text output_subarea output_execute_result">
+<pre>
+<code>[[&#39;Bide&#39;, &#39;Biden&#39;, &#39;J. biden&#39;, &#39;joe biden&#39;],
+ [&#39;Christopher c . miller&#39;, &#39;miller&#39;],
+ [&#39;Nancy Pelosi&#39;, &#39;jim mattis&#39;, &#39;mark esper&#39;],
+ [&#39;Donald Trump&#39;, &#39;Trump&#39;, &#39;trumps&#39;],
+ [&#39;Donald&#39;]]</code>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Here we have applied the 'average' linkage function (popular choice), and we measure the pairwise distances between strings/clusters in an euclidean space spanned by the mutual fuzzy ratios.</p>
+<p>We see from the results, that different string representations of e.g. 'Donald Trump' have been clustered together.</p>
+<p>Depending on your use case, you can customize arguments for computing (1) the pairwise distrances 'args_pdist', (2) arguments for the linkage function 'args_linkage' (i.e. 'method' and 'metric'), (3) arguments for the hierarchical clustering algorithm 'args_cluster' and (4) the 'flatten_coef' that is a coefficient for computing a generic cutoff for deciding how many clusters to create.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="step-3-rank-clusters">Step 3: Rank Clusters</h3>
+<p>A simple/naïve approach for assigning weights to the different string clusters is to just count the number of nodes/strings in each cluster. <code>fuzzup</code> has a function for this: <code>form_clusters_and_rank</code>. <code>form_clusters_and_rank</code> performs steps 1 and 2 and ranks the clusters using this simple logic:</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+
+<pre><code class="language-python">form_clusters_and_rank(strings)
+</code></pre>
+
+
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="output_text output_subarea output_execute_result">
+<pre>
+<code>[{&#39;PROMOTED_STRING&#39;: &#39;Donald Trump&#39;,
+  &#39;STRINGS&#39;: [&#39;Donald Trump&#39;, &#39;Trump&#39;, &#39;trumps&#39;],
+  &#39;COUNT&#39;: 4,
+  &#39;RANK&#39;: 1},
+ {&#39;PROMOTED_STRING&#39;: &#39;joe biden&#39;,
+  &#39;STRINGS&#39;: [&#39;Bide&#39;, &#39;Biden&#39;, &#39;J. biden&#39;, &#39;joe biden&#39;],
+  &#39;COUNT&#39;: 4,
+  &#39;RANK&#39;: 1},
+ {&#39;PROMOTED_STRING&#39;: &#39;Christopher c . miller&#39;,
+  &#39;STRINGS&#39;: [&#39;Christopher c . miller&#39;, &#39;miller&#39;],
+  &#39;COUNT&#39;: 2,
+  &#39;RANK&#39;: 3},
+ {&#39;PROMOTED_STRING&#39;: &#39;Nancy Pelosi&#39;,
+  &#39;STRINGS&#39;: [&#39;Nancy Pelosi&#39;, &#39;mark esper&#39;],
+  &#39;COUNT&#39;: 2,
+  &#39;RANK&#39;: 3},
+ {&#39;PROMOTED_STRING&#39;: &#39;jim mattis&#39;,
+  &#39;STRINGS&#39;: [&#39;jim mattis&#39;],
+  &#39;COUNT&#39;: 1,
+  &#39;RANK&#39;: 5},
+ {&#39;PROMOTED_STRING&#39;: &#39;Donald&#39;, &#39;STRINGS&#39;: [&#39;Donald&#39;], &#39;COUNT&#39;: 1, &#39;RANK&#39;: 5}]</code>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>As you see, the longest string from each cluster has been promoted to 'PROMOTED_STRING' for the given cluster.</p>
+</div>
+</div>
+</div>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+        
+          <a href=".." class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            </div>
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Home
+              </div>
+            </div>
+          </a>
+        
+        
+          <a href="../code_reference/" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Code Reference
+              </div>
+            </div>
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../assets/javascripts/vendor.93c04032.min.js"></script>
+      <script src="../assets/javascripts/bundle.83e5331e.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
+      
+      <script>
+        app = initialize({
+          base: "..",
+          features: [],
+          search: Object.assign({
+            worker: "../assets/javascripts/worker/search.8c7e0a7e.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+      
+    
+  </body>
+</html>

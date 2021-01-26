@@ -111,13 +111,55 @@ def form_clusters(df: pd.DataFrame,
 
     return clusters
 
+def helper(m, vars, cutoff = 70):
+
+    add_elements = vars
+    nothing_to_add = False
+    iteration = 0
+    cluster = vars
+
+    while len(m) > 0 and not nothing_to_add:      
+        iteration += 1
+        #print("iteration", iteration)
+        m = m.drop(add_elements)
+        l = pd.DataFrame(m[cluster] > cutoff)
+        l = l.sum(axis = 1).tolist()
+        l = [x >= 1 for x in l]
+    
+        if not any(l):
+            # print("Nothing to add - stopping.")
+            nothing_to_add = True
+    
+        from itertools import compress
+        add_elements = list(compress(list(m.index), l))
+        cluster.extend(add_elements)
+    
+    return cluster, m
+
+def corr_cutoff(strings, 
+                ratio = None,
+                cutoff = 70):
+    if ratio is None:
+        ratio = fuzz.partial_token_set_ratio
+    # compute fuzzy ratios.
+    m = compute_fuzzy_matrix(strings, ratio = ratio)
+    clusters = []
+    while len(m) > 0:
+        var = [m.index.tolist()[0]]
+        cluster, m = helper(m, var, cutoff = cutoff)
+        clusters.append(cluster)
+    
+    return clusters
+
 def form_clusters_and_rank(strings: list, 
                            ratio: Callable = None, 
                            args_cluster: dict = {'criterion': 'distance'},
                            args_linkage: dict = {'method': 'complete',
                                                  'metric': 'euclidean'},
                            args_pdist: dict = {'metric': 'euclidean'},
-                           flatten_coef: float = 0.5) -> list:
+                           flatten_coef: float = 0.5,
+                           method: str = "cutoff",
+                           fuzz_cutoff: int = 70) -> list:
     """Form and Rank Clusters of Strings
 
     Form clusters of strings using Fuzzy Matching in 
@@ -157,20 +199,25 @@ def form_clusters_and_rank(strings: list,
     """
 
     if ratio is None:
-        ratio = fuzz.partial_ratio
+        ratio = fuzz.partial_token_set_ratio
 
     # extract unique strings
     strings_unique = list(set(strings))
 
     if len(strings_unique) > 1:
-        # compute matrix with fuzzy ratios.
-        fuzzy_matrix = compute_fuzzy_matrix(strings_unique, ratio)
     
-        strings_clusters = form_clusters(fuzzy_matrix, 
-                                         args_cluster = args_cluster,
-                                         args_pdist = args_pdist,
-                                         args_linkage = args_linkage,
-                                         flatten_coef = flatten_coef)
+        if method == "hclust":
+            # compute matrix with fuzzy ratios.
+            fuzzy_matrix = compute_fuzzy_matrix(strings_unique, ratio)
+            strings_clusters = form_clusters(fuzzy_matrix, 
+                                            args_cluster = args_cluster,
+                                            args_pdist = args_pdist,
+                                            args_linkage = args_linkage,
+                                            flatten_coef = flatten_coef)
+        if method == "cutoff":
+            strings_clusters = corr_cutoff(strings_unique,
+                                           ratio = ratio,
+                                           cutoff = fuzz_cutoff)
     else:
         # handle trivial case of only one entity.
         strings_clusters = [strings]
@@ -187,6 +234,30 @@ def form_clusters_and_rank(strings: list,
 
     return clusters
 
+
 if __name__ == '__main__':
-    strings = ['biden', 'joe biden', 'donald trump']
-    form_clusters_and_rank(strings) 
+    from fuzzywuzzy import fuzz
+    strings = ['Donald Trump', 
+               'Donald Trump', 
+               'J. biden', 
+               'joe biden', 
+               'Biden', 
+               'Bide', 
+               'mark esper', 
+               'Christopher c . miller',
+               'jim mattis', 
+               'Nancy Pelosi',
+               'trumps',
+               'Trump',
+               'Donald',
+               'miller']
+    form_clusters_and_rank(strings,
+                           ratio = fuzz.partial_token_set_ratio,
+                           method = "hclust",
+                           fuzz_cutoff = 0.7)
+    form_clusters_and_rank(strings,
+                           ratio = fuzz.partial_token_set_ratio,
+                           method = "cutoff",
+                           fuzz_cutoff = 0.7)
+    
+

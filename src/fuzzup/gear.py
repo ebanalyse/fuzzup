@@ -258,6 +258,6 @@ if __name__ == '__main__':
     form_clusters_and_rank(strings,
                            ratio = fuzz.partial_token_set_ratio,
                            method = "cutoff",
-                           fuzz_cutoff = 0.7)
+                           fuzz_cutoff = 70)
     
 

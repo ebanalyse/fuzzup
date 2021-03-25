@@ -188,6 +188,8 @@ def form_clusters_and_rank(strings: list,
             is computed as this coefficient multiplied with the 
             maximum pairwise distance between two observations. 
             Defaults to 0.5.
+        method (stringm optional): what method to apply? Choose
+            between 'hclust' and 'cutoff'.
         
     Returns:
         list: clusters of strings.

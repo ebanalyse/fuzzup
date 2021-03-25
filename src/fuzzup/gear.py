@@ -229,14 +229,14 @@ def form_clusters_and_rank(strings: list,
     counts = list(map(lambda x: int(np.sum([ent in x for ent in strings])), strings_clusters))
     ranks =  rankdata(counts, method = "min")
     ranks = max(ranks) - ranks + 1
-    ranks = ranks.astype(int)
+    # convert to python native int
+    ranks = [int(x) for x in ranks]
 
     # organize data.
     headers = ["PROMOTED_STRING", "STRINGS", "COUNT", "RANK"]
     clusters = [dict(zip(headers, z)) for z in zip(promoted_strings, strings_clusters, counts, ranks)]
 
     return clusters
-
 
 if __name__ == '__main__':
     from fuzzywuzzy import fuzz
@@ -254,13 +254,10 @@ if __name__ == '__main__':
                'Trump',
                'Donald',
                'miller']
-    form_clusters_and_rank(strings,
-                           ratio = fuzz.partial_token_set_ratio,
-                           method = "hclust",
-                           fuzz_cutoff = 0.7)
-    form_clusters_and_rank(strings,
+    o = form_clusters_and_rank(strings,
                            ratio = fuzz.partial_token_set_ratio,
                            method = "cutoff",
                            fuzz_cutoff = 70)
+    o[0]['RANK']
     
 

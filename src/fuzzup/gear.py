@@ -226,7 +226,7 @@ def form_clusters_and_rank(strings: list,
 
     # compute cluster meta data.
     promoted_strings = [max(cluster, key = len) for cluster in strings_clusters]
-    counts = list(map(lambda x: np.sum([ent in x for ent in strings]), strings_clusters))
+    counts = list(map(lambda x: int(np.sum([ent in x for ent in strings])), strings_clusters))
     ranks =  rankdata(counts, method = "min")
     ranks = max(ranks) - ranks + 1
 

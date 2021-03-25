@@ -20,7 +20,7 @@ setuptools.setup(
         'pandas',
         'numpy',
         'fuzzywuzzy',
-        'python-Levenshtein's
+        'python-Levenshtein'
     ],
     setup_requires=['pytest-runner'],
     tests_require=['pytest',

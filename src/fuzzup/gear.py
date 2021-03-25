@@ -229,6 +229,7 @@ def form_clusters_and_rank(strings: list,
     counts = list(map(lambda x: int(np.sum([ent in x for ent in strings])), strings_clusters))
     ranks =  rankdata(counts, method = "min")
     ranks = max(ranks) - ranks + 1
+    ranks = ranks.astype(int)
 
     # organize data.
     headers = ["PROMOTED_STRING", "STRINGS", "COUNT", "RANK"]

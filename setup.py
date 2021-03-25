@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="fuzzup", 
-    version="0.0.14",
+    version="0.0.15",
     author="Lars Kjeldgaard",
     author_email="lars.kjeldgaard@eb.dk",
     description="A Fuzzy Matching Approach for Clustering Strings",
@@ -19,8 +19,7 @@ setuptools.setup(
         'scipy',
         'pandas',
         'numpy',
-        'fuzzywuzzy',
-        'python-Levenshtein'
+        'fuzzywuzzy'
     ],
     setup_requires=['pytest-runner'],
     tests_require=['pytest',

@@ -142,7 +142,6 @@ def corr_cutoff(strings,
     if ratio is None:
         ratio = fuzz.partial_token_set_ratio
     # compute fuzzy ratios.
-    import pdb; pdb.set_trace()
     m = compute_fuzzy_matrix(strings, ratio = ratio)
     clusters = []
     while len(m) > 0:

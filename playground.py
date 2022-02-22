@@ -1,32 +1,30 @@
 import timeit
+from rapidfuzz.fuzz import partial_token_set_ratio
 
-from fuzzup.gear import form_clusters_and_rank
-from rapidfuzz.process import cdist, extract
+from fuzzup.fuzz import fuzz_it_up
 
-person_names = ['Donald Trump', 'Donald Trump', 
-                'J. biden', 'joe biden', 'Biden', 
-                'Bide', 'mark esper', 'Christopher c . miller', 
-                'jim mattis', 'Nancy Pelosi', 'trumps',
-                'Trump', 'Donald', 'miller']
+PERSONS = ['Donald Trump', 'Donald Trump', 
+           'J. biden', 'joe biden', 'Biden', 
+           'Bide', 'mark esper', 'Christopher c . miller', 
+           'jim mattis', 'Nancy Pelosi', 'trumps',
+           'Trump', 'Donald', 'miller']
 
-o = form_clusters_and_rank(person_names)
-import pandas as pd
-pd.DataFrame.from_dict(o)
+clusters, fuzzy_matrix = fuzz_it_up(PERSONS)
+clusters
+clusters, fuzzy_matrix = fuzz_it_up(PERSONS, 
+                                    scorer=partial_token_set_ratio, 
+                                    workers=2,
+                                    cutoff=70)
+clusters
 
-x = person_names
-x = list(set(x))
-dists = cdist(x, x, 
-              workers=1)
-
-
-
-# extract(person_names, person_names)
-
-
+# TESTING
 def test():
-    form_clusters_and_rank(person_names)
+    return fuzz_it_up(PERSONS, scorer=partial_token_set_ratio)
 
-n_runs = 10
-t = timeit.timeit(test, number=n_runs)/n_runs
+# computational performance
+n_trials = 100
+timeit.timeit(test, number=n_trials)/n_trials
+
+
 
 

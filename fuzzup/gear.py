@@ -142,6 +142,7 @@ def corr_cutoff(strings,
     if ratio is None:
         ratio = fuzz.partial_token_set_ratio
     # compute fuzzy ratios.
+    import pdb; pdb.set_trace()
     m = compute_fuzzy_matrix(strings, ratio = ratio)
     clusters = []
     while len(m) > 0:
@@ -159,7 +160,8 @@ def form_clusters_and_rank(strings: list,
                            args_pdist: dict = {'metric': 'euclidean'},
                            flatten_coef: float = 0.5,
                            method: str = "cutoff",
-                           fuzz_cutoff: int = 70) -> list:
+                           fuzz_cutoff: int = 70,
+                           to_dataframe: bool = True) -> pd.DataFrame:
     """Form and Rank Clusters of Strings
 
     Form clusters of strings using Fuzzy Matching in 
@@ -233,8 +235,9 @@ def form_clusters_and_rank(strings: list,
     ranks = [int(x) for x in ranks]
 
     # organize data.
-    headers = ["PROMOTED_STRING", "STRINGS", "COUNT", "RANK"]
+    headers = ["ENTITY", "CLUSTER", "COUNT", "RANK"]
     clusters = [dict(zip(headers, z)) for z in zip(promoted_strings, strings_clusters, counts, ranks)]
+    clusters = pd.DataFrame.from_dict(clusters)
 
     return clusters
 

@@ -34,7 +34,8 @@ share/python-wheels/
 *.egg
 MANIFEST
 test-results/
-
+venv/
+.envrc
 
 # PyInstaller
 #  Usually these files are written by a python script from a template

@@ -6,10 +6,8 @@
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/fuzzup?color=green)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 
-`fuzzup` offers a simple approach for clustering strings based on 
-[Levenshtein Distance](https://en.wikipedia.org/wiki/Levenshtein_distance) using
-[Fuzzy Matching](https://en.wikipedia.org/wiki/Fuzzy_matching_(computer-assisted_translation))
-in conjunction with [Hierarchical Clustering](https://en.wikipedia.org/wiki/Hierarchical_clustering). 
+`fuzzup` offers a simple approach for organizing and structuring the predictions from a Huggingface `transformers` Named-Entity Recognition (=NER) model.
+The approach is based on [Fuzzy Matching](https://en.wikipedia.org/wiki/Fuzzy_matching_(computer-assisted_translation)).
 
 ## Installation guide
 `fuzzup` can be installed from the Python Package Index (PyPI) by:
@@ -25,8 +23,8 @@ If you want the development version then install directly from [Github](https://
 `fuzzup` organizes strings by forming clusters from them. It does so in 3 steps:
 
 1. Compute all of the mutual string distances (Levensteihn Distances/fuzzy ratios) between the strings
-2. Form clusters of strings (using hierarchical clustering) based on the distances from (1)
-3. Rank the clusters by simply counting the number of nodes(strings) in each cluster
+2. Form clusters of strings based on the distances from (1)
+3. Rank clusters
 
 ```python
 # TODO: update example with tuned model.

@@ -143,7 +143,10 @@ def compute_prominence(clusters: List[Dict],
             to "count".
 
     Returns:
-        List[Dict]: _description_
+        List[Dict]: clusters and their prominence.
+        
+    Examples:
+        ...
     """
     
     clusters = pd.DataFrame.from_dict(clusters)

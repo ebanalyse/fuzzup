@@ -124,10 +124,27 @@ def fuzzy_cluster(words,
     
     return output, fuzzy_matrix
 
-def compute_prominence(clusters, 
-                       to_dataframe=False, 
-                       merge_output=True,
-                       method="count"):
+def compute_prominence(clusters: List[Dict], 
+                       to_dataframe: bool=False, 
+                       merge_output: bool=True,
+                       method: str="count") -> List[Dict]:
+    """Compute Prominence
+    
+    Computes prominence of entity clusters.
+
+    Args:
+        clusters (List[Dict]): Entity clusters.
+        to_dataframe (bool, optional): Export output
+            as pandas dataframe? Defaults to False.
+        merge_output (bool, optional): Merge resulting 
+            clusters with input data. Defaults to True.
+        method (str, optional): Method for computing 
+            prominence. Choose from "count". Defaults 
+            to "count".
+
+    Returns:
+        List[Dict]: _description_
+    """
     
     clusters = pd.DataFrame.from_dict(clusters)
     counts = clusters[CLUSTER_ID].value_counts()
@@ -136,6 +153,7 @@ def compute_prominence(clusters,
     output = pd.DataFrame.from_dict({CLUSTER_ID: counts.index,
                                     'prominence': ranks,
                                     'count': counts})  
+    
     if merge_output:
         output = pd.merge(clusters, output, how="left")
         

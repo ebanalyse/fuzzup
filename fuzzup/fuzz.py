@@ -1,5 +1,5 @@
-from doctest import OutputChecker
-from pyparsing import string_start
+from typing import List, Dict
+
 from rapidfuzz.process import cdist, extract
 import numpy as np
 import pandas as pd
@@ -8,10 +8,35 @@ from scipy.stats import rankdata
 # constants
 CLUSTER_ID = 'cluster_id'
 
-def compute_fuzzy_matrix(strings: list,
+def compute_fuzzy_matrix(strings: List[str],
                          **kwargs) -> pd.DataFrame:
-    """Compute Matrix with pairwise edit distances
+    """Compute Fuzzy Matrix
+    
+    Computes matrix with pairwise fuzzy ratios (=edit)
+    distances between all strings. 
+    
+    The result can be thought of as a correlation 
+    matrix with all diagonal elements equal to 100.
+    
+    Args:
+        strings (List[str]): strings for clustering.
+        
+    Returns:
+        pd.DataFrame: pairwise fuzzy ratios between
+            strings.
+            
+    Examples:
+        >>> person_names = ['Donald Trump', 'Donald Trump', 
+                            'J. biden', 'joe biden', 'Biden', 
+                            'Bide', 'mark esper', 
+                            'Christopher c . miller', 
+                            'jim mattis', 'Nancy Pelosi', 
+                            'trumps', 'Trump', 'Donald', 
+                            'miller']
+        ....
+        
     """  
+    
     # subset unique strings.
     strings = list(set(strings))
 

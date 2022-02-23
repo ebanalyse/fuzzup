@@ -10,7 +10,8 @@ PERSONS = ['Donald Trump', 'Donald Trump',
            'J. biden', 'joe biden', 'Biden', 
            'Bide', 'mark esper', 'Christopher c . miller', 
            'jim mattis', 'Nancy Pelosi', 'trumps',
-           'Trump', 'Donald', 'miller']
+           'Trump', 'Donald', 'miller'
+           ]
 # OUTPUT IN THE SAME FORMAT AS FROM NER-PIPELINE
 n = len(PERSONS)
 PERSONS_NER = pd.DataFrame(data = PERSONS, columns=['word'])

@@ -1,7 +1,12 @@
+from doctest import OutputChecker
+from pyparsing import string_start
 from rapidfuzz.process import cdist, extract
 import numpy as np
 import pandas as pd
 from scipy.stats import rankdata
+
+# constants
+CLUSTER_ID = 'cluster_id'
 
 def compute_fuzzy_matrix(strings: list,
                          **kwargs) -> pd.DataFrame:
@@ -54,11 +59,22 @@ def cluster_cutoff(fuzzy_matrix,
     
     return clusters
 
-def fuzz_it_up(strings: str, 
-               cutoff: int = 70, 
-               to_dataframe: bool = True,
-               **kwargs):
+def fuzzy_cluster(words, 
+                  cutoff: int = 70, 
+                  to_dataframe: bool = False,
+                  merge_output: bool = True,
+                  by_entity_group = False,
+                  **kwargs):
+    
+    # TODO: implement by_entity_group
 
+    if isinstance(words, list) and all([isinstance(x, dict) for x in words]):
+        input_ner = True
+        strings = [x.get('word') for x in words]
+    else:
+        input_ner = False
+        strings = words
+    
     # compute fuzzy ratios
     fuzzy_matrix = compute_fuzzy_matrix(strings, **kwargs)
     
@@ -66,19 +82,39 @@ def fuzz_it_up(strings: str,
                               cutoff=cutoff)
     
     # compute cluster meta data.
-    promoted_strings = [max(cluster, key=len) for cluster in clusters]
-    counts = list(map(lambda x: int(np.sum([ent in x for ent in strings])), clusters))
-    ranks =  rankdata(counts, method = "max")
+    cluster_ids = [max(cluster, key=len) for cluster in clusters]
+    
+    # organize output properly (for compatibility with transformers NER pipeline)
+    output = []
+    for idx, cluster in enumerate(clusters):
+        output.append(pd.DataFrame.from_dict({'word': cluster, CLUSTER_ID: cluster_ids[idx]}))
+    output = pd.concat(output, ignore_index=True)
+    
+    # merge output with original input
+    if input_ner and merge_output:
+        output = pd.merge(pd.DataFrame.from_dict(words), output, how="left")
+                 
+    if not to_dataframe:
+        output = output.to_dict(orient="records")
+    
+    return output, fuzzy_matrix
+
+def compute_prominence(clusters, 
+                       to_dataframe=False, 
+                       merge_output=True,
+                       method="count"):
+    
+    clusters = pd.DataFrame.from_dict(clusters)
+    counts = clusters[CLUSTER_ID].value_counts()
+    ranks = rankdata(counts, method = "max")
     ranks = max(ranks) - ranks + 1
-    # convert to python native int
-    ranks = [int(x) for x in ranks]
-
-    # organize data.
-    headers = ["ENTITY", "CLUSTER", "OCCURENCES", "PROMINENCE"]
-    clusters = [dict(zip(headers, z)) for z in zip(promoted_strings, clusters, counts, ranks)]
-    if to_dataframe:
-        clusters = pd.DataFrame.from_dict(clusters)
-        clusters.sort_values(by=['PROMINENCE'],
-                             inplace=True)
-
-    return clusters, fuzzy_matrix
+    output = pd.DataFrame.from_dict({CLUSTER_ID: counts.index,
+                                    'prominence': ranks,
+                                    'count': counts})  
+    if merge_output:
+        output = pd.merge(clusters, output, how="left")
+        
+    if not to_dataframe:
+        output = output.to_dict(orient="records")
+    
+    return output

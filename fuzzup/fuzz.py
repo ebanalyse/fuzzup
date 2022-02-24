@@ -127,7 +127,7 @@ def fuzzy_cluster(words,
 def compute_prominence(clusters: List[Dict], 
                        to_dataframe: bool=False, 
                        merge_output: bool=True,
-                       method: str="count") -> List[Dict]:
+                       weight_position: float=None) -> List[Dict]:
     """Compute Prominence
     
     Computes prominence of entity clusters.
@@ -138,9 +138,6 @@ def compute_prominence(clusters: List[Dict],
             as pandas dataframe? Defaults to False.
         merge_output (bool, optional): Merge resulting 
             clusters with input data. Defaults to True.
-        method (str, optional): Method for computing 
-            prominence. Choose from "count". Defaults 
-            to "count".
 
     Returns:
         List[Dict]: clusters and their prominence.
@@ -148,19 +145,44 @@ def compute_prominence(clusters: List[Dict],
     Examples:
         ...
     """
+
+    # validate inputs
+    if weight_position is not None:
+        assert 0 <= weight_position <= 1, "choose 'weight_position' between 0 and 1"
     
     clusters = pd.DataFrame.from_dict(clusters)
-    counts = clusters[CLUSTER_ID].value_counts()
-    ranks = rankdata(counts, method = "max")
-    ranks = max(ranks) - ranks + 1
-    output = pd.DataFrame.from_dict({CLUSTER_ID: counts.index,
-                                    'prominence': ranks,
-                                    'count': counts})  
     
+    prominence = clusters.copy() 
+    prominence_score = float(1)
+    
+    # adjust prominence score for word positions (=offsets)
+    if weight_position is not None:
+        if len(clusters.start) > 1:
+            offset_min = min(clusters.start)
+            offset_max = max(clusters.start)
+            # linear interpolation
+            xp = [offset_min, offset_max]
+            yp = [1, weight_position]
+            prominence_position = np.array([np.interp(x, xp, yp) for x in clusters.start])
+            prominence_score = prominence_score * prominence_position
+    
+    # aggregate prominence to group level
+    prominence['prominence_score'] = prominence_score
+    prominence = prominence.groupby(CLUSTER_ID)['prominence_score'].sum()
+    
+    # rank clusters by prominence
+    ranks = rankdata(prominence, method = "max")
+    ranks = max(ranks) - ranks + 1
+
+    # organize output as data frame
+    prominence = pd.DataFrame(prominence)
+    prominence['prominence_rank'] = ranks 
+    prominence.reset_index(level=0, inplace=True) 
+        
     if merge_output:
-        output = pd.merge(clusters, output, how="left")
+        prominence = pd.merge(clusters, prominence, how="left")
         
     if not to_dataframe:
-        output = output.to_dict(orient="records")
+        prominence = prominence.to_dict(orient="records")
     
-    return output
+    return prominence

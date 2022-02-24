@@ -137,7 +137,8 @@ def compute_prominence(clusters: List[Dict],
         to_dataframe (bool, optional): Export output
             as pandas dataframe? Defaults to False.
         merge_output (bool, optional): Merge resulting 
-            clusters with input data. Defaults to True.
+            cluster meta data with input data. Defaults to True.
+        weight_position 
 
     Returns:
         List[Dict]: clusters and their prominence.

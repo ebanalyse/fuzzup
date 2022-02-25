@@ -9,12 +9,12 @@ plugins:
         python:
           setup_commands:
             - import sys
-            - sys.path.append("src")
+            - sys.path.append("fuzzup")
   - mknotebooks:
       execute: True
       preamble: "docs/preamble.py"
 
 nav:
     - Home: index.md
-    - Workflow: workflow.ipynb
+    - Showcase: showcase.ipynb
     - Code Reference: code_reference.md

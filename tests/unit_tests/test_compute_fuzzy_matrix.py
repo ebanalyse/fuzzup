@@ -1,4 +1,4 @@
-from fuzzup.gear import compute_fuzzy_matrix
+from fuzzup.fuzz import compute_fuzzy_matrix
 import pandas as pd
 
 strings = ['biden', 'joe biden', 'donald trump']

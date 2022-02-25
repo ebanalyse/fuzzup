@@ -20,6 +20,8 @@ def compute_fuzzy_matrix(strings: List[str],
     
     Args:
         strings (List[str]): strings for clustering.
+        kwargs: all optional arguments for 
+            rapidfuzz.process.cdist.
         
     Returns:
         pd.DataFrame: pairwise fuzzy ratios between
@@ -47,7 +49,9 @@ def compute_fuzzy_matrix(strings: List[str],
     
     return dists
 
-def helper_clustering(m, vars, cutoff = 70):
+def helper_clustering(m, 
+                      vars, 
+                      cutoff: float = 70):
 
     add_elements = vars
     nothing_to_add = False
@@ -72,9 +76,24 @@ def helper_clustering(m, vars, cutoff = 70):
     
     return cluster, m
 
-def cluster_cutoff(fuzzy_matrix, 
-                   cutoff=70,
-                   **kwargs):
+def naive_cluster(fuzzy_matrix: pd.DataFrame, 
+                  cutoff: float = 70,
+                  **kwargs) -> list:
+    """Naive Clustering
+    
+    Conducts naive clustering based on matrix with
+    pairwise correlations, fuzzy ratios etc.
+
+    Args:
+        fuzzy_matrix (pd.DataFrame): Matrix with
+            pairwise fuzzy ratios between words.
+        cutoff (float, optional): Threshold for naive
+            clustering algorithm with respect to 
+            pairwise fuzzy ratios. Defaults to 70.
+
+    Returns:
+        list: resulting clusters.
+    """
     m = fuzzy_matrix
     clusters = []
     while len(m) > 0:
@@ -84,7 +103,7 @@ def cluster_cutoff(fuzzy_matrix,
     
     return clusters
 
-def fuzzy_cluster(words, 
+def fuzzy_cluster(words: List[Dict], 
                   cutoff: int = 70, 
                   to_dataframe: bool = False,
                   merge_output: bool = True,
@@ -103,10 +122,10 @@ def fuzzy_cluster(words,
     # compute fuzzy ratios
     fuzzy_matrix = compute_fuzzy_matrix(strings, **kwargs)
     
-    clusters = cluster_cutoff(fuzzy_matrix, 
-                              cutoff=cutoff)
+    clusters = naive_cluster(fuzzy_matrix, 
+                             cutoff=cutoff)
     
-    # compute cluster meta data.
+    # generate cluster ids.
     cluster_ids = [max(cluster, key=len) for cluster in clusters]
     
     # organize output properly (for compatibility with transformers NER pipeline)

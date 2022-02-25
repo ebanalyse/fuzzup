@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="fuzzup", 
-    version="0.0.15",
+    version="0.0.16",
     author="Lars Kjeldgaard",
     author_email="lars.kjeldgaard@eb.dk",
     description="A Fuzzy Matching Approach for Clustering Strings",
@@ -14,7 +14,7 @@ setuptools.setup(
     url="https://github.com/ebanalyse/fuzzup",
     packages=setuptools.find_packages(where='src'),
     package_dir={'': 'fuzzup'},
-    python_requires='>=3.6',
+    python_requires='>=3.7',
     install_requires=[
         'scipy',
         'pandas',

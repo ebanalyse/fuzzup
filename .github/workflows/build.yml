@@ -23,7 +23,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: '3.7'
+        python-version: '3.8'
 
     - name: Display Python version
       run: python -c "import sys; print(sys.version)"
@@ -74,6 +74,7 @@ jobs:
       run: |
         python setup.py sdist bdist_wheel
         twine upload -r testpypi dist/*
+        
     - name: Publish to PyPI
       env:
         TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}

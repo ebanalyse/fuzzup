@@ -31,7 +31,7 @@ def run_random(ner_preds):
     clusters, _ = fuzzy_cluster(preds, 
                                 scorer=partial_token_set_ratio, 
                                 workers=1,
-                                cutoff=70,
+                                cutoff=75,
                                 merge_output=True)
     #pd.DataFrame.from_dict(clusters)
 

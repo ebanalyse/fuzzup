@@ -32,12 +32,14 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r dev-requirements.txt
+
     - name: Lint
       run: |
         # stop the build if there are Python syntax errors or undefined names
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics --exclude=.git,__pycache__,docs/source/conf.py,old,build,dist,admin
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --exclude=.git,__pycache__,docs/source/conf.py,old,build,dist,admin --statistics --format=html --htmldir=flake-report
+
     - name: Upload Lint results
       uses: actions/upload-artifact@v2
       with:
@@ -47,6 +49,7 @@ jobs:
     - name: Run tests
       run: |
         python setup.py test
+
     - name: Publish test results
       uses: EnricoMi/publish-unit-test-result-action@v1.6
       if: always()
@@ -82,4 +85,5 @@ jobs:
         TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
       if: github.ref == 'refs/heads/main'
       run: |
-        twine upload dist/*
+      python setup.py sdist bdist_wheel
+        twine upload -r dist/*

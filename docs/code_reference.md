@@ -1,2 +1,2 @@
 # Code Reference
-::: fuzzup.gear
+::: fuzzup.fuzz

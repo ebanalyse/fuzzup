@@ -1,4 +1,4 @@
-from typing import List, Dict
+from typing import List, Dict, Tuple
 
 from rapidfuzz.process import cdist, extract
 import numpy as np
@@ -107,8 +107,22 @@ def fuzzy_cluster(words: List[Dict],
                   cutoff: int = 70, 
                   to_dataframe: bool = False,
                   merge_output: bool = True,
-                  by_entity_group = False,
-                  **kwargs):
+                  **kwargs) -> Tuple[List[Dict], pd.DataFrame]:
+    """_summary_
+
+    Args:
+        words (List[Dict]): Words/entities for clustering.
+        cutoff (int, optional): Cutoff threshold value for fuzzy
+            ratios when forming clusters. Defaults to 70.
+        to_dataframe (bool, optional): Output as dataframe?
+            Defaults to True.
+        merge_output (bool, optional): Merge output with 
+            original input? Defaults to False.
+
+    Returns:
+        Tuple[List[Dict], pd.DataFrame]: Clusters of entities and 
+            a data frame with pairwise fuzzy ratios.
+    """
     
     # TODO: implement by_entity_group
 

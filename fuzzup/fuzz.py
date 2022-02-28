@@ -125,7 +125,15 @@ def fuzzy_cluster(words: List[Dict],
     """
     
     # TODO: implement by_entity_group
+    assert isinstance(words, list), "'words' must be a list"
 
+    # handle trivial case (empty list)
+    if not words:
+        if to_dataframe:
+            return pd.DataFrame(), pd.DataFrame()
+        else:
+            return [], pd.DataFrame()
+        
     if isinstance(words, list) and all([isinstance(x, dict) for x in words]):
         input_ner = True
         strings = [x.get('word') for x in words]
@@ -179,7 +187,14 @@ def compute_prominence(clusters: List[Dict],
     Examples:
         ...
     """
-
+    # handle trivial case (empty list)
+    
+    if not clusters:
+        if to_dataframe:
+            return pd.DataFrame()
+        else:
+            return []
+    
     # validate inputs
     if weight_position is not None:
         assert 0 <= weight_position <= 1, "choose 'weight_position' between 0 and 1"

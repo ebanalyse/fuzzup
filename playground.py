@@ -4,8 +4,18 @@ from rapidfuzz.fuzz import partial_token_set_ratio
 from rapidfuzz.process import cdist
 import pandas as pd
 import numpy as np
+import boto3
 
-from fuzzup.fuzz import fuzzy_cluster, compute_prominence
+from fuzzup.fuzz import (
+    fuzzy_cluster, 
+    compute_prominence,
+    match_whitelist
+)
+
+def load_danish_companies(file="companies-name-municipality.json"):
+    s3 = boto3.resource('s3')
+    companies = pd.read_json(s3.Bucket("nerbonanza").Object(file).get()['Body'])
+    return companies
 
 #### SIMULATE DATA
 PERSONS = ['Donald Trump', 'Donald Trump', 
@@ -35,34 +45,28 @@ clusters = compute_prominence(clusters,
                               merge_output=True)
 pd.DataFrame.from_dict(clusters)
 
-wl = ["Donald Trump", "Joe Biden"]
+whitelist = ["Donald Trump", "Joe Biden"]
+   
+companies = load_danish_companies()
+company_names = companies.name.tolist()
 
-scorer = partial_token_set_ratio
-words = [x.get('word') for x in clusters]
+# match with whitelists
+match_whitelist(words=clusters, 
+                whitelist=company_names,
+                merge_output=True,
+                aggregate_cluster=True,
+                to_dataframe=True,
+                score_cutoff=80,
+                scorer=partial_token_set_ratio)
 
-score_cutoff=80
 
-dists = cdist(wl, 
-              words, 
-              scorer=scorer, 
-              score_cutoff=score_cutoff)
 
-wl = np.array(wl)
 
-matches = [wl[np.where(col)] for col in dists.T]
 
-df = pd.DataFrame.from_records(clusters)
-df["matches"] = matches
 
-def aggregate_to_cluster(x):
-    res = np.unique(np.concatenate(x.matches.tolist()))
-    return res
 
-matches = pd.DataFrame(df.groupby(by=['cluster_id']).apply(aggregate_to_cluster), columns=['matches'], index=None)
-matches = matches.reset_index()
 
-df.drop('matches', axis=1, inplace=True)
-pd.merge(df, matches, how="left")
+
 
 
 

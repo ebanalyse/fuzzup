@@ -12,10 +12,10 @@ from fuzzup.fuzz import fuzzy_cluster, compute_prominence
 def load_preds_from_s3(file="ner_preds_v1.pickle"):
 
     s3 = boto3.resource('s3')
-    preds = pickle.loads(s3.Bucket("nerbonanza").Object("ner_preds_v1.pickle").get()['Body'].read())
+    preds = pickle.loads(s3.Bucket("nerbonanza").Object(file).get()['Body'].read())
     
     return preds
-    
+   
 ner_preds = load_preds_from_s3()
 
 # run random article

@@ -31,8 +31,14 @@ If you want the development version then install directly from [Github](https://
 
 ## To do
 
-- ~~update docs~~
+- run against tores list
+- document whitelist matching in showcase
+- update readme with workflow
+- tests for whitelist
+- try and tune on junges entitites
 - cutoff_threshold -> score_cutoff -> cdist
+- ~~document whitelist~~~
+- ~~update docs~~
 
 ## Background
 `fuzzup` is developed as a part of [Ekstra Bladet](https://ekstrabladet.dk/)’s activities on Platform Intelligence in News (PIN). PIN is an industrial research project that is carried out in collaboration between the [Technical University of Denmark](https://www.dtu.dk/), [University of Copenhagen](https://www.ku.dk/) and [Copenhagen Business School](https://www.cbs.dk/) with funding from [Innovation Fund Denmark](https://innovationsfonden.dk/). The project runs from 2020-2023 and develops recommender systems and natural language processing systems geared for news publishing, some of which are open sourced like `fuzzup`.

@@ -1,13 +1,24 @@
 import timeit
 import time
 
-from rapidfuzz.fuzz import partial_token_set_ratio
+from rapidfuzz.fuzz import (
+    ratio,
+    token_ratio,
+    token_set_ratio,
+    token_sort_ratio,
+    partial_token_set_ratio,
+    partial_token_sort_ratio,
+    partial_ratio_alignment,
+    partial_ratio,
+    WRatio,
+    QRatio
+    )
 import pandas as pd
 import numpy as np
 import pickle
 import boto3
 
-from fuzzup.fuzz import fuzzy_cluster, compute_prominence
+from fuzzup.fuzz import fuzzy_cluster, compute_prominence, match_whitelist
 
 def load_preds_from_s3(file="ner_preds_v1.pickle"):
 
@@ -18,6 +29,14 @@ def load_preds_from_s3(file="ner_preds_v1.pickle"):
    
 ner_preds = load_preds_from_s3()
 
+# danish company names (for white list)
+def load_danish_companies(file="companies-name-municipality.json"):
+    s3 = boto3.resource('s3')
+    companies = pd.read_json(s3.Bucket("nerbonanza").Object(file).get()['Body'])
+    return companies
+companies = load_danish_companies()
+company_names = companies.name.tolist()
+
 # run random article
 def run_random(ner_preds):
     example = ner_preds.sample(n=1)
@@ -26,11 +45,9 @@ def run_random(ner_preds):
         return np.nan
     text =  example.body.values[0]
 
-    t1 = time.time()
-
     clusters, _ = fuzzy_cluster(preds, 
-                                scorer=partial_token_set_ratio, 
-                                workers=1,
+                                scorer=ratio, 
+                                workers=4,
                                 cutoff=75,
                                 merge_output=True)
     #pd.DataFrame.from_dict(clusters)
@@ -38,6 +55,16 @@ def run_random(ner_preds):
     clusters = compute_prominence(clusters, 
                                   merge_output=True,
                                   weight_position=.5)
+    t1 = time.time()
+    
+    clusters = match_whitelist(clusters,
+                               whitelist=company_names,
+                               score_cutoff=90,
+                               merge_output=True,
+                               
+                               aggregate_cluster=True,
+                               workers=1)
+    
     t2 = time.time()
 
     clusters = pd.DataFrame.from_dict(clusters).sort_values(by ="prominence_rank")

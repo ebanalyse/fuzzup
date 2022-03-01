@@ -1,6 +1,7 @@
 import timeit
 
 from rapidfuzz.fuzz import partial_token_set_ratio
+from rapidfuzz.process import cdist
 import pandas as pd
 import numpy as np
 
@@ -11,9 +12,9 @@ PERSONS = ['Donald Trump', 'Donald Trump',
            'J. biden', 'joe biden', 'Biden', 
            'Bide', 'mark esper', 'Christopher c . miller', 
            'jim mattis', 'Nancy Pelosi', 'trumps',
-           'Trump', 'Donald', 'miller'
-           ]
-# SAME FORMAT AS FROM NER-PIPELINE
+           'Trump', 'Donald', 'miller']
+
+# ALIGN WITH HUGGINGFACE 'TRANSFORMERS' NER PIPELINE OUTPUT FORMAT
 n = len(PERSONS)
 PERSONS_NER = pd.DataFrame(data = PERSONS, columns=['word'])
 PERSONS_NER["entity_group"] = "PER"
@@ -31,14 +32,52 @@ clusters, _ = fuzzy_cluster(PERSONS_NER,
 pd.DataFrame.from_dict(clusters)
 
 clusters = compute_prominence(clusters, 
-                              merge_output=True,
-                              weight_position=.5)
+                              merge_output=True)
 pd.DataFrame.from_dict(clusters)
 
-# PERFORMANCE TESTING
-#def test():
-#    return fuzzy_cluster(PERSONS, scorer=partial_token_set_ratio)
-#
-## computational performance
-#n_trials = 100
-#timeit.timeit(test, number=n_trials)/n_trials
+wl = ["Donald Trump", "Joe Biden"]
+
+scorer = partial_token_set_ratio
+words = [x.get('word') for x in clusters]
+
+score_cutoff=80
+
+dists = cdist(wl, 
+              words, 
+              scorer=scorer, 
+              score_cutoff=score_cutoff)
+
+wl = np.array(wl)
+
+matches = [wl[np.where(col)] for col in dists.T]
+
+df = pd.DataFrame.from_records(clusters)
+df["matches"] = matches
+
+def aggregate_to_cluster(x):
+    res = np.unique(np.concatenate(x.matches.tolist()))
+    return res
+
+matches = pd.DataFrame(df.groupby(by=['cluster_id']).apply(aggregate_to_cluster), columns=['matches'], index=None)
+matches = matches.reset_index()
+
+df.drop('matches', axis=1, inplace=True)
+pd.merge(df, matches, how="left")
+
+
+
+    
+
+
+    
+
+
+
+
+
+
+
+
+
+
+

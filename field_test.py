@@ -27,8 +27,12 @@ def load_preds_from_s3(file="ner_preds_v1.pickle"):
     preds = pickle.loads(s3.Bucket("nerbonanza").Object(file).get()['Body'].read())
     
     return preds
-   
-ner_preds = load_preds_from_s3()
+
+# load ner predictions
+id = None
+s3 = boto3.resource('s3')
+entities = pd.read_csv(s3.Bucket("nerbonanza").Object('entities.csv').get()['Body'])
+articles = pd.read_csv(s3.Bucket("nerbonanza").Object('test_articles.csv').get()['Body'])
 
 # danish company names (for white list)
 def load_danish_companies(file="companies-name-municipality.json"):
@@ -36,52 +40,68 @@ def load_danish_companies(file="companies-name-municipality.json"):
     companies = pd.read_json(s3.Bucket("nerbonanza").Object(file).get()['Body'])
     return companies
 
-# whitelist
+#### WHITELIST EXPERIMENTS
 # companies = load_danish_companies()
 # whitelist = companies.name.tolist()
-whitelist = list(get_danish_politicians().keys())
+# whitelist = list(get_danish_politicians().keys())
 
 # run random article
-def run_random(ner_preds):
-    example = ner_preds.sample(n=1)
-    preds = example['body_preds'].values[0]
-    if len(preds) == 0:
-        return np.nan
-    text =  example.body.values[0]
+def run_random(articles, 
+               entitites, 
+               id=None,
+               scorer=partial_token_set_ratio,
+               cutoff=75
+               ):
+    
+    if id is None:
+        id = np.random.choice(articles.content_id.tolist())
 
+    article = articles[articles.content_id == id]
+    article = article[['content_id', 'title', 'lead', 'body']]
+    article_ents = entities[entities.content_id == id]    
+    article_ents = article_ents[article_ents.placement == "body"]
+    preds = article_ents.to_dict(orient="records")
+
+    t1 = time.time()
+    
     clusters, _ = fuzzy_cluster(preds, 
-                                scorer=partial_token_set_ratio, 
+                                scorer=scorer, 
                                 workers=4,
-                                cutoff=75,
+                                cutoff=cutoff,
                                 merge_output=True)
     #pd.DataFrame.from_dict(clusters)
 
     clusters = compute_prominence(clusters, 
                                   merge_output=True,
                                   weight_position=.5)
-    t1 = time.time()
     
-    clusters = match_whitelist(clusters,
-                               whitelist=whitelist,
-                               score_cutoff=90,
-                               merge_output=True,
-                               aggregate_cluster=True,
-                               workers=1)
+    #clusters = match_whitelist(clusters,
+    #                           whitelist=whitelist,
+    #                           score_cutoff=90,
+    #                           merge_output=True,
+    #                           aggregate_cluster=True,
+    #                           workers=1)
     
     t2 = time.time()
 
     clusters = pd.DataFrame.from_dict(clusters).sort_values(by ="prominence_rank")
     
-    print(example.content_id.tolist()[0]) 
-    print(text)
+    print(id)
+    #print(article.title.tolist()[0]) 
+    #print(article.lead.tolist()[0]) 
+    print(article.body.tolist()[0]) 
     print(clusters)
     
     return t2-t1
 
-n_trials = 500
-timings = [run_random(ner_preds) for x in range(n_trials)]
-print(f"Avg. time for {n_trials} trials: {np.round(np.nanmean(timings), 4)}s")
-print(f"Median time for {n_trials} trials: {np.round(np.nanmedian(timings), 4)}s")
+run_random(articles, 
+           entities,
+           scorer=partial_token_set_ratio,
+           cutoff=75)
+#n_trials = 500
+#timings = [run_random(articles, entities) for x in range(n_trials)]
+#print(f"Avg. time for {n_trials} trials: {np.round(np.nanmean(timings), 4)}s")
+#print(f"Median time for {n_trials} trials: {np.round(np.nanmedian(timings), 4)}s")
 
 
 

@@ -19,6 +19,7 @@ import pickle
 import boto3
 
 from fuzzup.fuzz import fuzzy_cluster, compute_prominence, match_whitelist
+from fuzzup.whitelists import get_danish_politicians
 
 def load_preds_from_s3(file="ner_preds_v1.pickle"):
 
@@ -34,8 +35,11 @@ def load_danish_companies(file="companies-name-municipality.json"):
     s3 = boto3.resource('s3')
     companies = pd.read_json(s3.Bucket("nerbonanza").Object(file).get()['Body'])
     return companies
-companies = load_danish_companies()
-company_names = companies.name.tolist()
+
+# whitelist
+# companies = load_danish_companies()
+# whitelist = companies.name.tolist()
+whitelist = list(get_danish_politicians().keys())
 
 # run random article
 def run_random(ner_preds):
@@ -46,7 +50,7 @@ def run_random(ner_preds):
     text =  example.body.values[0]
 
     clusters, _ = fuzzy_cluster(preds, 
-                                scorer=ratio, 
+                                scorer=partial_token_set_ratio, 
                                 workers=4,
                                 cutoff=75,
                                 merge_output=True)
@@ -58,10 +62,9 @@ def run_random(ner_preds):
     t1 = time.time()
     
     clusters = match_whitelist(clusters,
-                               whitelist=company_names,
+                               whitelist=whitelist,
                                score_cutoff=90,
                                merge_output=True,
-                               
                                aggregate_cluster=True,
                                workers=1)
     

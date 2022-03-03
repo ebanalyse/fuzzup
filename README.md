@@ -31,13 +31,13 @@ If you want the development version then install directly from [Github](https://
 
 ## To do
 
-- run against tores list
 - document whitelist matching in showcase
 - update readme with workflow
 - tests for whitelist
 - try and tune on junges entitites
 - cutoff_threshold -> score_cutoff -> cdist
-- ~~document whitelist~~~
+- ~~run against tores list~~
+- ~~document whitelist~~
 - ~~update docs~~
 
 ## Background

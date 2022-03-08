@@ -168,7 +168,8 @@ def fuzzy_cluster(words: List[Dict],
 def compute_prominence(clusters: List[Dict], 
                        to_dataframe: bool=False, 
                        merge_output: bool=True,
-                       weight_position: float=None) -> List[Dict]:
+                       weight_position: float=None,
+                       weight_multipliers: np.ndarray=None) -> List[Dict]:
     """Compute Prominence
     
     Computes prominence of entity clusters.
@@ -179,7 +180,10 @@ def compute_prominence(clusters: List[Dict],
             as pandas dataframe? Defaults to False.
         merge_output (bool, optional): Merge resulting 
             cluster meta data with input data. Defaults to True.
-        weight_position 
+        weight_position: threshold for position-adjusted
+            weight interpolation. Defaults to None implying
+            no adjustment for positions in text.
+        weight_multipliers: weight multipliers. 
 
     Returns:
         List[Dict]: clusters and their prominence.
@@ -198,7 +202,11 @@ def compute_prominence(clusters: List[Dict],
     # validate inputs
     if weight_position is not None:
         assert 0 <= weight_position <= 1, "choose 'weight_position' between 0 and 1"
-    
+    if weight_multipliers is not None:
+        assert len(weight_multipliers)==len(clusters), "Multipliers must have same length as number of entities"
+    else:
+        weight_multipliers = float(1)
+        
     clusters = pd.DataFrame.from_dict(clusters)
     
     prominence = clusters.copy() 
@@ -213,7 +221,10 @@ def compute_prominence(clusters: List[Dict],
             xp = [offset_min, offset_max]
             yp = [1, weight_position]
             prominence_position = np.array([np.interp(x, xp, yp) for x in clusters.start])
-            prominence_score = prominence_score * prominence_position
+    else: 
+        prominence_position = float(1)
+    
+    prominence_score = prominence_score * prominence_position * weight_multipliers
     
     # aggregate prominence to group level
     prominence['prominence_score'] = prominence_score

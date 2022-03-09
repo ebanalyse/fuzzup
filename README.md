@@ -6,13 +6,15 @@
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/fuzzup?color=green)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 
-`fuzzup` offers (1) a simple approach for clustering string entitities based on 
+`fuzzup` offers a simple approach for clustering string entitities based on 
 [Levenshtein Distance](https://en.wikipedia.org/wiki/Levenshtein_distance) using
 [Fuzzy Matching](https://en.wikipedia.org/wiki/Fuzzy_matching_(computer-assisted_translation))
 in conjunction with a simple rule-based clustering method. 
 
-`fuzzup` also provides (2) functions for computing the prominence of the resulting 
-entity clusters resulting from (1).
+`fuzzup` also provides functions for computing the prominence of the resulting 
+entity clusters and to match them with entity whitelists.
+
+An important use-case for `fuzzup` is *organizing, structuring and analyzing* output from [Named-Entity Recognition](https://en.wikipedia.org/wiki/Named-entity_recognition)(=NER).
 
 `fuzzup` has been designed to fit the output from NER predictions from the [Hugging Face](https://huggingface.co/) [transformers](https://github.com/huggingface/transformers) [NER pipeline](https://huggingface.co/docs/transformers/v4.16.2/en/main_classes/pipelines#transformers.TokenClassificationPipeline) specifically.
 
@@ -27,7 +29,17 @@ If you want the development version then install directly from [Github](https://
 
 ## Workflow
 
-... COMING SOON!
+`fuzzup` offers functionality for:
+
+1. Computing all of the mutual string distances (Levensteihn Distances/fuzzy ratios) between the string entities
+2. Forming clusters of string entities based on the distances from (1)
+3. Computing prominence of the clusters from (2) based on the number of entity occurrences, their positions in the text etc.
+4. Matching entities (clusters) with entity whitelists
+
+Together these steps constitute an end-to-end approach for organizing and structuring the output from NER. Here is an example of how to use `fuzzup` for forming entity clusters based on edit distances.
+
+
+
 
 ## To do
 

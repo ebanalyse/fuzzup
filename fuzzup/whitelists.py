@@ -7,7 +7,7 @@ def clean_string(x):
     out = re.sub(r"\([^()]*\)", "", x)
     return out
 
-def get_danish_politicians():
+def get_politicians():
     """
     copy pasta from https://github.com/cfblaeb/politik
     """
@@ -63,7 +63,7 @@ def get_byer():
         )
     df = pd.DataFrame(records)
     return df
-​
+
 def get_municipalities():
     
     kommuner = get_byer().kommune.tolist()
@@ -76,7 +76,7 @@ def get_municipalities():
     
     return kommuner
 
-def get_cities_municipalities():
+def get_cities():
     
     df = get_byer()
     

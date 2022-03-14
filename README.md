@@ -15,6 +15,8 @@ in conjunction with a simple rule-based clustering method.
 entity clusters and to match them with entity whitelists.
 
 An important use-case for `fuzzup` is *organizing, structuring and analyzing* output from [Named-Entity Recognition](https://en.wikipedia.org/wiki/Named-entity_recognition)(=NER).
+`fuzzup` also provides (2) functions for computing the prominence of the resulting 
+entity clusters resulting from (1) as well as whitelist matching (3).
 
 `fuzzup` has been designed to fit the output from NER predictions from the [Hugging Face](https://huggingface.co/) [transformers](https://github.com/huggingface/transformers) [NER pipeline](https://huggingface.co/docs/transformers/v4.16.2/en/main_classes/pipelines#transformers.TokenClassificationPipeline) specifically.
 
@@ -46,8 +48,8 @@ Together these steps constitute an end-to-end approach for organizing and struct
 - document whitelist matching in showcase
 - update readme with workflow
 - tests for whitelist
-- try and tune on junges entitites
 - cutoff_threshold -> score_cutoff -> cdist
+- ~~try and tune on junges entitites~~
 - ~~run against tores list~~
 - ~~document whitelist~~
 - ~~update docs~~

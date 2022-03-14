@@ -34,11 +34,11 @@ PERSONS_NER["end"] = np.random.randint(100, size=n)
 PERSONS_NER = PERSONS_NER.to_dict(orient="records")
 
 #### FUZZUP WORKFLOW
-clusters, _ = fuzzy_cluster(PERSONS_NER, 
-                            scorer=partial_token_set_ratio, 
-                            workers=2,
-                            cutoff=70,
-                            merge_output=True)
+clusters = fuzzy_cluster(PERSONS_NER, 
+                         scorer=partial_token_set_ratio, 
+                         workers=2,
+                         cutoff=70,
+                         merge_output=True)
 pd.DataFrame.from_dict(clusters)
 
 clusters = compute_prominence(clusters, 

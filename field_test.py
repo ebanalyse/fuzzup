@@ -1,5 +1,6 @@
 import timeit
 import time
+from itertools import compress
 
 from rapidfuzz.fuzz import (
     ratio,
@@ -19,7 +20,7 @@ import pickle
 import boto3
 
 from fuzzup.fuzz import fuzzy_cluster, compute_prominence, match_whitelist
-from fuzzup.whitelists import get_danish_politicians
+from fuzzup.whitelists import get_politicians, get_cities
 
 def load_preds_from_s3(file="ner_preds_v1.pickle"):
 
@@ -44,6 +45,7 @@ def load_danish_companies(file="companies-name-municipality.json"):
 # companies = load_danish_companies()
 # whitelist = companies.name.tolist()
 # whitelist = list(get_danish_politicians().keys())
+whitelist = list(get_cities().keys())
 
 # run random article
 def run_random(articles, 
@@ -64,27 +66,34 @@ def run_random(articles,
 
     t1 = time.time()
     
-    clusters, _ = fuzzy_cluster(preds, 
-                                scorer=scorer, 
-                                workers=4,
-                                cutoff=cutoff,
-                                merge_output=True)
-    #pd.DataFrame.from_dict(clusters)
-
+    clusters = fuzzy_cluster(preds, 
+                             scorer=scorer, 
+                             workers=4,
+                             cutoff=cutoff,
+                             merge_output=True)
+    #pd.DataFrame.from_dict(clu ters)
+    
     clusters = compute_prominence(clusters, 
                                   merge_output=True,
                                   weight_position=.5)
     
-    #clusters = match_whitelist(clusters,
-    #                           whitelist=whitelist,
-    #                           score_cutoff=90,
-    #                           merge_output=True,
-    #                           aggregate_cluster=True,
-    #                           workers=1)
+    # subset location entities (for matching with cities)
+    locations = [x["entity_group"] == "LOC" for x in clusters]
+    locations = list(compress(clusters, locations))
+    clusters = locations
+    
+    clusters = match_whitelist(clusters,
+                               whitelist=whitelist,
+                               scorer=ratio,
+                               score_cutoff=95,
+                               merge_output=True,
+                               aggregate_cluster=True,
+                               workers=1)
     
     t2 = time.time()
 
-    clusters = pd.DataFrame.from_dict(clusters).sort_values(by ="prominence_rank")
+    if len(clusters) > 0:
+        clusters = pd.DataFrame.from_dict(clusters).sort_values(by ="prominence_rank")
     
     print(id)
     #print(article.title.tolist()[0]) 

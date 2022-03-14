@@ -107,7 +107,7 @@ def fuzzy_cluster(words: List[Dict],
                   cutoff: int = 70, 
                   to_dataframe: bool = False,
                   merge_output: bool = True,
-                  **kwargs) -> Tuple[List[Dict], pd.DataFrame]:
+                  **kwargs) -> List[Dict]:
     """_summary_
 
     Args:
@@ -120,8 +120,7 @@ def fuzzy_cluster(words: List[Dict],
             original input? Defaults to False.
 
     Returns:
-        Tuple[List[Dict], pd.DataFrame]: Clusters of entities and 
-            a data frame with pairwise fuzzy ratios.
+        List[Dict]: Clusters of entities.
     """
     
     # TODO: implement by_entity_group
@@ -130,9 +129,9 @@ def fuzzy_cluster(words: List[Dict],
     # handle trivial case (empty list)
     if not words:
         if to_dataframe:
-            return pd.DataFrame(), pd.DataFrame()
+            return pd.DataFrame()
         else:
-            return [], pd.DataFrame()
+            return []
         
     if isinstance(words, list) and all([isinstance(x, dict) for x in words]):
         output_ner = True
@@ -163,8 +162,34 @@ def fuzzy_cluster(words: List[Dict],
     if not to_dataframe:
         output = output.to_dict(orient="records")
     
-    return output, fuzzy_matrix
+    return output
 
+def fuzzy_cluster_bygroup(words: List[Dict], 
+                          **kwargs) -> List[Dict]:
+    """Fuzzy Cluster By Group
+    
+    Fuzzy clustering by entity group. Simply 
+    calls fuzzy_cluster() groupwise.
+
+    Args:
+        words (List[Dict]): Words/entities.
+        kwargs: all optional arguments for 
+            fuzzy_cluster().
+
+    Returns:
+        List[Dict]: entity clusters.
+    """
+    # handle trivial case.
+    if len(words) == 0:
+        return []
+    
+    words = pd.DataFrame.from_dict(words)
+    words = words.groupby(['entity_group'])
+    
+    out = [fuzzy_cluster(words = words.get_group(group).to_dict(orient="records"), **kwargs) for group in words.groups][0]
+    
+    return out
+            
 def compute_prominence(clusters: List[Dict], 
                        to_dataframe: bool=False, 
                        merge_output: bool=True,
@@ -192,8 +217,7 @@ def compute_prominence(clusters: List[Dict],
         ...
     """
     # handle trivial case (empty list)
-    
-    if not clusters:
+    if len(clusters) == 0:
         if to_dataframe:
             return pd.DataFrame()
         else:
@@ -247,6 +271,33 @@ def compute_prominence(clusters: List[Dict],
     
     return prominence
 
+def compute_prominence_bygroup(clusters: List[Dict], 
+                               **kwargs) -> List[Dict]:
+    """Compute Prominence by Group
+    
+    Computes prominence by entity group. Simply 
+    calls compute_prominence() groupwise.
+
+    Args:
+        clusters (List[Dict]): Entity clusters.
+        kwargs: all optional arguments for 
+            compute_prominence().
+
+    Returns:
+        List[Dict]: entity clusters with 
+            prominence scores.
+    """
+    # handle trivial case.
+    if len(clusters) == 0:
+        return []
+    
+    clusters = pd.DataFrame.from_dict(clusters)
+    clusters = clusters.groupby(['entity_group'])
+    
+    out = [compute_prominence(clusters = clusters.get_group(group).to_dict(orient="records"), **kwargs) for group in clusters.groups][0]
+    
+    return out
+
 # helper function
 def aggregate_to_cluster(x):
     res = np.unique(np.concatenate(x.matches.tolist()))
@@ -273,6 +324,7 @@ def match_whitelist(words: List[Dict],
             input. Defaults to False.
         aggregate_cluster (bool, optional): Aggregate matches to
             cluster level. Defaults to False.
+        kwargs: optinal arguments for cdist.
 
     Returns:
         List[Dict]: words and their respective matches with the
@@ -322,4 +374,10 @@ def match_whitelist(words: List[Dict],
         df = df.to_dict(orient="records")
     
     return df
+
+#test = {'entity_group': ["PER", "PER", "LOC"], 'word': ['abe', 'abe', 'kat']}
+#tester = pd.DataFrame.from_dict(test)
+#tester = tester.to_dict(orient="records")
+#fuzzy_cluster_bygroup(tester)
+
 

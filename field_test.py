@@ -66,12 +66,12 @@ def run_random(articles,
 
     t1 = time.time()
     
-    clusters, _ = fuzzy_cluster(preds, 
-                                scorer=scorer, 
-                                workers=4,
-                                cutoff=cutoff,
-                                merge_output=True)
-    #pd.DataFrame.from_dict(clusters)
+    clusters = fuzzy_cluster(preds, 
+                             scorer=scorer, 
+                             workers=4,
+                             cutoff=cutoff,
+                             merge_output=True)
+    #pd.DataFrame.from_dict(clu ters)
     
     clusters = compute_prominence(clusters, 
                                   merge_output=True,

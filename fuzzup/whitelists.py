@@ -1,6 +1,10 @@
+from typing import List, Dict
+
 import requests
 import pandas as pd
 import re
+import numpy as np
+from rapidfuzz.process import cdist
 
 # helper function
 def clean_string(x):
@@ -85,3 +89,108 @@ def get_cities():
         out[row.navn] = {'municipality': row.kommune}                
     
     return out
+
+# helper function
+def aggregate_to_cluster(x):
+    res = np.unique(np.concatenate(x.matches.tolist()))
+    return res
+
+def match_whitelist(words: List[Dict],
+                    whitelist: List[str], 
+                    score_cutoff: float=80,
+                    to_dataframe: bool=False,
+                    aggregate_cluster: bool=False,
+                    entity_group: list=None,
+                    **kwargs) -> List[Dict]:
+    """Match entities with white list
+
+    Args:
+        words (List[Dict]): words/entities for matching.
+        whitelist (List[str]): white list with words/entities
+            to match with.
+        score_cutoff (float, optional): Cutoff threshold value for 
+            matching. Defaults to 80.
+        to_dataframe (bool, optional): Return output as data frame.
+            Defaults to False.
+        aggregate_cluster (bool, optional): Aggregate matches to
+            cluster level. Defaults to False.
+        kwargs: optinal arguments for cdist.
+        entity_group: which entity groups to match.
+
+    Returns:
+        List[Dict]: words and their respective matches with the
+            white list.
+    """
+
+    assert isinstance(words, list), "'words' must be a list"
+    assert isinstance(whitelist, list), "'whitelist' must be a list"
+    
+    # handle trivial case (empty list)
+    if not words or not whitelist:
+        if to_dataframe:
+            return pd.DataFrame()
+        else:
+            return []
+        
+    if isinstance(words, list) and all([isinstance(x, dict) for x in words]):
+        output_ner = True
+        if entity_group is not None:
+            words = [x for x in words if x.get('entity_group') in entity_group]
+        strings = [x.get('word') for x in words]
+    else:
+        output_ner = False
+        strings = words
+    
+    if len(strings) == 0:    
+        if to_dataframe:
+            return pd.DataFrame()
+        else:
+            return []
+           
+    # compute distances
+    dists = cdist(whitelist, 
+                  strings, 
+                  score_cutoff=score_cutoff,
+                  **kwargs)
+
+    matches = [np.array(whitelist)[np.where(col)] for col in dists.T]
+    
+    if not output_ner:
+        df = pd.DataFrame.from_dict({'word': strings, 'matches': matches}) 
+
+    if output_ner:
+        df = pd.DataFrame.from_records(words)
+        df["matches"] = matches
+        if aggregate_cluster:
+            matches = pd.DataFrame(df.groupby(by=['cluster_id']).apply(aggregate_to_cluster), columns=['matches'], index=None)
+            matches = matches.reset_index()
+            df.drop('matches', axis=1, inplace=True)
+            df = pd.merge(df, matches, how="left")
+    
+    df['matches']=[x.tolist() for x in df['matches']]    
+    
+    if not to_dataframe:
+        df = df.to_dict(orient="records")
+    
+    return df
+
+class Cities():
+    
+    def __init__(self):
+        self.whitelist = get_cities()
+        self.entity_group = ["LOC"]
+        self.title = "city"
+    
+    def __call__(self,
+                 words: List[Dict],
+                 **kwargs):
+        
+        out = match_whitelist(words=words,
+                              whitelist=list(self.whitelist.keys()), 
+                              entity_group=self.entity_group,
+                              **kwargs)
+        
+        # TODO: return mappings
+        
+        return out
+

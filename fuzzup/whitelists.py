@@ -1,10 +1,14 @@
 from typing import List, Dict
+import logging
 
 import requests
 import pandas as pd
 import re
 import numpy as np
 from rapidfuzz.process import cdist
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # helper function
 def clean_string(x):
@@ -100,7 +104,7 @@ def match_whitelist(words: List[Dict],
                     score_cutoff: float=80,
                     to_dataframe: bool=False,
                     aggregate_cluster: bool=False,
-                    entity_group: list=None,
+                    entity_group: List[str]=None,
                     **kwargs) -> List[Dict]:
     """Match entities with white list
 
@@ -174,16 +178,23 @@ def match_whitelist(words: List[Dict],
     
     return df
 
-class Cities():
+class Whitelist():
     
-    def __init__(self):
-        self.whitelist = get_cities()
-        self.entity_group = ["LOC"]
-        self.title = "city"
-    
+    def __init__(self,
+                 function_load,
+                 title,
+                 entity_group,
+                 **kwargs) -> None:
+        
+        self.entity_group = entity_group
+        self.title = title
+        logger.info(f"Loading whitelist: {title}")
+        self.whitelist = function_load(**kwargs)
+        logger.info("Done loading.")
+        
     def __call__(self,
                  words: List[Dict],
-                 **kwargs):
+                 **kwargs) -> List[Dict]:
         
         out = match_whitelist(words=words,
                               whitelist=list(self.whitelist.keys()), 
@@ -193,4 +204,38 @@ class Cities():
         # TODO: return mappings
         
         return out
-
+    
+class Cities(Whitelist):
+    
+    def __init__(self,
+                 **kwargs):
+        
+        super().__init__(function_load=get_cities,
+                         title='city',
+                         entity_group=['LOC'],
+                         **kwargs)
+    
+# c = Cities()
+    
+    
+    
+# class Cities():
+#     
+#     def __init__(self):
+#         self.whitelist = get_cities()
+#         self.entity_group = ["LOC"]
+#         self.title = "city"
+#     
+#     def __call__(self,
+#                  words: List[Dict],
+#                  **kwargs):
+#         
+#         out = match_whitelist(words=words,
+#                               whitelist=list(self.whitelist.keys()), 
+#                               entity_group=self.entity_group,
+#                               **kwargs)
+#         
+#         # TODO: return mappings
+#         
+#         return out
+# 

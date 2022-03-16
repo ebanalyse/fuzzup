@@ -3,19 +3,16 @@ import pandas as pd
 from fuzzup.fuzz import fuzzy_cluster, fuzzy_cluster_bygroup
 from fuzzup.datasets import simulate_ner_data
 
+import pytest
+
 def test_fuzzy_cluster_runs():
     assert True
 
-strings = ['biden', 'joe biden', 'donald trump', 'D. Trump']  
-
 def test_fuzzy_cluster():
-    fuzzy_cluster(strings)
-    
-clusters = fuzzy_cluster(strings)
-
-def test_fuzzy_cluster_format():
+    strings = ['biden', 'joe biden', 'donald trump', 'D. Trump']  
+    clusters = fuzzy_cluster(strings)
     assert isinstance(clusters, list)
-
+    
 #### SINGLE WORD
     
 def test_fuzzy_cluster_single():
@@ -35,4 +32,8 @@ def test_fuzzy_cluster_bygroup():
     out = fuzzy_cluster_bygroup(PERSONS_NER)
     assert len(out)==len(PERSONS_NER)
     assert fuzzy_cluster_bygroup([])==[]
+    
+    
+if __name__ == '__main__':
+    pytest.main()
     

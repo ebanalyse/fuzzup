@@ -4,9 +4,11 @@ import numpy as np
 from fuzzup.fuzz import fuzzy_cluster, compute_prominence, fuzzy_cluster_bygroup, compute_prominence_bygroup
 from fuzzup.datasets import simulate_ner_data
 
-strings = ['biden', 'joe biden', 'donald trump', 'D. Trump']  
+import pytest
 
 def test_compute_prominence_multiple():
+    strings = ['biden', 'joe biden', 'donald trump', 'D. Trump']  
+    
     clusters = fuzzy_cluster(strings)
     clusters = compute_prominence(clusters)
     assert isinstance(clusters, list)
@@ -56,4 +58,5 @@ def test_compute_prominence_bygroup():
 #def test_form_clusters_and_rank_format():
 #    assert isinstance(output, list)
 
-
+if __name__ == "__main__":
+    pytest.main()

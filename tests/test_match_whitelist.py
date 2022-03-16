@@ -2,6 +2,7 @@ import pandas as pd
 
 from fuzzup.whitelists import match_whitelist, Cities
 from fuzzup.fuzz import fuzzy_cluster
+import pytest
 
 c = Cities()
 
@@ -24,3 +25,6 @@ def test_whitelist_no_input():
     clusters = fuzzy_cluster(test_data)
     out = c(clusters)
     assert len(out) == 0
+
+if __name__ == '__main__':
+    pytest.main()

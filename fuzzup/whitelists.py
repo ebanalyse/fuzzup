@@ -127,8 +127,14 @@ def match_whitelist(words: List[Dict],
     """
 
     assert isinstance(words, list), "'words' must be a list"
-    assert isinstance(whitelist, list), "'whitelist' must be a list"
-    
+    assert isinstance(whitelist, (list, dict)), "'whitelist' must be a list or dit"
+ 
+    is_dict = False   
+    if isinstance(whitelist, dict):
+        is_dict = True
+        whitelist_dict = whitelist
+        whitelist = list(whitelist.keys())
+        
     # handle trivial case (empty list)
     if not words or not whitelist:
         if to_dataframe:
@@ -171,7 +177,14 @@ def match_whitelist(words: List[Dict],
             df.drop('matches', axis=1, inplace=True)
             df = pd.merge(df, matches, how="left")
     
-    df['matches']=[x.tolist() for x in df['matches']]    
+    df['matches']=[x.tolist() for x in df['matches']]
+             
+    if is_dict:
+        mappings = []
+        for match in matches:
+            out = [whitelist_dict.get(x) for x in match]
+            mappings.append(out)
+        df['mappings'] = mappings
     
     if not to_dataframe:
         df = df.to_dict(orient="records")
@@ -197,7 +210,7 @@ class Whitelist():
                  **kwargs) -> List[Dict]:
         
         out = match_whitelist(words=words,
-                              whitelist=list(self.whitelist.keys()), 
+                              whitelist=self.whitelist, 
                               entity_group=self.entity_group,
                               **kwargs)
         

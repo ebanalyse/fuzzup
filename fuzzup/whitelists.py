@@ -21,6 +21,7 @@ def clean_string(x):
     return out
 
 ## This won't work well and the quota is quickly expired...
+#CVRAPI.dk attempt - can only query 1 company at a time ...
 def fetch_single_company(name : str, country: str ='dk') -> Dict:
   name = name.replace(' ', '-')
   name = name.replace('A/S', '%2FS')
@@ -37,7 +38,23 @@ def fetch_single_company(name : str, country: str ='dk') -> Dict:
             return record 
   except:
       return {name : None} # nothing was found in lookup on company
-    
+
+#CVR-dev attempt
+#KEY: cvr.dev_513f54b68ebe9e83e3b2dde277d598bf
+import cvr
+CLIENT =  cvr.Client(api_key='cvr.dev_513f54b68ebe9e83e3b2dde277d598bf')
+
+def get_cvrdev_company(name: str) -> Dict:    
+    record_list = []
+    for virksomhed in CLIENT.cvr.virksomheder(navn=name):
+        record = {virksomhed.metadata.nyeste_navn.navn : {'postnummer':virksomhed.metadata.nyeste_beliggenhedsadresse.postnummer,
+                                                          'bynavn': virksomhed.metadata.nyeste_beliggenhedsadresse.bynavn,
+                                                          'fritekst': virksomhed.metadata.nyeste_beliggenhedsadresse.fritekst
+                                                          }
+                  }
+        record_list.append(record)
+    return record_list
+        
 def get_politicians():
     """
     copy pasta from https://github.com/cfblaeb/politik

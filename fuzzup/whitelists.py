@@ -23,7 +23,7 @@ def clean_string(x):
 ## This won't work well and the quota is quickly expired...
 #CVRAPI.dk attempt - can only query 1 company at a time ...
 #It is quota based... bad
-def fetch_single_company(name : str, country: str ='dk') -> Dict:
+def get_cvrapi_company(name : str, country: str ='dk') -> Dict:
   time.sleep(0.5) # it's not nice to spam public api
   name = name.replace(' ', '-')
   name = name.replace('A/S', '%2FS')
@@ -59,19 +59,21 @@ def get_cvrdev_company(name: str) -> Dict:
                     }
             record_list.append(record)
     except:
-        return {name : None}
+        record_list.append({name : {'postnummer': None, 'bynavn': None, 'fritekst': None}})
     return record_list
     
-def generate_test_records(function_load: Callable) -> List[Dict]:
-    test_records = []
+def get_companies(function_load: Callable = get_cvrdev_company) -> List[Dict]:
+    test_records = {}
     with open('./companies-name-municipality.json', 'rb') as f:
         complist = json.loads(f.read())
-        
-    for i in tqdm(complist):
-        test_records.append(function_load(i['name']))
-        if len(test_records) > 100:
-            break
     
+    for i in tqdm(complist):
+        record = function_load(i['name'])
+        for j in record:
+            test_records.update(j) 
+        if len(test_records) > 100:
+            logging.info('Stopping early, dont spam the api')
+            break
     return test_records
 
 def get_politicians():
@@ -285,11 +287,9 @@ class Companies(Whitelist):
                          entity_group=['ORG'],
                          **kwargs
                          )
-    
-# c = Cities()
-    
-    
-    
+comp = Companies()   
+
+__import__('pdb').set_trace()    
 # class Cities():
 #     
 #     def __init__(self):

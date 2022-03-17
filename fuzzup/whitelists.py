@@ -6,6 +6,11 @@ import pandas as pd
 import re
 import numpy as np
 from rapidfuzz.process import cdist
+import contextlib
+import json
+import urllib.request as request
+from tqdm import tqdm
+import time
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -15,6 +20,24 @@ def clean_string(x):
     out = re.sub(r"\([^()]*\)", "", x)
     return out
 
+## This won't work well and the quota is quickly expired...
+def fetch_single_company(name : str, country: str ='dk') -> Dict:
+  name = name.replace(' ', '-')
+  name = name.replace('A/S', '%2FS')
+  request_a = request.Request(
+    url=f'https://cvrapi.dk/api?search={name}&country={country}',
+    headers={
+      'User-Agent': 'CVR opslag'})
+  try:
+    with contextlib.closing(request.urlopen(request_a)) as response:
+            companies_json = json.loads(response.read())
+            record = {companies_json['name'] : {
+                'by': companies_json['city'],
+                'postnr': companies_json['zipcode']}}
+            return record 
+  except:
+      return {name : None} # nothing was found in lookup on company
+    
 def get_politicians():
     """
     copy pasta from https://github.com/cfblaeb/politik
@@ -214,6 +237,18 @@ class Cities(Whitelist):
                          title='city',
                          entity_group=['LOC'],
                          **kwargs)
+        
+        
+class Companies(Whitelist):
+    
+    def __init__(self,
+                 **kwargs):
+        
+        super().__init__(function_load=get_companies,
+                         title='company',
+                         entity_group=['ORG'],
+                         **kwargs
+                         )
     
 # c = Cities()
     

@@ -181,7 +181,7 @@ def match_whitelist(words: List[Dict],
              
     if is_dict:
         mappings = []
-        for match in matches:
+        for match in df.matches.tolist():
             out = [whitelist_dict.get(x) for x in match]
             mappings.append(out)
         df['mappings'] = mappings

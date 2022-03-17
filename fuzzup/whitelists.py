@@ -11,9 +11,10 @@ import json
 import urllib.request as request
 from tqdm import tqdm
 import time
-
+import cvr
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
 
 # helper function
 def clean_string(x):
@@ -41,40 +42,42 @@ def get_cvrapi_company(name : str, country: str ='dk') -> Dict:
   except:
       return {name : None} # nothing was found in lookup on company
 
-#CVR-dev attempt
-#KEY: cvr.dev_513f54b68ebe9e83e3b2dde277d598bf
-import cvr
-CLIENT =  cvr.Client(api_key='cvr.dev_513f54b68ebe9e83e3b2dde277d598bf')
-
 def get_cvrdev_company(name: str) -> Dict:    
     time.sleep(0.5) # it's not nice to spam public api
     record_list = []
     
+    #BUG : There is a bug with cvr=0.2.0, that throws an exception if specific company names are parsed.
     try:
         for virksomhed in CLIENT.cvr.virksomheder(navn=name):
             record = {virksomhed.metadata.nyeste_navn.navn : {'postnummer':virksomhed.metadata.nyeste_beliggenhedsadresse.postnummer,
                                                             'bynavn': virksomhed.metadata.nyeste_beliggenhedsadresse.bynavn,
                                                             'fritekst': virksomhed.metadata.nyeste_beliggenhedsadresse.fritekst
-                                                            }
-                    }
+                                                             }
+                     }
             record_list.append(record)
-    except:
+    except Exception:
+        #We have to either skip the company or hardcode the entry. Defaultdict can't be used, because it's a problem with CVR library.
         record_list.append({name : {'postnummer': None, 'bynavn': None, 'fritekst': None}})
     return record_list
     
 def get_companies(function_load: Callable = get_cvrdev_company) -> List[Dict]:
-    test_records = {}
+    #CVR-dev attempt
+    #KEY: cvr.dev_513f54b68ebe9e83e3b2dde277d598bf
+    global CLIENT
+    CLIENT =  cvr.Client(api_key='cvr.dev_513f54b68ebe9e83e3b2dde277d598bf')
+
+    company_records = {}
     with open('./companies-name-municipality.json', 'rb') as f:
         complist = json.loads(f.read())
     
     for i in tqdm(complist):
         record = function_load(i['name'])
         for j in record:
-            test_records.update(j) 
-        if len(test_records) > 100:
+            company_records.update(j) 
+        if len(company_records) > 100:
             logging.info('Stopping early, dont spam the api')
             break
-    return test_records
+    return company_records
 
 def get_politicians():
     """
@@ -289,7 +292,6 @@ class Companies(Whitelist):
                          )
 comp = Companies()   
 
-__import__('pdb').set_trace()    
 # class Cities():
 #     
 #     def __init__(self):

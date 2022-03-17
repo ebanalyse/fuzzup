@@ -1,4 +1,4 @@
-from typing import List, Dict
+from typing import List, Dict, Callable
 import logging
 
 import requests
@@ -22,7 +22,9 @@ def clean_string(x):
 
 ## This won't work well and the quota is quickly expired...
 #CVRAPI.dk attempt - can only query 1 company at a time ...
+#It is quota based... bad
 def fetch_single_company(name : str, country: str ='dk') -> Dict:
+  time.sleep(0.5) # it's not nice to spam public api
   name = name.replace(' ', '-')
   name = name.replace('A/S', '%2FS')
   request_a = request.Request(
@@ -45,16 +47,33 @@ import cvr
 CLIENT =  cvr.Client(api_key='cvr.dev_513f54b68ebe9e83e3b2dde277d598bf')
 
 def get_cvrdev_company(name: str) -> Dict:    
+    time.sleep(0.5) # it's not nice to spam public api
     record_list = []
-    for virksomhed in CLIENT.cvr.virksomheder(navn=name):
-        record = {virksomhed.metadata.nyeste_navn.navn : {'postnummer':virksomhed.metadata.nyeste_beliggenhedsadresse.postnummer,
-                                                          'bynavn': virksomhed.metadata.nyeste_beliggenhedsadresse.bynavn,
-                                                          'fritekst': virksomhed.metadata.nyeste_beliggenhedsadresse.fritekst
-                                                          }
-                  }
-        record_list.append(record)
+    
+    try:
+        for virksomhed in CLIENT.cvr.virksomheder(navn=name):
+            record = {virksomhed.metadata.nyeste_navn.navn : {'postnummer':virksomhed.metadata.nyeste_beliggenhedsadresse.postnummer,
+                                                            'bynavn': virksomhed.metadata.nyeste_beliggenhedsadresse.bynavn,
+                                                            'fritekst': virksomhed.metadata.nyeste_beliggenhedsadresse.fritekst
+                                                            }
+                    }
+            record_list.append(record)
+    except:
+        return {name : None}
     return record_list
+    
+def generate_test_records(function_load: Callable) -> List[Dict]:
+    test_records = []
+    with open('./companies-name-municipality.json', 'rb') as f:
+        complist = json.loads(f.read())
         
+    for i in tqdm(complist):
+        test_records.append(function_load(i['name']))
+        if len(test_records) > 100:
+            break
+    
+    return test_records
+
 def get_politicians():
     """
     copy pasta from https://github.com/cfblaeb/politik

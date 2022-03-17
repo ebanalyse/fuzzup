@@ -55,7 +55,7 @@ def get_politicians():
 
 def get_byer():
     """Get all byer in DK"""
-    url = 'https://api.dataforsyningen.dk/steder?hovedtype=Bebyggelse&undertype=by'
+    url = 'https://api.dataforsyningen.dk/steder?hovedtype=Bebyggelse&undertype=bydel'
     byer = requests.get(url).json()
     records = []
     for by in byer:
@@ -66,23 +66,12 @@ def get_byer():
             {
                 'navn': by['primærtnavn'],
                 'indbyggerantal': by['egenskaber']['indbyggerantal'],
-                'kommune': kommuner
+                'city_code': by['id'],
+                'municipality': kommuner,
             }
         )
     df = pd.DataFrame(records)
     return df
-
-def get_municipalities():
-    
-    kommuner = get_byer().kommune.tolist()
-    kommuner = [[x] if isinstance(x, str) else x for x in kommuner]
-    kommuner = [item for sublist in kommuner for item in sublist]
-    kommuner = set(kommuner)
-    
-    # convert to fuzzup dict format
-    kommuner = {x: {} for x in kommuner}
-    
-    return kommuner
 
 def get_cities():
     
@@ -90,9 +79,16 @@ def get_cities():
     
     out = {}
     for row in df.itertuples(index=False, name="row"):
-        out[row.navn] = {'municipality': row.kommune}                
+        out[row.navn] = {'municipality': row.municipality,
+                         'city_code': row.city_code}                
     
     return out
+
+def get_municipalities():
+    url = 'https://api.dataforsyningen.dk/kommuner'
+    data = requests.get(url).json() 
+    whitelist = {x.get('navn'): {'municipality_code': x.get('kode')} for x in data}
+    return whitelist
 
 # helper function
 def aggregate_to_cluster(x):
@@ -163,6 +159,8 @@ def match_whitelist(words: List[Dict],
                   score_cutoff=score_cutoff,
                   **kwargs)
 
+    import pdb; pdb.set_trace()
+    
     matches = [np.array(whitelist)[np.where(col)] for col in dists.T]
     
     if not output_ner:
@@ -192,6 +190,21 @@ def match_whitelist(words: List[Dict],
     return df
 
 class Whitelist():
+    """Whitelist
+    
+    Whitelist objects containing whitelists and 
+    relevant meta data regarding how to apply 
+    it.
+    
+    Attributes:
+        entity_group (str): the entity group of interest
+            for the given whitelist.
+        title (str): title of the type of entity the
+            whitelist relates to.
+        whitelist (dict): whitelist with keys to
+            match with. The values contain mappings
+            for the given key. 
+    """
     
     def __init__(self,
                  function_load,
@@ -219,6 +232,11 @@ class Whitelist():
         return out
     
 class Cities(Whitelist):
+    """Danish Cities
+    
+    Whitelist of names of Danish cities
+    initialized from the DAWA API.
+    """
     
     def __init__(self,
                  **kwargs):
@@ -227,28 +245,37 @@ class Cities(Whitelist):
                          title='city',
                          entity_group=['LOC'],
                          **kwargs)
+        
+class Municipalities(Whitelist):
+    """Danish Cities
     
-# c = Cities()
+    Whitelist of names of Danish Municipalities
+    initialized from the DAWA API.
+    """
     
+    def __init__(self,
+                 **kwargs):
+        
+        super().__init__(function_load=get_municipalities,
+                         title='municipality',
+                         entity_group=['LOC'],
+                         **kwargs)
+
+  
+
+from fuzzup.fuzz import fuzzy_cluster
+
+# simulate data
+test_data = [{'word': 'Viborg', 'entity_group': 'LOC', 'cluster_id' : 'ABE'}, 
+             {'word': 'Uldum', 'entity_group': 'ORG', 'cluster_id' : 'bambolino' }]
+
+# cluster data
+clusters = fuzzy_cluster(test_data)
+
+# initiate whitelists
+c = Cities()
+m = Municipalities()
     
+municipalities = m(clusters, score_cutoff=95) 
+cities = c(clusters, score_cutoff=90)
     
-# class Cities():
-#     
-#     def __init__(self):
-#         self.whitelist = get_cities()
-#         self.entity_group = ["LOC"]
-#         self.title = "city"
-#     
-#     def __call__(self,
-#                  words: List[Dict],
-#                  **kwargs):
-#         
-#         out = match_whitelist(words=words,
-#                               whitelist=list(self.whitelist.keys()), 
-#                               entity_group=self.entity_group,
-#                               **kwargs)
-#         
-#         # TODO: return mappings
-#         
-#         return out
-# 

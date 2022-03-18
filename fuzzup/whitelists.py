@@ -55,13 +55,11 @@ def get_politicians():
 
 def get_byer():
     """Get all byer in DK"""
-    url = 'https://api.dataforsyningen.dk/steder?hovedtype=Bebyggelse&undertype=bydel'
+    url = 'https://api.dataforsyningen.dk/steder?hovedtype=Bebyggelse&undertype=by'
     byer = requests.get(url).json()
     records = []
     for by in byer:
         kommuner = [kommune['navn'] for kommune in by['kommuner']]
-        if len(kommuner) == 1:
-            kommuner = kommuner[0]
         records.append(
             {
                 'navn': by['primærtnavn'],
@@ -90,6 +88,13 @@ def get_municipalities():
     whitelist = {x.get('navn'): {'municipality_code': x.get('kode')} for x in data}
     return whitelist
 
+def get_neighborhoods():
+    """Get all neighborhoods in DK"""
+    url = 'https://api.dataforsyningen.dk/steder?hovedtype=Bebyggelse&undertype=bydel'
+    hoods = requests.get(url).json()
+    out = {hood['primærtnavn'] : {'neighborhood_code': hood['id']} for hood in hoods}
+    return out
+    
 # helper function
 def aggregate_to_cluster(x):
     res = np.unique(np.concatenate(x.matches.tolist()))
@@ -158,8 +163,6 @@ def match_whitelist(words: List[Dict],
                   strings, 
                   score_cutoff=score_cutoff,
                   **kwargs)
-
-    import pdb; pdb.set_trace()
     
     matches = [np.array(whitelist)[np.where(col)] for col in dists.T]
     
@@ -183,6 +186,9 @@ def match_whitelist(words: List[Dict],
             out = [whitelist_dict.get(x) for x in match]
             mappings.append(out)
         df['mappings'] = mappings
+    
+    # subset matches only
+    df = df[df['matches'].astype(str) != '[]']
     
     if not to_dataframe:
         df = df.to_dict(orient="records")
@@ -260,22 +266,23 @@ class Municipalities(Whitelist):
                          title='municipality',
                          entity_group=['LOC'],
                          **kwargs)
+        
+class Neighborhoods(Whitelist):
+    """Danish Neighborhoods
+    
+    Whitelist of names of Danish Neighborhoods
+    initialized from the DAWA API.
+    """
+    
+    def __init__(self,
+                 **kwargs):
+        
+        super().__init__(function_load=get_neighborhoods,
+                         title='neighborhood',
+                         entity_group=['LOC'],
+                         **kwargs)
 
   
 
-from fuzzup.fuzz import fuzzy_cluster
 
-# simulate data
-test_data = [{'word': 'Viborg', 'entity_group': 'LOC', 'cluster_id' : 'ABE'}, 
-             {'word': 'Uldum', 'entity_group': 'ORG', 'cluster_id' : 'bambolino' }]
-
-# cluster data
-clusters = fuzzy_cluster(test_data)
-
-# initiate whitelists
-c = Cities()
-m = Municipalities()
-    
-municipalities = m(clusters, score_cutoff=95) 
-cities = c(clusters, score_cutoff=90)
     

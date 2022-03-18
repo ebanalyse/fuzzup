@@ -35,7 +35,7 @@ def test_whitelist_list_input():
                  {'word': 'Uldum', 'entity_group': 'ORG', 'cluster_id' : 'bambolino' }]
     clusters = fuzzy_cluster(test_data)
     matches = match_whitelist(clusters, whitelist=['Viborg'])
-    assert len(matches) == len(test_data)
+    assert len(matches) == 1
     
 def test_whitelist_aggregate_cluster():
     test_data = [{'word': 'Viborg', 'entity_group': 'LOC', 'cluster_id' : 'ABE'}, 

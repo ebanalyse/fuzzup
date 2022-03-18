@@ -1,4 +1,4 @@
-[
+complist = [
   {
     "name": "ALDI Danmark ApS",
     "municipality": "Albertslund"

@@ -1,4 +1,4 @@
-from typing import List, Dict
+from typing import List, Dict, Callable
 import logging
 
 import requests
@@ -6,14 +6,79 @@ import pandas as pd
 import re
 import numpy as np
 from rapidfuzz.process import cdist
+import contextlib
+import json
+import urllib.request as request
+from tqdm import tqdm
+import time
+import cvr
+from pathlib import Path
+from fuzzup.utils import complist
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
 
 # helper function
 def clean_string(x):
     out = re.sub(r"\([^()]*\)", "", x)
     return out
+
+## This won't work well and the quota is quickly expired...
+#CVRAPI.dk attempt - can only query 1 company at a time ...
+#It is quota based... bad
+def get_cvrapi_company(name : str, country: str ='dk') -> Dict:
+  time.sleep(0.5) # it's not nice to spam public api
+  name = name.replace(' ', '-')
+  name = name.replace('A/S', '%2FS')
+  request_a = request.Request(
+    url=f'https://cvrapi.dk/api?search={name}&country={country}',
+    headers={
+      'User-Agent': 'CVR opslag'})
+  try:
+    with contextlib.closing(request.urlopen(request_a)) as response:
+            companies_json = json.loads(response.read())
+            record = {companies_json['name'] : {
+                'by': companies_json['city'],
+                'postnr': companies_json['zipcode']}}
+            return record 
+  except:
+      return {name : None} # nothing was found in lookup on company
+
+def get_cvrdev_company(name: str) -> Dict:
+    time.sleep(0.5) #don't spam api
+    url = f'https://api.cvr.dev/api/cvr/virksomhed?navn={name}'
+    auth = {'Authorization':'cvr.dev_513f54b68ebe9e83e3b2dde277d598bf'}
+    record_list = []
+    
+    resp = requests.get(url, headers=auth)
+    
+    if resp.ok:
+        for record in resp.json():
+            res = {record['virksomhedMetadata']['nyesteNavn']['navn']:{
+                    'postnummer':record['virksomhedMetadata']['nyesteBeliggenhedsadresse']['postnummer'],
+                    'vejnavn':record['virksomhedMetadata']['nyesteBeliggenhedsadresse']['vejnavn'],
+                    'bynavn':record['virksomhedMetadata']['nyesteBeliggenhedsadresse']['bynavn'],
+                    'fritkest':record['virksomhedMetadata']['nyesteBeliggenhedsadresse']['fritekst'],
+                    'kommunekode':record['virksomhedMetadata']['nyesteBeliggenhedsadresse']['kommune']['kommuneKode'],
+                    'kommunenavn':record['virksomhedMetadata']['nyesteBeliggenhedsadresse']['kommune']['kommuneNavn'],
+                    'postdistrikt':record['virksomhedMetadata']['nyesteBeliggenhedsadresse']['postdistrikt']}}
+            record_list.append(res)
+    else:
+        raise RuntimeError(resp.status_code)
+    return record_list
+    
+def get_companies(function_load: Callable = get_cvrdev_company) -> List[Dict]:
+    company_records = {}
+
+    for i in tqdm(complist):
+        record = function_load(i['name'])
+        for j in record:
+            company_records.update(j) 
+        if len(company_records) > 10:
+            logging.info('Stopping early, dont spam the api')
+            break
+    return company_records
 
 def get_politicians():
     """
@@ -227,11 +292,18 @@ class Cities(Whitelist):
                          title='city',
                          entity_group=['LOC'],
                          **kwargs)
+        
+        
+class Companies(Whitelist):
     
-# c = Cities()
-    
-    
-    
+    def __init__(self,
+                 **kwargs):
+        
+        super().__init__(function_load=get_companies,
+                         title='company',
+                         entity_group=['ORG'],
+                         **kwargs
+                         )
 # class Cities():
 #     
 #     def __init__(self):

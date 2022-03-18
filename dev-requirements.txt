@@ -5,3 +5,4 @@ mkdocs-material
 mkdocstrings
 mknotebooks
 jupyter
+cvr

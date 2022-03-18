@@ -11,8 +11,6 @@ import json
 import urllib.request as request
 from tqdm import tqdm
 import time
-import cvr
-from pathlib import Path
 from fuzzup.utils import complist
 
 logging.basicConfig(level=logging.INFO)

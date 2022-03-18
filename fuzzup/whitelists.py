@@ -45,36 +45,32 @@ def get_cvrapi_company(name : str, country: str ='dk') -> Dict:
   except:
       return {name : None} # nothing was found in lookup on company
 
-def get_cvrdev_company(name: str) -> Dict:    
-    time.sleep(0.5) # it's not nice to spam public api
+def get_cvrdev_company(name: str) -> Dict:
+    time.sleep(0.5) #don't spam api
+    url = f'https://api.cvr.dev/api/cvr/virksomhed?navn={name}'
+    auth = {'Authorization':'cvr.dev_513f54b68ebe9e83e3b2dde277d598bf'}
     record_list = []
     
-    #BUG : There is a bug with cvr=0.2.0, that throws an exception if specific company names are parsed.
-    try:
-        for virksomhed in CLIENT.cvr.virksomheder(navn=name):
-            record = {virksomhed.metadata.nyeste_navn.navn : {'postnummer':virksomhed.metadata.nyeste_beliggenhedsadresse.postnummer,
-                                                              'vejnavn': virksomhed.metadata.nyeste_beliggenhedsadresse.vejnavn,
-                                                              'bynavn': virksomhed.metadata.nyeste_beliggenhedsadresse.bynavn,
-                                                              'fritekst': virksomhed.metadata.nyeste_beliggenhedsadresse.fritekst,
-                                                              'kommunekode': virksomhed.metadata.nyeste_beliggenhedsadresse.kommune.kommune_kode,
-                                                              'kommunenavn': virksomhed.metadata.nyeste_beliggenhedsadresse.kommune.kommune_navn,
-                                                              'postdistrikt': virksomhed.metadata.nyeste_beliggenhedsadresse.postdistrikt
-                                                             }
-                     }
-            record_list.append(record)
-    except Exception:
-        #We have to either skip the company or hardcode the entry. Defaultdict can't be used, because it's a problem with CVR library.
-        record_list.append({name : {'postnummer': None, 'vejnavn':None,'bynavn': None, 'fritekst': None, 'kommunekode': None, 'kommunenavn': None, 'postdistrikt': None}})
+    resp = requests.get(url, headers=auth)
+    
+    if resp.ok:
+        for record in resp.json():
+            res = {record['virksomhedMetadata']['nyesteNavn']['navn']:{
+                    'postnummer':record['virksomhedMetadata']['nyesteBeliggenhedsadresse']['postnummer'],
+                    'vejnavn':record['virksomhedMetadata']['nyesteBeliggenhedsadresse']['vejnavn'],
+                    'bynavn':record['virksomhedMetadata']['nyesteBeliggenhedsadresse']['bynavn'],
+                    'fritkest':record['virksomhedMetadata']['nyesteBeliggenhedsadresse']['fritekst'],
+                    'kommunekode':record['virksomhedMetadata']['nyesteBeliggenhedsadresse']['kommune']['kommuneKode'],
+                    'kommunenavn':record['virksomhedMetadata']['nyesteBeliggenhedsadresse']['kommune']['kommuneNavn'],
+                    'postdistrikt':record['virksomhedMetadata']['nyesteBeliggenhedsadresse']['postdistrikt']}}
+            record_list.append(res)
+    else:
+        raise RuntimeError(resp.status_code)
     return record_list
     
 def get_companies(function_load: Callable = get_cvrdev_company) -> List[Dict]:
-    #CVR-dev attempt
-    #KEY: cvr.dev_513f54b68ebe9e83e3b2dde277d598bf
-    global CLIENT
-    CLIENT =  cvr.Client(api_key='cvr.dev_513f54b68ebe9e83e3b2dde277d598bf')
-
     company_records = {}
-    
+
     for i in tqdm(complist):
         record = function_load(i['name'])
         for j in record:

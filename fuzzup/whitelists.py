@@ -12,6 +12,9 @@ import urllib.request as request
 from tqdm import tqdm
 import time
 import cvr
+from pathlib import Path
+from fuzzup.utils import complist
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -67,8 +70,6 @@ def get_companies(function_load: Callable = get_cvrdev_company) -> List[Dict]:
     CLIENT =  cvr.Client(api_key='cvr.dev_513f54b68ebe9e83e3b2dde277d598bf')
 
     company_records = {}
-    with open('./companies-name-municipality.json', 'rb') as f:
-        complist = json.loads(f.read())
     
     for i in tqdm(complist):
         record = function_load(i['name'])
@@ -290,7 +291,7 @@ class Companies(Whitelist):
                          entity_group=['ORG'],
                          **kwargs
                          )
-comp = Companies()   
+#comp = Companies()   
 
 # class Cities():
 #     

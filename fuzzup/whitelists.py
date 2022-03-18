@@ -53,14 +53,18 @@ def get_cvrdev_company(name: str) -> Dict:
     try:
         for virksomhed in CLIENT.cvr.virksomheder(navn=name):
             record = {virksomhed.metadata.nyeste_navn.navn : {'postnummer':virksomhed.metadata.nyeste_beliggenhedsadresse.postnummer,
-                                                            'bynavn': virksomhed.metadata.nyeste_beliggenhedsadresse.bynavn,
-                                                            'fritekst': virksomhed.metadata.nyeste_beliggenhedsadresse.fritekst
+                                                              'vejnavn': virksomhed.metadata.nyeste_beliggenhedsadresse.vejnavn,
+                                                              'bynavn': virksomhed.metadata.nyeste_beliggenhedsadresse.bynavn,
+                                                              'fritekst': virksomhed.metadata.nyeste_beliggenhedsadresse.fritekst,
+                                                              'kommunekode': virksomhed.metadata.nyeste_beliggenhedsadresse.kommune.kommune_kode,
+                                                              'kommunenavn': virksomhed.metadata.nyeste_beliggenhedsadresse.kommune.kommune_navn,
+                                                              'postdistrikt': virksomhed.metadata.nyeste_beliggenhedsadresse.postdistrikt
                                                              }
                      }
             record_list.append(record)
     except Exception:
         #We have to either skip the company or hardcode the entry. Defaultdict can't be used, because it's a problem with CVR library.
-        record_list.append({name : {'postnummer': None, 'bynavn': None, 'fritekst': None}})
+        record_list.append({name : {'postnummer': None, 'vejnavn':None,'bynavn': None, 'fritekst': None, 'kommunekode': None, 'kommunenavn': None, 'postdistrikt': None}})
     return record_list
     
 def get_companies(function_load: Callable = get_cvrdev_company) -> List[Dict]:
@@ -75,7 +79,7 @@ def get_companies(function_load: Callable = get_cvrdev_company) -> List[Dict]:
         record = function_load(i['name'])
         for j in record:
             company_records.update(j) 
-        if len(company_records) > 100:
+        if len(company_records) > 10:
             logging.info('Stopping early, dont spam the api')
             break
     return company_records
@@ -291,8 +295,6 @@ class Companies(Whitelist):
                          entity_group=['ORG'],
                          **kwargs
                          )
-#comp = Companies()   
-
 # class Cities():
 #     
 #     def __init__(self):

@@ -56,13 +56,14 @@ def get_cvrdev_company(name: str) -> Dict:
     if resp.ok:
         for record in resp.json():
             res = {record['virksomhedMetadata']['nyesteNavn']['navn']:{
-                    'postnummer':record['virksomhedMetadata']['nyesteBeliggenhedsadresse']['postnummer'],
-                    'vejnavn':record['virksomhedMetadata']['nyesteBeliggenhedsadresse']['vejnavn'],
-                    'bynavn':record['virksomhedMetadata']['nyesteBeliggenhedsadresse']['bynavn'],
-                    'fritkest':record['virksomhedMetadata']['nyesteBeliggenhedsadresse']['fritekst'],
-                    'kommunekode':record['virksomhedMetadata']['nyesteBeliggenhedsadresse']['kommune']['kommuneKode'],
-                    'kommunenavn':record['virksomhedMetadata']['nyesteBeliggenhedsadresse']['kommune']['kommuneNavn'],
-                    'postdistrikt':record['virksomhedMetadata']['nyesteBeliggenhedsadresse']['postdistrikt']}}
+                    # 'postnummer':record['virksomhedMetadata']['nyesteBeliggenhedsadresse']['postnummer'],
+                    # 'vejnavn':record['virksomhedMetadata']['nyesteBeliggenhedsadresse']['vejnavn'],
+                    # 'bynavn':record['virksomhedMetadata']['nyesteBeliggenhedsadresse']['bynavn'],
+                    # 'fritkest':record['virksomhedMetadata']['nyesteBeliggenhedsadresse']['fritekst'],
+                    'municipality':record['virksomhedMetadata']['nyesteBeliggenhedsadresse']['kommune']['kommuneKode'],
+                    # 'kommunenavn':record['virksomhedMetadata']['nyesteBeliggenhedsadresse']['kommune']['kommuneNavn'],
+                    # 'postdistrikt':record['virksomhedMetadata']['nyesteBeliggenhedsadresse']['postdistrikt']
+                    }}
             record_list.append(res)
     else:
         raise RuntimeError(resp.status_code)
@@ -75,7 +76,7 @@ def get_companies(function_load: Callable = get_cvrdev_company) -> List[Dict]:
         record = function_load(i['name'])
         for j in record:
             company_records.update(j) 
-        if len(company_records) > 10:
+        if len(company_records) > 100:
             logging.info('Stopping early, dont spam the api')
             break
     return company_records

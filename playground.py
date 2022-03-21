@@ -11,6 +11,25 @@ from fuzzup.fuzz import (
     compute_prominence,
     match_whitelist
 )
+from fuzzup.whitelists import Cities, Municipalities, Neighborhoods
+from fuzzup.fuzz import fuzzy_cluster
+
+# simulate data
+test_data = [{'word': 'Viborg', 'entity_group': 'LOC', 'cluster_id' : 'ABE'}, 
+             {'word': 'Uldum', 'entity_group': 'ORG', 'cluster_id' : 'bambolino'},
+             {'word': 'Solgårde', 'entity_group': 'LOC', 'cluster_id' : 'ee'}]
+
+# cluster data
+clusters = fuzzy_cluster(test_data)
+
+# initiate whitelists
+c = Cities()
+m = Municipalities()
+n = Neighborhoods()
+
+cities = c(clusters, score_cutoff=95)
+municipalities = m(clusters, score_cutoff=95) 
+neighborhoods = n(clusters, score_cutoff=95) 
 
 def load_danish_companies(file="companies-name-municipality.json"):
     s3 = boto3.resource('s3')
@@ -59,7 +78,10 @@ match_whitelist(words=clusters,
                 score_cutoff=80,
                 scorer=partial_token_set_ratio)
 
-
+import pandas as pd
+d = {'x': [1,2,3], 'g': [[], [2], []]}
+df = pd.DataFrame.from_dict(d)
+df[df['g'].astype(str) != '[]']
 
 
 

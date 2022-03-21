@@ -300,7 +300,64 @@ class Whitelist():
         # TODO: return mappings
         
         return out
+
+def apply_whitelists(whitelists: List[Whitelist], clusters: List[Dict], **kwargs) -> pd.DataFrame:
+    """Apply Multiple Whitelists
+
+    Args:
+        whitelists (List[Whitelist]): Whitelists.
+        clusters (List[Dict]): Results from fuzzy clustering etc.
+        kwargs: all optional arguments for whitelist matching.
+
+    Returns:
+        Dict: output from whitelist applications.
+    """
+    out = {wl.title: wl(clusters, **kwargs) for wl in whitelists}
+    return out
+
+
+def format_helper(x: List[Dict], columns: List[str]=['neighborhood_code', 'city_code', 'municipality_code']) -> pd.DataFrame:
+    output = []
+    if len(x) > 0:
+        for match in x:
+            mappings = match.get('mappings')
+            if len(mappings) > 0:
+                df = pd.DataFrame.from_records(mappings)
+                out = pd.DataFrame(columns=columns, index=range(len(df)))
+                for col in columns:
+                    if col in df:
+                        out[col] = df[col]
+                output.append(out)
+    output = pd.concat(output, ignore_index=True)
+    return output
+
+def format_output(results: List[Dict], 
+                  columns: List[str]=['neighborhood_code', 'city_code', 'municipality_code'],
+                  drop_duplicates: bool=True) -> pd.DataFrame:
+    """Format Output
     
+    Formats output from whitelist format by extracting
+    only specific columns and converting them to
+    a pandas DataFrame.
+    
+    Args:
+        results (List[Dict]): Results from Fuzzy Clustering.
+        columns (List[str], optional): Desired columns
+            to extract. Defaults to 
+            ['neighborhood_code', 'city_code', 
+            'municipality_code'].
+        drop_duplicates (bool, optional): Drop duplicate 
+            matches? Defaults to True.
+
+    Returns:
+        pd.DataFrame: Output in desired format.
+    """
+    results = [format_helper(results.get(x)) for x in results]
+    results = pd.concat(results, ignore_index=True)
+    if drop_duplicates:
+        results.drop_duplicates(inplace=True, keep="first")
+    return results
+
 class Cities(Whitelist):
     """Danish Cities
     

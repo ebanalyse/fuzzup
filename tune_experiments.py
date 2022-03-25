@@ -35,8 +35,6 @@ def process_dataset() -> List[Dict]:
                 pred = {'entity_group': row['entity_group'], 'word': row['word'], 'start': row['start'], 'end': row['end'], 'true_value': row['main_entity']}            
                 preds_list.append(pred)
             preds_dict[article].update({'item':_predict(preds_list)})
-            if pbar.n==10:
-                pass
     return preds_dict    
 
 def evaluate_predictions(preds_dict: Dict) -> None:

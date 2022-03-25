@@ -9,6 +9,8 @@ src/*.pickle
 src/*.pkl
 *.csv
 *.pickle
+*.zip
+/Bizou
 
 # C extensions
 *.so

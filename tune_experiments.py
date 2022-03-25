@@ -38,3 +38,19 @@ def process_dataset() -> List[Dict]:
             if pbar.n==10:
                 pass
     return preds_dict    
+
+def evaluate_predictions(preds_dict: Dict) -> None:
+    total_preds = 0
+    true_preds = 0
+    
+    for article_id in preds_dict.keys():
+        d_dict = preds_dict[article_id]['item']
+        for val in d_dict.values():
+            total_preds+=1
+            if val['pred'] == val['true_value']:
+                true_preds += 1
+    __import__('pdb').set_trace()
+    print(true_preds/total_preds)            
+preds_dict = process_dataset()
+evaluate_predictions(preds_dict)
+    

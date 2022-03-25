@@ -49,8 +49,10 @@ def evaluate_predictions(preds_dict: Dict) -> None:
             total_preds+=1
             if val['pred'] == val['true_value']:
                 true_preds += 1
-    __import__('pdb').set_trace()
-    print(true_preds/total_preds)            
+            
+    print(f'ACCURACY: {(true_preds/total_preds)*100}%')            
+    print(f'\n#Correct prediction: {true_preds}')
+    print(f'\n#Wrong Prediction: {total_preds-true_preds}')
 preds_dict = process_dataset()
 evaluate_predictions(preds_dict)
     

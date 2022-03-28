@@ -142,21 +142,21 @@ def get_cities():
     out = {}
     for row in df.itertuples(index=False, name="row"):
         out[row.navn] = {'municipality': row.municipality,
-                         'city_code': row.city_code}                
+                         'eblocal_code': row.city_code}                
     
     return out
 
 def get_municipalities():
     url = 'https://api.dataforsyningen.dk/kommuner'
     data = requests.get(url).json() 
-    whitelist = {x.get('navn'): {'municipality_code': x.get('kode')} for x in data}
+    whitelist = {x.get('navn'): {'eblocal_code': x.get('kode')} for x in data}
     return whitelist
 
 def get_neighborhoods():
     """Get all neighborhoods in DK"""
     url = 'https://api.dataforsyningen.dk/steder?hovedtype=Bebyggelse&undertype=bydel'
     hoods = requests.get(url).json()
-    out = {hood['primærtnavn'] : {'neighborhood_code': hood['id']} for hood in hoods}
+    out = {hood['primærtnavn'] : {'eblocal_code': hood['id']} for hood in hoods}
     return out
     
 # helper function

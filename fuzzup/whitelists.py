@@ -354,7 +354,7 @@ def format_output(results: List[Dict],
     Returns:
         pd.DataFrame: Output in desired format.
     """
-    results = [format_helper(results.get(x)) for x in results]
+    results = [format_helper(results.get(x), columns) for x in results]
     results = pd.concat(results, ignore_index=True)
     if drop_duplicates:
         results.drop_duplicates(inplace=True, keep="first")

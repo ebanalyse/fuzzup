@@ -1,4 +1,3 @@
-flake8-html
 wheel
 twine
 mkdocs-material 

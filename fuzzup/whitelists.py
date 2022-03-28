@@ -149,7 +149,7 @@ def get_cities():
 def get_municipalities():
     url = 'https://api.dataforsyningen.dk/kommuner'
     data = requests.get(url).json() 
-    whitelist = {x.get('navn'): {'municipality_code': x.get('kode')} for x in data}
+    whitelist = {" ".join([x.get('navn'), "Kommune"]): {'municipality_code': x.get('kode')} for x in data}
     return whitelist
 
 def get_neighborhoods():

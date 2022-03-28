@@ -4,7 +4,7 @@ from ner.inference.predicter import NERPredicter
 from rapidfuzz.fuzz import ratio, partial_token_set_ratio, token_set_ratio
 import pandas as pd
 
-from fuzzup.fuzz import fuzzy_cluster, compute_prominence
+from fuzzup.fuzz import fuzzy_cluster, compute_prominence, fuzzy_cluster_bygroup, compute_prominence_bygroup
 from fuzzup.whitelists import (
     Cities, 
     Municipalities, 
@@ -35,12 +35,18 @@ text = ",".join(article[["title", "subtitle", "body_text"]].values.tolist()[0])
 text = clean_text(text)
 preds = predicter.predict(text=text, sentence_based=True)
 
-clusters = fuzzy_cluster(preds, scorer=partial_token_set_ratio, cutoff=75)
+clusters = fuzzy_cluster_bygroup(preds, scorer=partial_token_set_ratio, cutoff=75)
 
-clusters = compute_prominence(clusters, weight_position=0.5)
+clusters = compute_prominence_bygroup(clusters, weight_position=0.5)
 
-matches = apply_whitelists(whitelists, clusters, scorer=partial_token_set_ratio, score_cutoff=95, aggregate_cluster=True)
-format_output(matches)
+matches = apply_whitelists(whitelists, clusters, scorer=ratio, score_cutoff=99, aggregate_cluster=True)
+# to dataframe
+l = []
+for m in matches:
+    l.append(pd.DataFrame.from_dict(matches.get(m)))
+pd.concat(l, ignore_index=True)
+
+format_output(matches, columns=["eblocal_code", "municipality_code"])
 pd.DataFrame.from_dict(matches)
 
 

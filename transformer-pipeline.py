@@ -8,7 +8,8 @@ from fuzzup.fuzz import fuzzy_cluster, compute_prominence
 from fuzzup.whitelists import (
     Cities, 
     Municipalities, 
-    Neighborhoods, 
+    Neighborhoods,
+    aggregate_to_cluster, 
     apply_whitelists, 
     format_output
 )
@@ -38,8 +39,9 @@ clusters = fuzzy_cluster(preds, scorer=partial_token_set_ratio, cutoff=75)
 
 clusters = compute_prominence(clusters, weight_position=0.5)
 
-matches = apply_whitelists(whitelists, clusters, scorer=partial_token_set_ratio, score_cutoff=95)
-matches
+matches = apply_whitelists(whitelists, clusters, scorer=partial_token_set_ratio, score_cutoff=95, aggregate_cluster=True)
+format_output(matches)
+pd.DataFrame.from_dict(matches)
 
 
 

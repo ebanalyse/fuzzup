@@ -11,11 +11,11 @@ import json
 import urllib.request as request
 from tqdm import tqdm
 import time
+
 from fuzzup.utils import complist
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
 
 # helper function
 def clean_string(x):
@@ -352,7 +352,7 @@ def format_output(results: List[Dict],
     Returns:
         pd.DataFrame: Output in desired format.
     """
-    results = [format_helper(results.get(x)) for x in results]
+    results = [format_helper(x=results.get(x), columns=columns) for x in results]
     results = pd.concat(results, ignore_index=True)
     if drop_duplicates:
         results.drop_duplicates(inplace=True, keep="first")

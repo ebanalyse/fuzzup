@@ -1,10 +1,11 @@
 import pandas as pd
-from fuzzup.fuzz import fuzzy_cluster
+from fuzzup.fuzz import fuzzy_cluster, fuzzy_cluster_bygroup
 from typing import List,Dict,Any
 from tqdm import tqdm
 import numpy as np
 from collections import defaultdict
 import logging
+from rapidfuzz.fuzz import partial_token_set_ratio
 #TODO: Get accuracies for each entity_type
 #TODO: Filter out observations that only occur one time, to get accuracy in complex situations.
 
@@ -19,9 +20,10 @@ train = train.dropna()
 def filter_low_freq_entities(train: pd.DataFrame) -> pd.DataFrame:
     #Group and find all main_entity that for an article, occurs more than once.
     filter_train = train.groupby(['content_id', 'word'])['main_entity'].count().reset_index()
+    
     #Filter them out
     filter_train = filter_train[filter_train.main_entity <= 1]
-
+    
     #Get tuple groups of content_id and words that we want to keep
     filter_train = filter_train.groupby(['content_id','word']).groups
 
@@ -35,7 +37,7 @@ def filter_low_freq_entities(train: pd.DataFrame) -> pd.DataFrame:
 
 def _predict(preds:List[Dict]) -> Dict:
     res = defaultdict(lambda:{})
-    fuzzy_preds = fuzzy_cluster(preds, cutoff = 100)
+    fuzzy_preds = fuzzy_cluster_bygroup(preds, cutoff = 90, scorer=partial_token_set_ratio)
     for i, fuzzy_pred in enumerate(fuzzy_preds):
         res[i].update({'pred':fuzzy_pred['cluster_id'],'true_value':fuzzy_pred['true_value']})
     return res
@@ -44,7 +46,6 @@ def _filter_single_clusters(article):
     word_freq = {}
     for index, row in article.iterrows():
         word_freq[article['word']] += 1
-        
     
 # Predict on train
 def process_dataset() -> List[Dict]:
@@ -66,7 +67,6 @@ def evaluate_predictions(preds_dict: Dict) -> None:
     
     for article_id in preds_dict.keys():
         d_dict = preds_dict[article_id]['item']
-        __import__('pdb').set_trace()
         for val in d_dict.values():
             total_preds+=1
             #Lowering is kinda.. but the labelling is not always case sensitive.

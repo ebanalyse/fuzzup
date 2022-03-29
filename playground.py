@@ -1,4 +1,5 @@
 import timeit
+import logging
 
 from rapidfuzz.fuzz import partial_token_set_ratio
 from rapidfuzz.process import cdist
@@ -18,6 +19,9 @@ from fuzzup.whitelists import (
     format_output
 )
 from fuzzup.fuzz import fuzzy_cluster
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # simulate data
 test_data = [{'word': 'Viborg', 'entity_group': 'LOC', 'cluster_id' : 'A'}, 
@@ -48,11 +52,68 @@ out = format_output(out,
 
 # .. then maybe convert to strings
 out.to_csv(header=None, index=False).strip('\n').split('\n')
-                
-                        
-            
-            
-            
+
+#### WITH NER PIPELINE
+
+# download and unzip model
+#import awswrangler as wr
+#import shutil
+#wr.s3.download(path='s3://auto-training-artifact-bucket/ner/0.0.8/Bizou.zip', local_file='./Bizou.zip')                        
+#shutil.unpack_archive("Bizou.zip")            
+
+# load model
+from ner.inference.predicter import NERPredicter
+predicter = NERPredicter()
+predicter.load_model('./Bizou/checkpoint-25000/')
+predicter.predict(text='Jens Hansen har en bondegård i Skals', sentence_based=True)
+
+def get_news_data(content_ids,
+                  cols=["article_id", "title", "lead", "body"]):
+
+    # prep params for query
+    content_ids = list(filter(lambda x: x != "", content_ids))
+    content_ids = set(content_ids)
+    n_content_ids = len(content_ids)
+    content_ids = ", ".join([str(id) for id in content_ids])
+
+    cols = ', '.join(cols)
+
+    # form sql query
+    query = f"""
+    SELECT 
+    {cols}
+    FROM
+    manual_escenic_articles
+    WHERE
+    article_id IN ({content_ids})
+    ORDER BY publish_time DESC
+    """
+    
+    logger.info(f"Querying data for {n_content_ids} news articles with columnns {cols} from data lake...")
+    
+    # submit query
+    df = wr.athena.read_sql_query(
+        sql=query,
+        database="manual-recsys", 
+        use_threads=True,
+        # chunksize=True
+        )
+    
+    # enforce only unique article_ids
+    df = df.drop_duplicates(subset=["article_id"])
+    df = df[df['section_path'].str.len() > 0]
+    
+    logger.info(f"Extracted news data successfully for {len(df)}/{n_content_ids} content ids")
+    # formatting
+    df['article_id'] = df['article_id'].astype(str)   
+    
+    # TODO: output dict with article id as key 
+    
+    return df
+
+get_news_data([9150838],
+              cols=["article_id", "title", "subtitle", "body_text"])
+ 
             
 
     

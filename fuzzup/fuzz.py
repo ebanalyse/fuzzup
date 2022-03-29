@@ -1,9 +1,12 @@
 from typing import List, Dict, Tuple
+from itertools import compress
 
 from rapidfuzz.process import cdist, extract
 import numpy as np
 import pandas as pd
 from scipy.stats import rankdata
+
+from fuzzup.utils import flatten
 
 # constants
 CLUSTER_ID = 'cluster_id'
@@ -70,7 +73,6 @@ def helper_clustering(m,
             # print("Nothing to add - stopping.")
             nothing_to_add = True
     
-        from itertools import compress
         add_elements = list(compress(list(m.index), l))
         cluster.extend(add_elements)
     
@@ -186,7 +188,9 @@ def fuzzy_cluster_bygroup(words: List[Dict],
     words = pd.DataFrame.from_dict(words)
     words = words.groupby(['entity_group'])
     
-    out = [fuzzy_cluster(words = words.get_group(group).to_dict(orient="records"), **kwargs) for group in words.groups][0]
+    out = [fuzzy_cluster(words = words.get_group(group).to_dict(orient="records"), **kwargs) for group in words.groups]
+    
+    out = flatten(out)
     
     return out
             
@@ -294,7 +298,9 @@ def compute_prominence_bygroup(clusters: List[Dict],
     clusters = pd.DataFrame.from_dict(clusters)
     clusters = clusters.groupby(['entity_group'])
     
-    out = [compute_prominence(clusters = clusters.get_group(group).to_dict(orient="records"), **kwargs) for group in clusters.groups][0]
+    out = [compute_prominence(clusters = clusters.get_group(group).to_dict(orient="records"), **kwargs) for group in clusters.groups]
+    
+    out = flatten(out)
     
     return out
 

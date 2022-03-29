@@ -51,7 +51,7 @@ def test_whitelist_aggregate_cluster():
     assert len(out) == 1
     
 def test_municipalities_whitelist():
-    test_data = [{'word': 'Viborg', 'entity_group': 'LOC', 'cluster_id' : 'ABE'}, 
+    test_data = [{'word': 'Viborg Kommune', 'entity_group': 'LOC', 'cluster_id' : 'ABE'}, 
                  {'word': 'Uldum', 'entity_group': 'ORG', 'cluster_id' : 'bambolino' }]
     clusters = fuzzy_cluster(test_data)
     out = m(clusters, score_cutoff=95) 
@@ -71,7 +71,7 @@ def test_whitelist_formatting():
 
     #### Format output 
     # set desired columns
-    cols = ['neighborhood_code', 'city_code', 'municipality_code']
+    cols = ['eblocal_code', 'municipality_code']
 
     # format output
     out = format_output(out,
@@ -87,7 +87,7 @@ def test_format_no_match_on_subcategory():
 
     #### Format output 
     # set desired columns
-    cols = ['neighborhood_code', 'city_code', 'municipality_code']
+    cols = ['eblocal_code', 'municipality_code']
 
     # format output
     out = format_output(test_data,

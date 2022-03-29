@@ -11,11 +11,11 @@ import json
 import urllib.request as request
 from tqdm import tqdm
 import time
+
 from fuzzup.utils import complist
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
 
 # helper function
 def clean_string(x):
@@ -149,7 +149,7 @@ def get_cities():
 def get_municipalities():
     url = 'https://api.dataforsyningen.dk/kommuner'
     data = requests.get(url).json() 
-    whitelist = {x.get('navn'): {'municipality_code': x.get('kode')} for x in data}
+    whitelist = {" ".join([x.get('navn'), "Kommune"]): {'municipality_code': x.get('kode')} for x in data}
     return whitelist
 
 def get_neighborhoods():
@@ -328,7 +328,7 @@ def format_helper(x: List[Dict], columns: List[str]=['neighborhood_code', 'city_
                     if col in df:
                         out[col] = df[col]
                 output.append(out)
-    if len(out) == 0:
+    if len(output) == 0:
         return pd.DataFrame()
     output = pd.concat(output, ignore_index=True)
     return output
@@ -354,7 +354,7 @@ def format_output(results: List[Dict],
     Returns:
         pd.DataFrame: Output in desired format.
     """
-    results = [format_helper(results.get(x), columns) for x in results]
+    results = [format_helper(x=results.get(x), columns=columns) for x in results]
     results = pd.concat(results, ignore_index=True)
     if drop_duplicates:
         results.drop_duplicates(inplace=True, keep="first")

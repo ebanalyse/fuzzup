@@ -1,3 +1,11 @@
+# flatten list
+def flatten(x):
+    flat_list = []
+    for sublist in x:
+        for item in sublist:
+            flat_list.append(item)
+    return flat_list
+
 complist = [
   {
     "name": "ALDI Danmark ApS",

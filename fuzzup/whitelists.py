@@ -328,7 +328,7 @@ def format_helper(x: List[Dict], columns: List[str]=['neighborhood_code', 'city_
                     if col in df:
                         out[col] = df[col]
                 output.append(out)
-    if len(out) == 0:
+    if len(output) == 0:
         return pd.DataFrame()
     output = pd.concat(output, ignore_index=True)
     return output

@@ -95,16 +95,19 @@ def get_politicians():
     while ccount < totalcount:
         r = requests.get(url, params={"$skip": ccount})
         for row in r.json()['value']:
-            if all([row.get('slutdato') is None,
-                    row.get('startdato') is not None,
-                    row.get('fornavn') is not None,
-                    row.get('efternavn') is not None]):
-                results.append(row)
+            if row.get('typeid') == 5: # Type_ID 5 = Politiker i folketinget.
+                if all([row.get('slutdato') is None,
+                        row.get('startdato') is not None,
+                        row.get('fornavn') is not None,
+                        row.get('efternavn') is not None]):
+                    results.append(row)
+            else:
+                pass
 
         ccount += 100
         if ccount % 1000 == 0:
             print(f"# records processed: {ccount}/{totalcount}")
-
+            
     print(f"Number of politicians identified: {len(results)}")
 
     # extract names    
@@ -416,3 +419,13 @@ class Companies(Whitelist):
                          **kwargs
                          )
 
+class Politicians(Whitelist):
+    
+    def __init__(self,
+                 **kwargs):
+        
+        super().__init__(function_load=get_politicians,
+                         title='politician',
+                         entity_group=['PER'],
+                         **kwargs
+                         )

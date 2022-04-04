@@ -21,13 +21,18 @@ note that angles need to be in radians to pass to trig functions!
 #TEST
 df = df[['dawa_id','name','municipality_name', 'longitude', 'latitude']]
 
-match_1 = df[df.name == 'Aarhus']
-match_2 = df[df.name == 'Aalborg']
+muni1 = 'Holbæk'
+muni2 = 'Høje-Taastrup'
+town1 = 'Vipperød'
+town2 = 'Taastrup'
+
+match_1 = df[df.municipality_name == muni1]
+match_2 = df[df.municipality_name == muni2]
 
 #sometimes the same place has two different coordinates.
 #Pick the first place in data.
-match_1 = match_1.iloc[0]
-match_2 = match_2.iloc[0]
+match_1 = match_1[match_1['name'] == town1]
+match_2 = match_2[match_2['name'] == town2]
 
 #Basic distance between two points in Euclidean plane.
 def calculate_simple_distance(match_1,match_2) -> float:
@@ -101,5 +106,5 @@ print('numpy: ', haversine(lat1, lon1, lat2, lon2))
 tuple1 = (match_1['longitude'].astype(float).item(), match_1['latitude'].astype(float).item())
 tuple2 = (match_2['longitude'].astype(float).item(), match_2['latitude'].astype(float).item())
 
-print('geopy: ',  distance.great_circle(tuple1,tuple2).km)
+print('geopy: ',  distance.great_circle(tuple1,tuple2))
 

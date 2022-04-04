@@ -241,14 +241,13 @@ def compute_prominence(clusters: List[Dict],
     prominence_score = float(1)
     
     # adjust prominence score for word positions (=offsets)
-    if weight_position is not None:
-        if len(clusters.start) > 1:
-            offset_min = min(clusters.start)
-            offset_max = max(clusters.start)
-            # linear interpolation
-            xp = [offset_min, offset_max]
-            yp = [1, weight_position]
-            prominence_position = np.array([np.interp(x, xp, yp) for x in clusters.start])
+    if weight_position is not None and len(clusters.start) > 1:
+        offset_min = min(clusters.start)
+        offset_max = max(clusters.start)
+        # linear interpolation
+        xp = [offset_min, offset_max]
+        yp = [1, weight_position]
+        prominence_position = np.array([np.interp(x, xp, yp) for x in clusters.start])
     else: 
         prominence_position = float(1)
     

@@ -82,7 +82,11 @@ def compute_preds_distances2(preds:Dict):
         return df["lon_lat"].apply(distance.great_circle, args=(end,))
 
     dist_matrix = dist_matrix.apply(_get_distance, axis=1).T
+    dist_list = dist_matrix.values.tolist()
     
-    return dist_matrix
-
-print(compute_preds_distances2(whitelist_data))
+    #EXAMPLE OF checking if some distance is greater than 80km
+    for row in dist_list:
+        for value in row:
+            if value >= 80:
+                return False
+    return True

@@ -303,14 +303,12 @@ def compute_prominence_bygroup(clusters: List[Dict],
     
     #If you only want the most prominent entities returned, pop all entities that are not the most prominent
     if return_first_rank:
-        for index, val in enumerate(out):
-            if val['prominence_rank'] != 1:
-                out.pop(index)
+        out = [i for i in out if i['prominence_rank'] == 1]
     return out
 
-# test = {'entity_group': ["PER", "PER", "PER", "LOC"], 'word': ['abe', 'abe', 'kat', 'københavn']}
+# test = {'entity_group': ["PER", "PER", "PER", "LOC", "LOC", "LOC", "LOC", "LOC", "LOC"], 'word': ['abe', 'abe', 'kat', 'københavn', 'københavn', 'albertslund', 'holbæk', 'holbæk', 'holbæk']}
 # tester = pd.DataFrame.from_dict(test)
 # tester = tester.to_dict(orient="records")
 # t = fuzzy_cluster_bygroup(tester)
-# t = compute_prominence_bygroup(t, return_rank = True)
-
+# t = compute_prominence_bygroup(t, return_first_rank = True)
+# __import__('pdb').set_trace()

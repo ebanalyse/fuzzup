@@ -275,6 +275,7 @@ def compute_prominence(clusters: List[Dict],
     return prominence
 
 def compute_prominence_bygroup(clusters: List[Dict], 
+                               return_first_rank: bool = False,
                                **kwargs) -> List[Dict]:
     """Compute Prominence by Group
     
@@ -298,15 +299,18 @@ def compute_prominence_bygroup(clusters: List[Dict],
     clusters = clusters.groupby(['entity_group'])
     
     out = [compute_prominence(clusters = clusters.get_group(group).to_dict(orient="records"), **kwargs) for group in clusters.groups]
-    
     out = flatten(out)
     
+    #If you only want the most prominent entities returned, pop all entities that are not the most prominent
+    if return_first_rank:
+        for index, val in enumerate(out):
+            if val['prominence_rank'] != 1:
+                out.pop(index)
     return out
 
-#test = {'entity_group': ["PER", "PER", "LOC"], 'word': ['abe', 'abe', 'kat']}
-#tester = pd.DataFrame.from_dict(test)
-#tester = tester.to_dict(orient="records")
-#fuzzy_cluster_bygroup(tester)
-
-
+# test = {'entity_group': ["PER", "PER", "PER", "LOC"], 'word': ['abe', 'abe', 'kat', 'københavn']}
+# tester = pd.DataFrame.from_dict(test)
+# tester = tester.to_dict(orient="records")
+# t = fuzzy_cluster_bygroup(tester)
+# t = compute_prominence_bygroup(t, return_rank = True)
 

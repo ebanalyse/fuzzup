@@ -11,6 +11,7 @@ import json
 import urllib.request as request
 from tqdm import tqdm
 import time
+from pathlib import Path
 
 from fuzzup.utils import complist
 
@@ -120,7 +121,9 @@ def get_politicians():
     
     return names
 def _get_df():
-    df = pd.read_csv('./fuzzup/2022.04.06-finished-eblocal_converts.csv')
+    here = Path(__file__).parent
+    fname = here / "2022.04.06-finished-eblocal_converts.csv"
+    df = pd.read_csv(fname)
     return df
     
 def get_eblocal_byer():

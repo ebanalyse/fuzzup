@@ -1,3 +1,9 @@
+import pandas as pd
+from typing import Dict, List, Any
+import numpy as np
+from math import radians, cos, sin, asin, sqrt, atan2
+from geopy import distance
+
 # flatten list
 def flatten(x):
     flat_list = []
@@ -5,6 +11,51 @@ def flatten(x):
         for item in sublist:
             flat_list.append(item)
     return flat_list
+
+"""
+Distance formula between two coordinates:
+√[(long₂ - long₁)² + (lat₂ - lat₁)²]
+Distance formula adjusted for curvature of the earth:
+c = 2 ⋅ atan2( √a, √(1−a) )
+d = R ⋅ c
+where 	φ is latitude, λ is longitude, R is earth’s radius (mean radius = 6,371km);
+note that angles need to be in radians to pass to trig functions!
+"""
+def validate_location_distances(preds:Dict, distance_treshold: float):
+    
+    coord_data = []
+    
+    for whitelist in preds:
+        for matches in preds[whitelist]:
+            #unpack values in list of dictionaries
+            for mapping in matches['mappings']:
+                eblocal_code = mapping['eblocal_id']
+                lon_lat = mapping['lon_lat']
+                data = {"eblocal_code":eblocal_code, "lon_lat":lon_lat}            
+                coord_data.append(data)
+    df = pd.DataFrame(coord_data)
+
+    dist_matrix = pd.DataFrame(
+    np.zeros(len(df) ** 2).reshape(len(df), len(df)),
+    index=df.index,
+    columns=df.eblocal_code,
+    )
+
+    def _get_distance(col):
+        
+        end = df.loc[col.name]["lon_lat"]
+        return df["lon_lat"].apply(distance.great_circle, args=(end,))
+
+    dist_matrix = dist_matrix.apply(_get_distance, axis=1).T
+    dist_list = dist_matrix.values.tolist()
+    
+    #EXAMPLE OF checking if some distance is greater than 80km
+    for row in dist_list:
+        for value in row:
+            if value >= distance_treshold:
+                return False
+    return True
+
 
 complist = [
   {

@@ -133,8 +133,7 @@ def get_eblocal_byer():
         out[row.name] = {'municipality': row.municipality_name,
                          'eblocal_id': row.eblocal_id,
                          'dawa_id' : row.dawa_id,
-                         'lon': row.longitude,
-                         'lat':row.latitude
+                         'lon_lat': (row.longitude,row.latitude),
                          }
     return out
 
@@ -149,13 +148,9 @@ def get_eblocal_neighborhoods():
         out[row.name] = {'municipality': row.municipality_name,
                          'eblocal_id': row.eblocal_id,
                          'dawa_id' : row.dawa_id,
-                         'lon': row.longitude,
-                         'lat':row.latitude
+                         'lon_lat': (row.longitude,row.latitude),
                          }
     return out
-
-    
-    
 
 def get_eblocal_municipality():
     df = _get_df()
@@ -166,8 +161,7 @@ def get_eblocal_municipality():
         out[row.municipality_name] = {'eblocal_id': row.eblocal_id,
                          'municipality_id': row.municipality_id,
                          'dawa_id' : row.dawa_id,
-                         'lon': row.longitude,
-                         'lat':row.latitude
+                         'lon_lat': (row.longitude,row.latitude),
                          }
     return out
 

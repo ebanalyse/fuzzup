@@ -1,14 +1,15 @@
 import timeit
 import logging
 
-from rapidfuzz.fuzz import partial_token_set_ratio
+from rapidfuzz.fuzz import partial_token_set_ratio, WRatio
 from rapidfuzz.process import cdist
 import pandas as pd
 import numpy as np
 import boto3
+from fuzzup.utils import validate_location_distances
 
 from fuzzup.fuzz import (
-    fuzzy_cluster, 
+    fuzzy_cluster_bygroup, 
     compute_prominence,
 )
 from fuzzup.whitelists import (
@@ -24,12 +25,12 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # simulate data
-test_data = [{'word': 'Viborg', 'entity_group': 'LOC', 'cluster_id' : 'A'}, 
-             {'word': 'Uldum', 'entity_group': 'ORG', 'cluster_id' : 'B'},
-             {'word': 'Solgårde', 'entity_group': 'LOC', 'cluster_id' : 'C'}]
+test_data = [{'word': 'Holbæk', 'entity_group': 'LOC', 'cluster_id' : 'Holbæk'}, 
+             {'word': 'Vipperød', 'entity_group': 'ORG', 'cluster_id' : 'Vipperød'},
+             {'word': 'Vipperød', 'entity_group': 'LOC', 'cluster_id' : 'Vipperød'}]
 
 # cluster data
-clusters = fuzzy_cluster(test_data)
+clusters = fuzzy_cluster_bygroup(test_data)
 
 # initiate relevant whitelists
 c = Cities()
@@ -39,19 +40,25 @@ n = Neighborhoods()
 # Apply whitelists 
 out = apply_whitelists([c,m,n], 
                        clusters, 
-                       score_cutoff=90)
+                       score_cutoff=98,
+                       scorer=WRatio)
 
-#### Format output 
-# set desired columns
-cols = ['neighborhood_code', 'city_code', 'municipality_code']
+if validate_location_distances(out, distance_treshold = 1):
+    #### Format output 
+    # set desired columns
+    cols = ['municipality_id', 'eblocal_id', 'dawa_id']
 
-# format output
-out = format_output(out,
-                    columns = cols,
-                    drop_duplicates=True)
+    # format output
+    out = format_output(out,
+                        columns = cols,
+                        drop_duplicates=True)
 
-# .. then maybe convert to strings
-out.to_csv(header=None, index=False).strip('\n').split('\n')
+    # .. then maybe convert to strings
+    out.to_csv(header=None, index=False).strip('\n').split('\n')
+    print(out)
+else:
+    print('No matches found')
+
 
 #### WITH NER PIPELINE
 
@@ -64,7 +71,7 @@ out.to_csv(header=None, index=False).strip('\n').split('\n')
 # load model
 from ner.inference.predicter import NERPredicter
 predicter = NERPredicter()
-predicter.load_model('./Bizou/checkpoint-25000/')
+predicter.load_model('saattrupdan/nbailab-base-ner-scandi')
 predicter.predict(text='Jens Hansen har en bondegård i Skals', sentence_based=True)
 
 def get_news_data(content_ids,

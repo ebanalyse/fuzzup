@@ -26,6 +26,7 @@ def validate_location_distances(preds:Dict, distance_treshold: float):
     coord_data = []
     
     for whitelist in preds:
+      if whitelist == 'city':
         for matches in preds[whitelist]:
             #unpack values in list of dictionaries
             for mapping in matches['mappings']:
@@ -33,6 +34,9 @@ def validate_location_distances(preds:Dict, distance_treshold: float):
                 lon_lat = mapping['lon_lat']
                 data = {"eblocal_code":eblocal_code, "lon_lat":lon_lat}            
                 coord_data.append(data)
+    if len(coord_data) <= 0:
+      raise ValueError('No valid whitelist was passed')            
+
     df = pd.DataFrame(coord_data)
 
     dist_matrix = pd.DataFrame(

@@ -164,7 +164,6 @@ def get_eblocal_municipality():
         out[row.municipality_name] = {'eblocal_id': row.eblocal_id,
                          'municipality_id': row.municipality_id,
                          'dawa_id' : row.dawa_id,
-                         'lon_lat': (row.longitude,row.latitude),
                          }
     return out
 

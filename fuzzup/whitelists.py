@@ -155,6 +155,14 @@ def get_municipalities():
     whitelist = {" ".join([x.get('navn'), "Kommune"]): {'municipality_code': x.get('kode')} for x in data}
     return whitelist
 
+def get_eblocal_names():
+    url = 'https://misty-beirut-ryz6j4qt64tt.vapor-farm-b1.com/api/eblocals'
+    eblocals = requests.get(url).json()
+    # remove "hits"
+    eblocals.pop(0)
+    out = {x['eblocal_name'] : {'eblocal_id': x['eblocal_id']} for x in eblocals}
+    return out
+
 def get_neighborhoods():
     """Get all neighborhoods in DK"""
     url = 'https://api.dataforsyningen.dk/steder?hovedtype=Bebyggelse&undertype=bydel'
@@ -393,6 +401,21 @@ class Municipalities(Whitelist):
                          entity_group=['LOC'],
                          **kwargs)
         
+class EBLocalNames(Whitelist):
+    """EB Local Names
+    
+    Whitelist with Ekstra Bladet Local Names.
+    """
+    
+    def __init__(self,
+                 **kwargs):
+        
+        super().__init__(function_load=get_eblocal_names,
+                         title='eblocal_name',
+                         entity_group=['LOC'],
+                         **kwargs)
+
+        
 class Neighborhoods(Whitelist):
     """Danish Neighborhoods
     
@@ -429,3 +452,4 @@ class Politicians(Whitelist):
                          entity_group=['PER'],
                          **kwargs
                          )
+

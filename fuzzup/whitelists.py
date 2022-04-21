@@ -133,7 +133,7 @@ def get_eblocal_byer():
     
     out = {}
     for row in df.itertuples(index=False, name="row"):
-        out[row.name] = {'municipality': row.municipality_name,
+        out[row.name] = {'municipality': row.municipality_name + ' Kommune',
                          'eblocal_id': row.eblocal_id,
                          'dawa_id' : row.dawa_id,
                          'lon_lat': (row.longitude,row.latitude),
@@ -161,7 +161,7 @@ def get_eblocal_municipality():
     out =  {}
 
     for row in df.itertuples(index=False, name="row"):
-        out[row.municipality_name] = {'eblocal_id': row.eblocal_id,
+        out[row.municipality_name + ' Kommune'] = {'eblocal_id': row.eblocal_id,
                          'municipality_id': row.municipality_id,
                          'dawa_id' : row.dawa_id,
                          }

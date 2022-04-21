@@ -129,8 +129,6 @@ def _get_df():
 def get_eblocal_byer():
     df = _get_df()
     
-    df = df[df['type']=='by']
-    
     out = {}
     for row in df.itertuples(index=False, name="row"):
         out[row.name] = {'municipality': row.municipality_name + ' Kommune',

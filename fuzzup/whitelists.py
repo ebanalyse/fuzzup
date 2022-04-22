@@ -11,6 +11,7 @@ import json
 import urllib.request as request
 from tqdm import tqdm
 import time
+from pathlib import Path
 
 from fuzzup.utils import complist
 
@@ -95,16 +96,19 @@ def get_politicians():
     while ccount < totalcount:
         r = requests.get(url, params={"$skip": ccount})
         for row in r.json()['value']:
-            if all([row.get('slutdato') is None,
-                    row.get('startdato') is not None,
-                    row.get('fornavn') is not None,
-                    row.get('efternavn') is not None]):
-                results.append(row)
+            if row.get('typeid') == 5: # Type_ID 5 = Politiker i folketinget.
+                if all([row.get('slutdato') is None,
+                        row.get('startdato') is not None,
+                        row.get('fornavn') is not None,
+                        row.get('efternavn') is not None]):
+                    results.append(row)
+            else:
+                pass
 
         ccount += 100
         if ccount % 1000 == 0:
             print(f"# records processed: {ccount}/{totalcount}")
-
+            
     print(f"Number of politicians identified: {len(results)}")
 
     # extract names    
@@ -116,6 +120,50 @@ def get_politicians():
     names = {x: {} for x in names}
     
     return names
+def _get_df():
+    here = Path(__file__).parent
+    fname = here / "2022.04.06-finished-eblocal_converts.csv"
+    df = pd.read_csv(fname)
+    return df
+    
+def get_eblocal_byer():
+    df = _get_df()
+    
+    out = {}
+    for row in df.itertuples(index=False, name="row"):
+        out[row.name] = {'municipality': row.municipality_name + ' Kommune',
+                         'eblocal_id': row.eblocal_id,
+                         'dawa_id' : row.dawa_id,
+                         'lon_lat': (row.longitude,row.latitude),
+                         }
+    return out
+
+
+def get_eblocal_neighborhoods():
+    df = _get_df()
+    
+    df = df[df['type']=='bydel']
+    
+    out = {}
+    for row in df.itertuples(index=False, name="row"):
+        out[row.name] = {'municipality': row.municipality_name,
+                         'eblocal_id': row.eblocal_id,
+                         'dawa_id' : row.dawa_id,
+                         'lon_lat': (row.longitude,row.latitude),
+                         }
+    return out
+
+def get_eblocal_municipality():
+    df = _get_df()
+    
+    out =  {}
+
+    for row in df.itertuples(index=False, name="row"):
+        out[row.municipality_name + ' Kommune'] = {'eblocal_id': row.eblocal_id,
+                         'municipality_id': row.municipality_id,
+                         'dawa_id' : row.dawa_id,
+                         }
+    return out
 
 def get_byer():
     """Get all byer in DK"""
@@ -151,6 +199,14 @@ def get_municipalities():
     data = requests.get(url).json() 
     whitelist = {" ".join([x.get('navn'), "Kommune"]): {'municipality_code': x.get('kode')} for x in data}
     return whitelist
+
+def get_eblocal_names():
+    url = 'https://misty-beirut-ryz6j4qt64tt.vapor-farm-b1.com/api/eblocals'
+    eblocals = requests.get(url).json()
+    # remove "hits"
+    eblocals.pop(0)
+    out = {x['eblocal_name'] : {'eblocal_id': x['eblocal_id']} for x in eblocals}
+    return out
 
 def get_neighborhoods():
     """Get all neighborhoods in DK"""
@@ -370,7 +426,7 @@ class Cities(Whitelist):
     def __init__(self,
                  **kwargs):
         
-        super().__init__(function_load=get_cities,
+        super().__init__(function_load=get_eblocal_byer,
                          title='city',
                          entity_group=['LOC'],
                          **kwargs)
@@ -385,10 +441,25 @@ class Municipalities(Whitelist):
     def __init__(self,
                  **kwargs):
         
-        super().__init__(function_load=get_municipalities,
+        super().__init__(function_load=get_eblocal_municipality,
                          title='municipality',
                          entity_group=['LOC'],
                          **kwargs)
+        
+class EBLocalNames(Whitelist):
+    """EB Local Names
+    
+    Whitelist with Ekstra Bladet Local Names.
+    """
+    
+    def __init__(self,
+                 **kwargs):
+        
+        super().__init__(function_load=get_eblocal_names,
+                         title='eblocal_name',
+                         entity_group=['LOC'],
+                         **kwargs)
+
         
 class Neighborhoods(Whitelist):
     """Danish Neighborhoods
@@ -400,7 +471,7 @@ class Neighborhoods(Whitelist):
     def __init__(self,
                  **kwargs):
         
-        super().__init__(function_load=get_neighborhoods,
+        super().__init__(function_load=get_eblocal_neighborhoods,
                          title='neighborhood',
                          entity_group=['LOC'],
                          **kwargs)
@@ -413,6 +484,17 @@ class Companies(Whitelist):
         super().__init__(function_load=get_companies,
                          title='company',
                          entity_group=['ORG'],
+                         **kwargs
+                         )
+
+class Politicians(Whitelist):
+    
+    def __init__(self,
+                 **kwargs):
+        
+        super().__init__(function_load=get_politicians,
+                         title='politician',
+                         entity_group=['PER'],
                          **kwargs
                          )
 

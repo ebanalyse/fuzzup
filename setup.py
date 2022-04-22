@@ -18,7 +18,8 @@ setuptools.setup(
         'scipy',
         'pandas>=1.3.5',
         'numpy',
-        'rapidfuzz'
+        'rapidfuzz',
+        'tqdm'
     ],
     setup_requires=['pytest-runner'],
     tests_require=['pytest',

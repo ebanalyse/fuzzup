@@ -6,7 +6,8 @@ from fuzzup.whitelists import (
     Municipalities,
     Neighborhoods,
     format_output,
-    apply_whitelists
+    apply_whitelists,
+    EBLocalNames
 )
 from fuzzup.fuzz import fuzzy_cluster
 
@@ -96,4 +97,6 @@ def test_format_no_match_on_subcategory():
     assert isinstance(out, pd.DataFrame)
     assert len(out) > 0
 
-  
+def test_EBLocalNames():
+    EBLocalNames()
+      

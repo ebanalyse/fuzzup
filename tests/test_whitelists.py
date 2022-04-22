@@ -71,7 +71,7 @@ def test_whitelist_formatting():
                            score_cutoff=90)
 
     #### Format output 
-    # set desired columns
+    # set desired columnsmunicipality_id
     cols = ['eblocal_code', 'municipality_code']
 
     # format output
@@ -82,12 +82,12 @@ def test_whitelist_formatting():
     assert len(out) > 0
     
 def test_format_no_match_on_subcategory():
-    # simulate data
+    # simulate datamunicipality_id
     test_data = {'city': [{'word': 'Viborg', 'entity_group': 'LOC', 'cluster_id': 'Viborg', 'matches': ['Visborg', 'Viborg'], 'mappings': [{'municipality': ['Mariagerfjord'], 'city_code': '12337669-ca46-6b98-e053-d480220a5a3f'}, {'municipality': ['Viborg'], 'city_code': '12337669-ba55-6b98-e053-d480220a5a3f'}]}], 'municipality': [{'word': 'Viborg', 'entity_group': 'LOC', 'cluster_id': 'Viborg', 'matches': ['Viborg'], 'mappings': [{'municipality_code': '0791'}]}]}
     # NOTE: no Neighborhood Code match
 
     #### Format output 
-    # set desired columns
+    # set desired columnsmunicipality_id
     cols = ['eblocal_code', 'municipality_code']
 
     # format output

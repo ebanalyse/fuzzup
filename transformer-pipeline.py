@@ -46,7 +46,7 @@ for m in matches:
     l.append(pd.DataFrame.from_dict(matches.get(m)))
 pd.concat(l, ignore_index=True)
 
-format_output(matches, columns=["eblocal_code", "municipality_code"])
+format_output(matches, columns=["eblocal_code", "municipality_id"])
 pd.DataFrame.from_dict(matches)
 
 

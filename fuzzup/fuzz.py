@@ -306,9 +306,53 @@ def compute_prominence_bygroup(clusters: List[Dict],
         out = [i for i in out if i['prominence_rank'] == 1]
     return out
 
-# test = {'entity_group': ["PER", "PER", "PER", "LOC", "LOC", "LOC", "LOC", "LOC", "LOC"], 'word': ['abe', 'abe', 'kat', 'københavn', 'københavn', 'albertslund', 'holbæk', 'holbæk', 'holbæk']}
-# tester = pd.DataFrame.from_dict(test)
-# tester = tester.to_dict(orient="records")
-# t = fuzzy_cluster_bygroup(tester)
-# t = compute_prominence_bygroup(t, return_first_rank = True)
-# __import__('pdb').set_trace()
+def compute_prominence_placement(clusters: list, 
+                                 placement_col: str="placement",
+                                 wgt_body: float=1.0,
+                                 wgt_lead: float=2.0,
+                                 wgt_title: float=3.0,
+                                 bygroup: bool=False,
+                                 **kwargs
+                                 ) -> list:
+    """Compute Prominence from Article Placement
+
+    Args:
+        clusters (list): NER predictions.
+        placement_col (str, optional): Name of column containing article
+            placement of entities. Defaults to "placement".
+        wgt_body (float, optional): Weight of entities in body
+            text. Defaults to 1.0.
+        wgt_lead (float, optional): Weight of entities in lead
+            text. Defaults to 2.0.
+        wgt_title (float, optional): Weight of entities in title.
+            Defaults to 3.0.
+        bygroup (bool, optional): use compute_prominence_bygroup()
+            in stead of compute_prominence()? Defaults to True. 
+        kwargs: all optional arguments for compute_prominence(bygroup).
+
+    Returns:
+        list: predictions with prominence scores.
+        
+    """
+    
+    if len(clusters) == 0:
+        return []
+    
+    assert all([placement_col in x for x in clusters]), f'key {placement_col} must be present in all dicts'
+    
+    weights = {'body': wgt_body, 
+               'lead': wgt_lead, 
+               'title': wgt_title}
+    
+    multipliers = np.array([weights.get(x.get(placement_col)) for x in clusters])
+    
+    if bygroup:
+        prominence_function = compute_prominence_bygroup
+    else: 
+        prominence_function = compute_prominence
+        
+    clusters = prominence_function(clusters,
+                                   weight_multipliers=multipliers,
+                                   **kwargs)
+    
+    return clusters

@@ -1,7 +1,13 @@
 import pandas as pd
 import numpy as np
 
-from fuzzup.fuzz import fuzzy_cluster, compute_prominence, fuzzy_cluster_bygroup, compute_prominence_bygroup
+from fuzzup.fuzz import (
+    fuzzy_cluster, 
+    compute_prominence, 
+    fuzzy_cluster_bygroup, 
+    compute_prominence_bygroup, 
+    compute_prominence_placement
+)
 from fuzzup.datasets import simulate_ner_data
 
 import pytest
@@ -47,6 +53,13 @@ def test_compute_prominence_bygroup():
     out = compute_prominence_bygroup(out)
     assert len(out)==len(PERSONS_NER)
     assert compute_prominence_bygroup([])==[]
+    
+def test_compute_prominence_placement():
+    PERSONS_NER = simulate_ner_data()
+    clusters = fuzzy_cluster_bygroup(PERSONS_NER)
+    results = compute_prominence_placement(clusters)
+    assert len(results)==len(PERSONS_NER)
+    assert compute_prominence_placement([])==[]
 
 #strings = ['biden', 'joe biden', 'donald trump']
 

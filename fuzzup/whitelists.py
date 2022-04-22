@@ -441,7 +441,7 @@ class Municipalities(Whitelist):
     def __init__(self,
                  **kwargs):
         
-        super().__init__(function_load=get_eblocal_municipality,
+        super().__init__(function_load=get_municipalities,
                          title='municipality',
                          entity_group=['LOC'],
                          **kwargs)

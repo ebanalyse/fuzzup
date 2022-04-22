@@ -1,3 +1,5 @@
+import random
+
 import pandas as pd
 import numpy as np
 
@@ -17,5 +19,7 @@ def simulate_ner_data() -> List[Dict]:
     PERSONS_NER["score"] = np.random.sample(n)
     PERSONS_NER["start"] = np.random.randint(100, size=n)
     PERSONS_NER["end"] = np.random.randint(100, size=n)
+    placements = ["title", "lead", "body"]
+    PERSONS_NER["placement"] = random.choices(placements, k=n)
     PERSONS_NER = PERSONS_NER.to_dict(orient="records")
     return PERSONS_NER

@@ -157,13 +157,20 @@ def evaluate_fuzzy_matching(preds_dict: Dict, mode: str = "jaccard") -> float:
 
     else:
         raise ValueError('Please set mode arg to either "jaccard" or "dice"')
+    
 
+def calculate_f1(TN:float, TP:float, FN:float, FP:float) -> float:
+    precision = TP/(TP+FP)
+    recall = TP/(TP+FN)
+    f1 = 2 * (precision * recall) / (precision + recall)    
+    return f1
+    
 def evaluate_prominence2(preds_dict: Dict, mode: str = "jaccard") -> float:
     TN = 0
     TP = 0
     FN = 0
     FP = 0
-    
+    # 2 * (Precision * Recall) / (Precision + Recall)
     for article in preds_dict.values():
         for preds in article.values():
             if preds['prominence_rank'] == 1:
@@ -177,7 +184,7 @@ def evaluate_prominence2(preds_dict: Dict, mode: str = "jaccard") -> float:
                 else:
                     FN += 1
     
-    return round(TP/(TP+FP), 2)    
+    return round(calculate_f1(TN,TP,FN,FP), 2)
 
 def evaluate_prominence(preds_dict: Dict, mode: str = "jaccard") -> float:
     hits = 0

@@ -4,7 +4,7 @@ from collections import defaultdict
 from tqdm import tqdm
 from typing import List, Dict, Callable
 import numpy as np
-from fuzzup.fuzz import fuzzy_cluster_bygroup, fuzzy_cluster, compute_prominence_bygroup
+from fuzzup.fuzz import fuzzy_cluster_bygroup, fuzzy_cluster, compute_prominence_bygroup, compute_prominence_placement
 from rapidfuzz.fuzz import (
     ratio,
     partial_ratio,
@@ -32,14 +32,50 @@ FUZZUP_SCORERS = {
 
 train = pd.read_csv("./prominence_dataset.csv")
 
+train = train[train['entity_group'] == 'LOC']
 
-def _predict(preds: List[Dict], cutoff, scorer, weight_pos) -> Dict:
+def _assert_fuzz_json(json_data):
+    if not all (key in json_data for key in ("title","body")):
+        raise ValueError('One of title or body not found in request')
+        
+    if 'lead' not in json_data or type(json_data['lead']) is not str:
+        json_data['lead'] = '' #Can be empty since not all articles have one
+               
+    if 'sentence_based' not in json_data:
+        json_data['sentence_based'] = True
+        
+    return json_data
+
+def _text_segment_adder(json_data, preds_out):
+    #This will probably require that each piece of text is seperated by a \n
+    for pred in preds_out:
+        lens = [len(json_data['title']), len(json_data['lead']), len(json_data['body'])]
+        if pred['start'] <= lens[0]:
+            pred['text_segment'] = 'title'
+        elif pred['start'] <= lens[0] + lens[1]:
+            pred['text_segment'] = 'lead'
+        elif pred['start'] <= lens[0] + lens[1] + lens[2]:
+            pred['text_segment'] = 'body'
+        else:
+            pred['text_segment'] = 'body'
+    return preds_out
+
+
+def _predict(preds: List[Dict], cutoff, scorer, weight_pos, json_data, **kwargs) -> Dict:
     res = defaultdict(lambda: {})
+    
+    json_data = _assert_fuzz_json(json_data)
     fuzzy_preds = fuzzy_cluster_bygroup(
         preds, cutoff=cutoff, scorer=FUZZUP_SCORERS[scorer]
     )
-    fuzzy_preds = compute_prominence_bygroup(fuzzy_preds, weight_position=weight_pos)
+    
+    fuzzy_preds = _text_segment_adder(json_data, fuzzy_preds)
 
+    try:
+        fuzzy_preds = compute_prominence_placement(fuzzy_preds, weight_position=weight_pos, **kwargs)
+    except:
+        __import__('pdb').set_trace()
+    
     for i, fuzzy_pred in enumerate(fuzzy_preds):
         res[i].update(
             {
@@ -53,16 +89,22 @@ def _predict(preds: List[Dict], cutoff, scorer, weight_pos) -> Dict:
     return res
 
 
-def process_dataset(train: pd.DataFrame, cutoff, scorer, weight_pos=1) -> List[Dict]:
+def process_dataset(train: pd.DataFrame, cutoff, scorer, weight_pos=1, **kwargs) -> List[Dict]:
     preds_dict = defaultdict(lambda: {})
     with tqdm(total=train["content_id"].nunique()) as pbar:
         for article in np.unique(train["content_id"]):
             pbar.update(1)
             preds_list = []
+            json_data = {}
             for index, row in train[train["content_id"] == article].iterrows():
                 row["true_value"] = row["main_entity"]
                 preds_list.append(dict(row))
-            preds_dict[article].update(_predict(preds_list, cutoff, scorer, weight_pos))
+            json_data['title'] = row['title']
+            json_data['body'] = row['body']
+            if 'lead' in row is not None:
+                json_data['lead'] = row['lead']
+            
+            preds_dict[article].update(_predict(preds_list, cutoff, scorer, weight_pos, json_data, **kwargs))
     return preds_dict
 
 
@@ -116,6 +158,26 @@ def evaluate_fuzzy_matching(preds_dict: Dict, mode: str = "jaccard") -> float:
     else:
         raise ValueError('Please set mode arg to either "jaccard" or "dice"')
 
+def evaluate_prominence2(preds_dict: Dict, mode: str = "jaccard") -> float:
+    TN = 0
+    TP = 0
+    FN = 0
+    FP = 0
+    
+    for article in preds_dict.values():
+        for preds in article.values():
+            if preds['prominence_rank'] == 1:
+                if preds['prominent'] == 1:
+                    TP += 1
+                else:
+                    FP += 1
+            if preds['prominence_rank'] != 1:
+                if preds['prominent'] == 0:
+                    TN += 1
+                else:
+                    FN += 1
+    
+    return round(TP/(TP+FP), 2)    
 
 def evaluate_prominence(preds_dict: Dict, mode: str = "jaccard") -> float:
     hits = 0
@@ -123,9 +185,9 @@ def evaluate_prominence(preds_dict: Dict, mode: str = "jaccard") -> float:
 
     for article in preds_dict.values():
         for preds in article.values():
-            if preds["prominent"] == 1:
-                if preds["prominence_rank"] == 1:
-                    hits += 1
+            if preds['prominence_rank'] == 1:
+                if preds['prominent'] == 1:
+                    hits +=1
                 else:
                     misses += 1
             else:
@@ -186,17 +248,27 @@ def train_fuzzy():
 
     plot_results(optimizer)
 
+"""
+Do not set weight_multipliers to 0, as all entities will get equal prominence_rank..
+ 
+Best result: {'weight_pos': 1.0, 'wgt_body': 3.0, 'wgt_lead': 7.4118645551409585, 'wgt_title': 3.0}; f(x) = 0.820.
 
+"""
 def train_prominent():
     # prominence
-    def black_box_function(weight_pos: float):
+    def black_box_function(weight_pos: float, **kwargs):
         preds_dict = process_dataset(
-            train, cutoff=96.703, scorer=1, weight_pos=weight_pos
+            train, cutoff=96.703, scorer=1, weight_pos=weight_pos,
+            placement_col = 'text_segment', **kwargs
         )
-        accuracy = evaluate_prominence(preds_dict)
+        accuracy = evaluate_prominence2(preds_dict)
         return accuracy
 
-    pbounds = {"weight_pos": [0, 1]}
+    pbounds = {"weight_pos": [0,1],
+               "wgt_body": [0, 3],
+               "wgt_lead": [0.1, 20],
+               "wgt_title": [0, 3],
+               }
 
     optimizer = BayesianOptimization(
         f=black_box_function, pbounds=pbounds, verbose=2, random_state=4
@@ -205,18 +277,21 @@ def train_prominent():
     utility = UtilityFunction(kind="ucb", kappa=1.96, xi=0.01)
 
     # TRAINING LOOP
-    for i in range(25):
+    for i in range(100):
         next_point = optimizer.suggest(utility)
 
-        target = black_box_function(weight_pos=next_point["weight_pos"])
+        target = black_box_function(weight_pos=next_point['weight_pos'], wgt_body = next_point['wgt_body'], wgt_lead = next_point['wgt_lead'], wgt_title = next_point['wgt_title'])
 
         try:
             optimizer.register(params=next_point, target=target)
         except:
             pass
         print(f"TARGET: {target} \n")
-        print(f'Weight_pos: {next_point["weight_pos"]}')
-
+        print(f'Weight_pos: {next_point["weight_pos"]} \n' )
+        print(f'wgt_body: {next_point["wgt_body"]} \n')
+        print(f'wgt_lead: {next_point["wgt_lead"]} \n')
+        print(f'wgt_title: {next_point["wgt_title"]} \n')
+        
     plot_results(optimizer)
 
 

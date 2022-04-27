@@ -83,6 +83,8 @@ def _predict(preds: List[Dict], cutoff, scorer, weight_pos, json_data, **kwargs)
                 "pred": fuzzy_pred["cluster_id"],
                 "true_value": fuzzy_pred["true_value"],
                 "prominence_rank": fuzzy_pred["prominence_rank"],
+                "prominence_score": fuzzy_pred["prominence_score"],
+                
                 "prominent": fuzzy_pred["prominent"],
             }
         )
@@ -163,7 +165,7 @@ def calculate_f1(TN:float, TP:float, FN:float, FP:float) -> float:
     precision = TP/(TP+FP)
     recall = TP/(TP+FN)
     f1 = 2 * (precision * recall) / (precision + recall)    
-    return f1
+    return precision
     
 def evaluate_prominence2(preds_dict: Dict, mode: str = "jaccard") -> float:
     TN = 0
@@ -173,16 +175,25 @@ def evaluate_prominence2(preds_dict: Dict, mode: str = "jaccard") -> float:
     # 2 * (Precision * Recall) / (Precision + Recall)
     for article in preds_dict.values():
         for preds in article.values():
-            if preds['prominence_rank'] == 1:
+            if preds['prominence_score'] >= 20:
                 if preds['prominent'] == 1:
                     TP += 1
                 else:
                     FP += 1
-            if preds['prominence_rank'] != 1:
+            if preds['prominence_score'] < 20:
                 if preds['prominent'] == 0:
                     TN += 1
                 else:
                     FN += 1
+                    
+    if TP <= 100:
+        return 0.7
+    
+    print('CONFUSION MATRIX: \n')
+    print(np.array(([TP, FP],[TN, FN])))
+    
+    if TP+FP == 0:
+        return 0
     
     return round(calculate_f1(TN,TP,FN,FP), 2)
 
@@ -259,7 +270,7 @@ def train_fuzzy():
 Do not set weight_multipliers to 0, as all entities will get equal prominence_rank..
  
 Best result: {'weight_pos': 1.0, 'wgt_body': 3.0, 'wgt_lead': 7.4118645551409585, 'wgt_title': 3.0}; f(x) = 0.820.
-
+'Best result: {'weight_pos': 0.0, 'wgt_body': 3.1199637756796292, 'wgt_lead': 11.1561038148714, 'wgt_title': 10.233392309970549}; f(x) = 0.840.
 """
 def train_prominent():
     # prominence
@@ -268,13 +279,14 @@ def train_prominent():
             train, cutoff=96.703, scorer=1, weight_pos=weight_pos,
             placement_col = 'text_segment', **kwargs
         )
+        
         accuracy = evaluate_prominence2(preds_dict)
         return accuracy
 
     pbounds = {"weight_pos": [0,1],
-               "wgt_body": [0, 3],
-               "wgt_lead": [0.1, 20],
-               "wgt_title": [0, 3],
+               "wgt_body": [0,20],
+               "wgt_lead": [0, 20],
+               "wgt_title": [0, 20],
                }
 
     optimizer = BayesianOptimization(

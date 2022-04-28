@@ -175,22 +175,22 @@ def evaluate_prominence2(preds_dict: Dict, mode: str = "jaccard") -> float:
     # 2 * (Precision * Recall) / (Precision + Recall)
     for article in preds_dict.values():
         for preds in article.values():
-            if preds['prominence_score'] >= 20:
+            if preds['prominence_score'] >= 10:
                 if preds['prominent'] == 1:
                     TP += 1
                 else:
                     FP += 1
-            if preds['prominence_score'] < 20:
+            if preds['prominence_score'] < 10:
                 if preds['prominent'] == 0:
                     TN += 1
                 else:
                     FN += 1
-                    
-    if TP <= 100:
-        return 0.7
     
     print('CONFUSION MATRIX: \n')
-    print(np.array(([TP, FP],[TN, FN])))
+    print(np.array(([TP, FP],[FN, TN])))
+    
+    if TP <= 300:
+        return 0
     
     if TP+FP == 0:
         return 0

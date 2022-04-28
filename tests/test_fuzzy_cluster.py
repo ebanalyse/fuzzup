@@ -13,6 +13,15 @@ def test_fuzzy_cluster():
     clusters = fuzzy_cluster(strings)
     assert isinstance(clusters, list)
     
+def test_fuzzy_existing_id():
+    words = [{"word": 'Vanløse', 'cluster_id': 'TEST99'},{"word": 'Vanløse', 'cluster_id': 'TEST99'}]    
+    clusters = fuzzy_cluster(words)
+    
+    for cluster in clusters:
+        if cluster['cluster_id'] == 'TEST99':
+            raise ValueError('cluster_id was not deleted succesfully')    
+    assert isinstance(clusters, list)
+    
 #### SINGLE WORD
     
 def test_fuzzy_cluster_single():

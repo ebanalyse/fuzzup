@@ -127,6 +127,11 @@ def fuzzy_cluster(words: List[Dict],
     
     # TODO: implement by_entity_group
     assert isinstance(words, list), "'words' must be a list"
+    
+    #Remove existing cluster_id entries in words 
+    for word in words:
+        if 'cluster_id' in word:
+            del word['cluster_id']
 
     # handle trivial case (empty list)
     if not words:

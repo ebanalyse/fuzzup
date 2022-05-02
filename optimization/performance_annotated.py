@@ -73,7 +73,9 @@ class FuzzEvaluater():
 
                     processed_df = processed_df.append(row)
                     #self.preds_dict[article].update(self._ner_predict(data))
-        return processed_df
+        final_df = pd.concat([processed_df,processed_df['preds'].explode().apply(pd.Series)], axis=1)
+        final_df = final_df.drop(columns=['preds'])
+        return final_df
     
     def _ner_predict(self, data: Dict) -> List[Dict]:
         if 'subtitle' not in data:
@@ -141,10 +143,12 @@ def load_dataframe() -> pd.DataFrame:
 
 train_df = load_dataframe()
 train_df = train_df.iloc[0:10]
-t = FuzzEvaluater(train_df, 'jaccard', 'Maltehb/danish-bert-botxo-ner-dane')
+fuzz_eval = FuzzEvaluater(train_df, 'jaccard', 'Bizou/checkpoint-25000')
 
-test = t.preproces_dataset(train_df, cutoff = 98, scorer=WRatio, weight_pos = 1, eval='whitelist')
+final_df = fuzz_eval.preproces_dataset(train_df, cutoff = 98, scorer=WRatio, weight_pos = 1, eval='whitelist')
 
+
+final_df.to_excel('./processed_annotated_dump.xlsx')
 __import__('pdb').set_trace()
 
 # def _assert_fuzz_json(json_data):

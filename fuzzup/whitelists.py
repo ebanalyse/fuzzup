@@ -197,15 +197,15 @@ def get_cities():
 def get_municipalities():
     url = 'https://api.dataforsyningen.dk/kommuner'
     data = requests.get(url).json() 
-    whitelist = {" ".join([x.get('navn'), "Kommune"]): {'municipality_code': x.get('kode')} for x in data}
+    whitelist = {" ".join([x.get('navn'), "Kommune"]): {'municipality_code': x.get('kode'), 'municipality_name': " ".join([x.get('navn'), "Kommune"])} for x in data}
     return whitelist
 
 def get_eblocal_names():
-    url = 'https://misty-beirut-ryz6j4qt64tt.vapor-farm-b1.com/api/eblocals'
+    url = 'https://misty-beirut-ryz6j4qt64tt.vapor-farm-b1.com/api/eblocal_aliases?big_cities=true'
     eblocals = requests.get(url).json()
     # remove "hits"
     eblocals.pop(0)
-    out = {x['eblocal_name'] : {'eblocal_id': x['eblocal_id']} for x in eblocals}
+    out = {x['eblocal_name'] : {'eblocal_id': x['eblocal_id'], 'eblocal_name':x['eblocal_name']} for x in eblocals}
     return out
 
 def get_neighborhoods():
@@ -497,4 +497,3 @@ class Politicians(Whitelist):
                          entity_group=['PER'],
                          **kwargs
                          )
-

@@ -11,7 +11,7 @@ from fuzzup.whitelists import (
 )
 from fuzzup.fuzz import fuzzy_cluster
 
-c = Cities()
+c = EBLocalNames()
 m = Municipalities()
 n = Neighborhoods()
 
@@ -60,9 +60,9 @@ def test_municipalities_whitelist():
 
 def test_whitelist_formatting():
     # simulate data
-    test_data = [{'word': 'Viborg', 'entity_group': 'LOC', 'cluster_id' : 'A'}, 
-                 {'word': 'Uldum', 'entity_group': 'ORG', 'cluster_id' : 'B'},
-                 {'word': 'Solgårde', 'entity_group': 'LOC', 'cluster_id' : 'C'}]
+    test_data = [{'word': 'Holbæk', 'entity_group': 'LOC', 'cluster_id' : 'Holbæk'}, 
+                 {'word': 'Holbæk', 'entity_group': 'ORG', 'cluster_id' : 'Holbæk'},
+                 {'word': 'Holbæk Kommune', 'entity_group': 'LOC', 'cluster_id' : 'Holbæk Kommune'}]
     clusters = fuzzy_cluster(test_data)
     
     # Apply multiple whitelists 
@@ -72,12 +72,13 @@ def test_whitelist_formatting():
 
     #### Format output 
     # set desired columnsmunicipality_id
-    cols = ['eblocal_code', 'municipality_code']
+    cols = ['eblocal_id', 'eblocal_name', "municipality_name", "municipality_code"]
 
     # format output
     out = format_output(out,
                         columns = cols,
                         drop_duplicates=True)
+    
     assert isinstance(out, pd.DataFrame)
     assert len(out) > 0
     

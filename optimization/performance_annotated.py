@@ -142,11 +142,9 @@ def load_dataframe() -> pd.DataFrame:
     return train
 
 train_df = load_dataframe()
-train_df = train_df.iloc[0:10]
 fuzz_eval = FuzzEvaluater(train_df, 'jaccard', 'Bizou/checkpoint-25000')
 
 final_df = fuzz_eval.preproces_dataset(train_df, cutoff = 98, scorer=WRatio, weight_pos = 1, eval='whitelist')
-
 
 final_df.to_excel('./processed_annotated_dump.xlsx')
 __import__('pdb').set_trace()

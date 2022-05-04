@@ -31,7 +31,9 @@ FUZZUP_SCORERS = {
     0: ratio,
     1: partial_ratio,
     2: partial_token_set_ratio,
-    3: WRatio
+    3: WRatio,
+    4: QRatio,
+    5: token_set_ratio
 }
 
 WHITELISTS = [EBLocalNames(), Municipalities()]
@@ -103,7 +105,7 @@ def _predict(preds: List[Dict],
     fuzzy_preds = _text_segment_adder(json_data, fuzzy_preds)
 
     try:
-        fuzzy_preds = compute_prominence_placement(fuzzy_preds, placement_col="text_segment", weight_position=weight_pos, wgt_lead=wgt_lead, wgt_body=wgt_body,wgt_title=wgt_title, return_first_rank = False, bygroup=True)
+        fuzzy_preds = compute_prominence_placement(fuzzy_preds, placement_col="text_segment", weight_position=weight_pos, wgt_lead=wgt_lead, wgt_body=wgt_body,wgt_title=wgt_title, return_first_rank = True, bygroup=True)
     except:
         __import__('pdb').set_trace()
         
@@ -116,12 +118,12 @@ def _predict(preds: List[Dict],
     """
     
     for i, fuzzy_pred in enumerate(fuzzy_preds):
-        #Filter any predictions with a score of lower than 10
-        if fuzzy_pred['prominence_score'] >= 20:
-            continue
-        else:
-            #If the score is lower than 10, then the prediction is nothing
-            match_city = []
+    #   #  Filter any predictions with a score of lower than 10
+    #     if fuzzy_pred['prominence_score'] >= 10:
+    #         continue
+    #     elif fuzzy_pred['prominence_rank'] != 1 and fuzzy_pred['prominence_score'] <10:
+    #         #If the score is lower than 10, then the prediction is nothing
+    #         match_city = []
         res[i].update(
             {
                 "word": fuzzy_pred["word"],
@@ -240,21 +242,20 @@ def evaluate_whitelist_matching(preds_dict:Dict,mode:str = 'jaccard') -> float:
                         "true_set": true_set,
                         "misses": preds_set - true_set,
                     }
+                print('predictions: ' , preds_set, 'true_value: ',  true_set)
             elif len(preds_set) ==0 and len(true_set) == 0:
-                print('both empty')
                 pass
-            elif len(preds_set) ==0 and not len(true_set):
-                print("pred but no true exist")
+            elif len(preds_set) and not len(true_set):
                 accuracy = 0
             elif not len(preds_set) and len(true_set):
-                print('pred empty but true exist')
                 accuracy = 0
+            else:
+                accuracy=0
             
             try:
                 accuracies[article] = accuracy
             except:
                 continue
-            print('predictions: ' , preds_set, 'true_value: ',  true_set)
         if len(accuracies) != 0:
             return (
                 sum(accuracies.values()) / len(accuracies),
@@ -384,13 +385,13 @@ def train_whitelist():
         return accuracy
 
     pbounds = {#"cutoff_fuzz": [0, 100],
-               "cutoff_wl": [0, 100],
+               "cutoff_wl": [80, 100],
                #"scorer_fuzz": [0, len(FUZZUP_SCORERS) - 1],
                "scorer_wl": [0, len(FUZZUP_SCORERS) - 1],
-               "weight_pos": [0,1],
-               "wgt_body": [0,20],
-               "wgt_lead": [0, 20],
-               "wgt_title": [0, 20],
+               "weight_pos": [0.99,1],
+               "wgt_body": [0.99,1],
+               "wgt_lead": [0.99, 1],
+               "wgt_title": [0.99, 1],
                }
 
     optimizer = BayesianOptimization(
@@ -400,7 +401,7 @@ def train_whitelist():
     utility = UtilityFunction(kind="ucb", kappa=1.96, xi=0.01)
 
     # TRAINING LOOP
-    for i in range(25):
+    for i in range(200):
         next_point = optimizer.suggest(utility)
 
         target = black_box_function(
@@ -468,6 +469,8 @@ Do not set weight_multipliers to 0, as all entities will get equal prominence_ra
  
 Best result: {'weight_pos': 1.0, 'wgt_body': 3.0, 'wgt_lead': 7.4118645551409585, 'wgt_title': 3.0}; f(x) = 0.820.
 'Best result: {'weight_pos': 0.0, 'wgt_body': 3.1199637756796292, 'wgt_lead': 11.1561038148714, 'wgt_title': 10.233392309970549}; f(x) = 0.840.
+Best result: {'cutoff_wl': 92.37154146074903, 'scorer_wl': 0.0, 'weight_pos': 1.0, 'wgt_body': 0.99, 'wgt_lead': 10.0, 'wgt_title': 10.0}; f(x) = 0.456.
+Best result: {'cutoff_wl': 91.98047495901676, 'scorer_wl': 0.43219773246841736, 'weight_pos': 1.0, 'wgt_body': 0.99, 'wgt_lead': 1.86707316458525, 'wgt_title': 2.029549572307997}; f(x) = 0.572.
 """
 def train_prominent():
     # prominence
@@ -509,9 +512,25 @@ def train_prominent():
         print(f'wgt_title: {next_point["wgt_title"]} \n')
         
     plot_results(optimizer)
+    
+def single_run(**kwargs):
+    preds_dict = process_dataset(train, **kwargs)
+    accuracy, diagnosis_dict = evaluate_whitelist_matching(preds_dict)
+    print(accuracy)
+#Best result: {'cutoff_wl': 92.37154146074903, 'scorer_wl': 0.0, 'weight_pos': 1.0, 'wgt_body': 0.99, 'wgt_lead': 10.0, 'wgt_title': 10.0}; f(x) = 0.456.
 
+single_run(
+        #cutoff_fuzz=next_point["cutoff_fuzz"],
+        #scorer_fuzz=int(next_point["scorer_fuzz"]),
+        cutoff_wl=98.0,
+        scorer_wl=3,
+        weight_pos=1,
+        wgt_body=1,
+        wgt_lead=1,
+        wgt_title=1,
+    )
 
-train_whitelist()
+#train_whitelist()
 
 # preds_dict = process_dataset(train, cutoff = 0, scorer=ratio)
 # accuracy, diagnosis_dict = evaluate_fuzzy_matching(preds_dict)

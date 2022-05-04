@@ -5,9 +5,9 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="fuzzup", 
-    version="0.4.2",
-    author="Lars Kjeldgaard",
-    author_email="lars.kjeldgaard@eb.dk",
+    version="0.4.3",
+    author="Lars Kjeldgaard, Søren Kolbye Jensen",
+    author_email="lars.kjeldgaard@eb.dk, soren.k.jensen@eb.dk",
     description="A Fuzzy Matching Approach for Clustering Strings",
     long_description=long_description,
     long_description_content_type="text/markdown",

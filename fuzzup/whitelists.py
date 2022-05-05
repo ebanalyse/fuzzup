@@ -67,7 +67,23 @@ def get_cvrdev_company(name: str) -> Dict:
     else:
         raise RuntimeError(resp.status_code)
     return record_list
-    
+
+def get_eblocal_names():
+    url = 'https://misty-beirut-ryz6j4qt64tt.vapor-farm-b1.com/api/eblocal_aliases?big_cities=true'
+    eblocals = requests.get(url).json()
+    # remove "hits"
+    eblocals.pop(0)
+    out = {x['eblocal_name'] : {'id': x['eblocal_id'], 'label':x['eblocal_name'], "type": "id_eblocal"} for x in eblocals}
+    return out
+
+def get_eblocal_organizations():
+    url = 'https://misty-beirut-ryz6j4qt64tt.vapor-farm-b1.com/api/eblocal_organisations'
+    eblocal_organizations = requests.get(url).json()
+    # remove "hits"
+    eblocal_organizations.pop(0)
+    out = {x['name'] : {'id': x['eblocal_id'], 'label':x['eblocal_name'], "type": "id_eblocal_organization"} for x in eblocal_organizations}
+    return out
+
 def get_companies(function_load: Callable = get_cvrdev_company) -> List[Dict]:
     company_records = {}
 
@@ -481,7 +497,7 @@ class Companies(Whitelist):
     def __init__(self,
                  **kwargs):
         
-        super().__init__(function_load=get_companies,
+        super().__init__(function_load=get_eblocal_organizations,
                          title='company',
                          entity_group=['ORG'],
                          **kwargs

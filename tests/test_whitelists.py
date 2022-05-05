@@ -7,13 +7,14 @@ from fuzzup.whitelists import (
     Neighborhoods,
     format_output,
     apply_whitelists,
-    EBLocalNames
+    EBLocalNames,
+    Companies
 )
 from fuzzup.fuzz import fuzzy_cluster
 
 c = EBLocalNames()
 m = Municipalities()
-n = Neighborhoods()
+n = Companies()
 
 
 def test_whitelist():
@@ -62,17 +63,19 @@ def test_whitelist_formatting():
     # simulate data
     test_data = [{'word': 'Holbæk', 'entity_group': 'LOC', 'cluster_id' : 'Holbæk'}, 
                  {'word': 'Holbæk', 'entity_group': 'ORG', 'cluster_id' : 'Holbæk'},
-                 {'word': 'Holbæk Kommune', 'entity_group': 'LOC', 'cluster_id' : 'Holbæk Kommune'}]
+                 {'word': 'Holbæk Kommune', 'entity_group': 'LOC', 'cluster_id' : 'Holbæk Kommune'},
+                 {'word': 'Frederiksberg Centret', 'entity_group': 'ORG', 'cluster_id' : 'Frederiksberg Centret'},
+                 ]
     clusters = fuzzy_cluster(test_data)
     
     # Apply multiple whitelists 
-    out = apply_whitelists([c,m], 
+    out = apply_whitelists([c,m,n], 
                            clusters, 
                            score_cutoff=90)
 
     #### Format output 
     # set desired columnsmunicipality_id
-    cols = ['eblocal_id', 'eblocal_name', "municipality_name", "municipality_code"]
+    cols = ['type', 'id', "label"]
 
     # format output
     out = format_output(out,
@@ -81,6 +84,7 @@ def test_whitelist_formatting():
     
     assert isinstance(out, pd.DataFrame)
     assert len(out) > 0
+    'Frederiksberg' in dict(out['label']).values()
     
 def test_format_no_match_on_subcategory():
     # simulate datamunicipality_id
@@ -89,7 +93,7 @@ def test_format_no_match_on_subcategory():
 
     #### Format output 
     # set desired columnsmunicipality_id
-    cols = ['eblocal_code', 'municipality_code']
+    cols = ['type', 'id', "label"]
 
     # format output
     out = format_output(test_data,

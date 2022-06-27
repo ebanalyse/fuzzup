@@ -82,7 +82,9 @@ def get_eblocal_names():
     url = "https://misty-beirut-ryz6j4qt64tt.vapor-farm-b1.com/api/eblocal_aliases?big_cities=true"
     eblocals = requests.get(url).json()
     # remove "hits"
+    meta = eblocals[0]
     eblocals.pop(0)
+
     out = {
         x["name"]: {
             "id": x["eblocal_id"],
@@ -91,8 +93,7 @@ def get_eblocal_names():
         }
         for x in eblocals
     }
-    __import__("pdb").set_trace()
-    return out
+    return out, meta
 
 
 def get_eblocal_organizations():
@@ -101,6 +102,7 @@ def get_eblocal_organizations():
     )
     eblocal_organizations = requests.get(url).json()
     # remove "hits"
+    meta = eblocal_organizations[0]
     eblocal_organizations.pop(0)
     out = {
         x["name"]: {
@@ -110,7 +112,7 @@ def get_eblocal_organizations():
         }
         for x in eblocal_organizations
     }
-    return out
+    return out, meta
 
 
 def get_companies(function_load: Callable = get_cvrdev_company) -> List[Dict]:
@@ -260,6 +262,7 @@ def get_cities():
 
 def get_municipalities():
     url = "https://api.dataforsyningen.dk/kommuner"
+    meta = {'version': 'dawa'}    
     data = requests.get(url).json()
     whitelist = {
         " ".join([x.get("navn"), "Kommune"]): {
@@ -269,7 +272,7 @@ def get_municipalities():
         }
         for x in data
     }
-    return whitelist
+    return whitelist, meta
 
 
 # TODO : Add version number in eb_local -> do not pop the first entry,put it in seperate key
@@ -277,6 +280,7 @@ def get_eblocal_names():
     url = "https://misty-beirut-ryz6j4qt64tt.vapor-farm-b1.com/api/eblocal_aliases?big_cities=true"
     eblocals = requests.get(url).json()
     # remove "hits"
+    _meta = eblocals[0]
     eblocals.pop(0)
     out = {
         x["name"]: {
@@ -286,7 +290,9 @@ def get_eblocal_names():
         }
         for x in eblocals
     }
-    return out
+    out["meta"] = _meta
+    __import__('pdb').set_trace()
+    return out, _meta
 
 
 def get_neighborhoods():
@@ -425,7 +431,7 @@ class Whitelist:
         self.entity_group = entity_group
         self.title = title
         logger.info(f"Loading whitelist: {title}")
-        self.whitelist = function_load(**kwargs)
+        self.whitelist, self.version = function_load(**kwargs)
         logger.info("Done loading.")
 
     def __call__(self, words: List[Dict], **kwargs) -> List[Dict]:

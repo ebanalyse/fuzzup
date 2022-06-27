@@ -37,6 +37,7 @@ def test_whitelist_major_cities():
     matches = apply_whitelists(whitelists=[c, m, n], clusters=clusters)
     copenhagen_bool = False
     aarhus_bool = False
+    __import__("pdb").set_trace()
     for label in matches["eblocal_name"]:
         matches = label["matches"]
         if "København K" in matches:

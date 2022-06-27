@@ -9,22 +9,21 @@ from scipy.stats import rankdata
 from fuzzup.utils import flatten
 
 # constants
-CLUSTER_ID = 'cluster_id'
+CLUSTER_ID = "cluster_id"
 
 
-def compute_fuzzy_matrix(strings: List[str],
-                         **kwargs) -> pd.DataFrame:
+def compute_fuzzy_matrix(strings: List[str], **kwargs) -> pd.DataFrame:
     """Compute Fuzzy Matrix
 
     Computes matrix with pairwise fuzzy ratios (=edit)
-    distances between all strings. 
+    distances between all strings.
 
-    The result can be thought of as a correlation 
+    The result can be thought of as a correlation
     matrix with all diagonal elements equal to 100.
 
     Args:
         strings (List[str]): strings for clustering.
-        kwargs: all optional arguments for 
+        kwargs: all optional arguments for
             rapidfuzz.process.cdist.
 
     Returns:
@@ -32,12 +31,12 @@ def compute_fuzzy_matrix(strings: List[str],
             strings.
 
     Examples:
-        >>> person_names = ['Donald Trump', 'Donald Trump', 
-                            'J. biden', 'joe biden', 'Biden', 
-                            'Bide', 'mark esper', 
-                            'Christopher c . miller', 
-                            'jim mattis', 'Nancy Pelosi', 
-                            'trumps', 'Trump', 'Donald', 
+        >>> person_names = ['Donald Trump', 'Donald Trump',
+                            'J. biden', 'joe biden', 'Biden',
+                            'Bide', 'mark esper',
+                            'Christopher c . miller',
+                            'jim mattis', 'Nancy Pelosi',
+                            'trumps', 'Trump', 'Donald',
                             'miller']
         ....
 
@@ -54,9 +53,7 @@ def compute_fuzzy_matrix(strings: List[str],
     return dists
 
 
-def helper_clustering(m,
-                      vars,
-                      cutoff: float = 70):
+def helper_clustering(m, vars, cutoff: float = 70):
 
     add_elements = vars
     nothing_to_add = False
@@ -65,7 +62,7 @@ def helper_clustering(m,
 
     while len(m) > 0 and not nothing_to_add:
         iteration += 1
-        #print("iteration", iteration)
+        # print("iteration", iteration)
         m = m.drop(add_elements)
         l = pd.DataFrame(m[cluster] > cutoff)
         l = l.sum(axis=1).tolist()
@@ -81,9 +78,7 @@ def helper_clustering(m,
     return cluster, m
 
 
-def naive_cluster(fuzzy_matrix: pd.DataFrame,
-                  cutoff: float = 70,
-                  **kwargs) -> list:
+def naive_cluster(fuzzy_matrix: pd.DataFrame, cutoff: float = 70, **kwargs) -> list:
     """Naive Clustering
 
     Conducts naive clustering based on matrix with
@@ -93,7 +88,7 @@ def naive_cluster(fuzzy_matrix: pd.DataFrame,
         fuzzy_matrix (pd.DataFrame): Matrix with
             pairwise fuzzy ratios between words.
         cutoff (float, optional): Threshold for naive
-            clustering algorithm with respect to 
+            clustering algorithm with respect to
             pairwise fuzzy ratios. Defaults to 70.
 
     Returns:
@@ -109,11 +104,13 @@ def naive_cluster(fuzzy_matrix: pd.DataFrame,
     return clusters
 
 
-def fuzzy_cluster(words: List[Dict],
-                  cutoff: int = 70,
-                  to_dataframe: bool = False,
-                  merge_output: bool = True,
-                  **kwargs) -> List[Dict]:
+def fuzzy_cluster(
+    words: List[Dict],
+    cutoff: int = 70,
+    to_dataframe: bool = False,
+    merge_output: bool = True,
+    **kwargs,
+) -> List[Dict]:
     """_summary_
 
     Args:
@@ -122,7 +119,7 @@ def fuzzy_cluster(words: List[Dict],
             ratios when forming clusters. Defaults to 70.
         to_dataframe (bool, optional): Output as dataframe?
             Defaults to True.
-        merge_output (bool, optional): Merge output with 
+        merge_output (bool, optional): Merge output with
             original input? Defaults to False.
 
     Returns:
@@ -134,8 +131,8 @@ def fuzzy_cluster(words: List[Dict],
 
     # Remove existing cluster_id entries in words
     for word in words:
-        if 'cluster_id' in word:
-            del word['cluster_id']
+        if "cluster_id" in word:
+            del word["cluster_id"]
 
     # handle trivial case (empty list)
     if not words:
@@ -146,7 +143,7 @@ def fuzzy_cluster(words: List[Dict],
 
     if isinstance(words, list) and all([isinstance(x, dict) for x in words]):
         output_ner = True
-        strings = [x.get('word') for x in words]
+        strings = [x.get("word") for x in words]
     else:
         output_ner = False
         strings = words
@@ -154,8 +151,7 @@ def fuzzy_cluster(words: List[Dict],
     # compute fuzzy ratios
     fuzzy_matrix = compute_fuzzy_matrix(strings, **kwargs)
 
-    clusters = naive_cluster(fuzzy_matrix,
-                             cutoff=cutoff)
+    clusters = naive_cluster(fuzzy_matrix, cutoff=cutoff)
 
     # generate cluster ids (longest entity variation).
     cluster_ids = [max(cluster, key=len) for cluster in clusters]
@@ -163,8 +159,9 @@ def fuzzy_cluster(words: List[Dict],
     # organize output properly (for compatibility with transformers NER pipeline)
     output = []
     for idx, cluster in enumerate(clusters):
-        output.append(pd.DataFrame.from_dict(
-            {'word': cluster, CLUSTER_ID: cluster_ids[idx]}))
+        output.append(
+            pd.DataFrame.from_dict({"word": cluster, CLUSTER_ID: cluster_ids[idx]})
+        )
     output = pd.concat(output, ignore_index=True)
 
     # merge output with original input
@@ -177,16 +174,15 @@ def fuzzy_cluster(words: List[Dict],
     return output
 
 
-def fuzzy_cluster_bygroup(words: List[Dict],
-                          **kwargs) -> List[Dict]:
+def fuzzy_cluster_bygroup(words: List[Dict], **kwargs) -> List[Dict]:
     """Fuzzy Cluster By Group
 
-    Fuzzy clustering by entity group. Simply 
+    Fuzzy clustering by entity group. Simply
     calls fuzzy_cluster() groupwise.
 
     Args:
         words (List[Dict]): Words/entities.
-        kwargs: all optional arguments for 
+        kwargs: all optional arguments for
             fuzzy_cluster().
 
     Returns:
@@ -197,21 +193,30 @@ def fuzzy_cluster_bygroup(words: List[Dict],
         return []
 
     words = pd.DataFrame.from_dict(words)
-    words = words.groupby(['entity_group'])
+    words = words.groupby(["entity_group"])
 
-    out = [fuzzy_cluster(words=words.get_group(group).to_dict(
-        orient="records"), **kwargs) for group in words.groups]
+    out = [
+        fuzzy_cluster(words=words.get_group(group).to_dict(orient="records"), **kwargs)
+        for group in words.groups
+    ]
 
     out = flatten(out)
 
     return out
 
 
-def compute_prominence(clusters: List[Dict],
-                       to_dataframe: bool = False,
-                       merge_output: bool = True,
-                       weight_position: float = None,
-                       weight_multipliers: np.ndarray = None) -> List[Dict]:
+# TODO : Change this function so that it returns prominence according to whitelist OR
+# pass a Whitelist object to the class ?
+# At the moment, this logic is called before a whitelist is even instantiated.
+# maybe this logic is more easily handled somewhere else
+# i.e. in apply_whitelists? -> Apply them to rank 2 if no match on rank 2 etc.
+def compute_prominence(
+    clusters: List[Dict],
+    to_dataframe: bool = False,
+    merge_output: bool = True,
+    weight_position: float = None,
+    weight_multipliers: np.ndarray = None,
+) -> List[Dict]:
     """Compute Prominence
 
     Computes prominence of entity clusters.
@@ -220,12 +225,12 @@ def compute_prominence(clusters: List[Dict],
         clusters (List[Dict]): Entity clusters.
         to_dataframe (bool, optional): Export output
             as pandas dataframe? Defaults to False.
-        merge_output (bool, optional): Merge resulting 
+        merge_output (bool, optional): Merge resulting
             cluster meta data with input data. Defaults to True.
         weight_position: threshold for position-adjusted
             weight interpolation. Defaults to None implying
             no adjustment for positions in text.
-        weight_multipliers: weight multipliers. 
+        weight_multipliers: weight multipliers.
 
     Returns:
         List[Dict]: clusters and their prominence.
@@ -245,7 +250,8 @@ def compute_prominence(clusters: List[Dict],
         assert 0 <= weight_position <= 1, "choose 'weight_position' between 0 and 1"
     if weight_multipliers is not None:
         assert len(weight_multipliers) == len(
-            clusters), "Multipliers must have same length as number of entities"
+            clusters
+        ), "Multipliers must have same length as number of entities"
     else:
         weight_multipliers = float(1)
 
@@ -261,16 +267,15 @@ def compute_prominence(clusters: List[Dict],
         # linear interpolation
         xp = [offset_min, offset_max]
         yp = [1, weight_position]
-        prominence_position = np.array(
-            [np.interp(x, xp, yp) for x in clusters.start])
+        prominence_position = np.array([np.interp(x, xp, yp) for x in clusters.start])
     else:
         prominence_position = float(1)
 
     prominence_score = prominence_score * prominence_position * weight_multipliers
 
     # aggregate prominence to group level
-    prominence['prominence_score'] = prominence_score
-    prominence = prominence.groupby(CLUSTER_ID)['prominence_score'].sum()
+    prominence["prominence_score"] = prominence_score
+    prominence = prominence.groupby(CLUSTER_ID)["prominence_score"].sum()
 
     # rank clusters by prominence
     ranks = rankdata(prominence, method="max")
@@ -278,7 +283,7 @@ def compute_prominence(clusters: List[Dict],
 
     # organize output as data frame
     prominence = pd.DataFrame(prominence)
-    prominence['prominence_rank'] = ranks
+    prominence["prominence_rank"] = ranks
     prominence.reset_index(level=0, inplace=True)
 
     if merge_output:
@@ -290,21 +295,21 @@ def compute_prominence(clusters: List[Dict],
     return prominence
 
 
-def compute_prominence_bygroup(clusters: List[Dict],
-                               return_first_rank: bool = False,
-                               **kwargs) -> List[Dict]:
+def compute_prominence_bygroup(
+    clusters: List[Dict], return_first_rank: bool = False, **kwargs
+) -> List[Dict]:
     """Compute Prominence by Group
 
-    Computes prominence by entity group. Simply 
+    Computes prominence by entity group. Simply
     calls compute_prominence() groupwise.
 
     Args:
         clusters (List[Dict]): Entity clusters.
-        kwargs: all optional arguments for 
+        kwargs: all optional arguments for
             compute_prominence().
 
     Returns:
-        List[Dict]: entity clusters with 
+        List[Dict]: entity clusters with
             prominence scores.
     """
     # handle trivial case.
@@ -312,26 +317,31 @@ def compute_prominence_bygroup(clusters: List[Dict],
         return []
 
     clusters = pd.DataFrame.from_dict(clusters)
-    clusters = clusters.groupby(['entity_group'])
+    clusters = clusters.groupby(["entity_group"])
 
-    out = [compute_prominence(clusters=clusters.get_group(group).to_dict(
-        orient="records"), **kwargs) for group in clusters.groups]
+    out = [
+        compute_prominence(
+            clusters=clusters.get_group(group).to_dict(orient="records"), **kwargs
+        )
+        for group in clusters.groups
+    ]
     out = flatten(out)
 
     # If you only want the most prominent entities returned, pop all entities that are not the most prominent
     if return_first_rank:
-        out = [i for i in out if i['prominence_rank'] == 1]
+        out = [i for i in out if i["prominence_rank"] == 1]
     return out
 
 
-def compute_prominence_placement(clusters: list,
-                                 placement_col: str = "placement",
-                                 wgt_body: float = 1.0,
-                                 wgt_lead: float = 2.0,
-                                 wgt_title: float = 3.0,
-                                 bygroup: bool = False,
-                                 **kwargs
-                                 ) -> list:
+def compute_prominence_placement(
+    clusters: list,
+    placement_col: str = "placement",
+    wgt_body: float = 1.0,
+    wgt_lead: float = 2.0,
+    wgt_title: float = 3.0,
+    bygroup: bool = False,
+    **kwargs,
+) -> list:
     """Compute Prominence from Article Placement
 
     Args:
@@ -345,7 +355,7 @@ def compute_prominence_placement(clusters: list,
         wgt_title (float, optional): Weight of entities in title.
             Defaults to 3.0.
         bygroup (bool, optional): use compute_prominence_bygroup()
-            in stead of compute_prominence()? Defaults to True. 
+            in stead of compute_prominence()? Defaults to True.
         kwargs: all optional arguments for compute_prominence(bygroup).
 
     Returns:
@@ -356,23 +366,19 @@ def compute_prominence_placement(clusters: list,
     if len(clusters) == 0:
         return []
 
-    assert all([placement_col in x for x in clusters]
-               ), f'key {placement_col} must be present in all dicts'
+    assert all(
+        [placement_col in x for x in clusters]
+    ), f"key {placement_col} must be present in all dicts"
 
-    weights = {'body': wgt_body,
-               'lead': wgt_lead,
-               'title': wgt_title}
+    weights = {"body": wgt_body, "lead": wgt_lead, "title": wgt_title}
 
-    multipliers = np.array([weights.get(x.get(placement_col))
-                           for x in clusters])
+    multipliers = np.array([weights.get(x.get(placement_col)) for x in clusters])
 
     if bygroup:
         prominence_function = compute_prominence_bygroup
     else:
         prominence_function = compute_prominence
 
-    clusters = prominence_function(clusters,
-                                   weight_multipliers=multipliers,
-                                   **kwargs)
+    clusters = prominence_function(clusters, weight_multipliers=multipliers, **kwargs)
 
     return clusters

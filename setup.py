@@ -15,11 +15,13 @@ setuptools.setup(
     packages=setuptools.find_packages(include=["fuzzup"]),
     python_requires='>=3.7',
     install_requires=[
-        'scipy',
+        'scipy==1.8.1',
         'pandas>=1.3.5',
-        'numpy',
-        'rapidfuzz',
-        'tqdm'
+        'numpy==1.21.6',
+        'rapidfuzz==2.0.4',
+        'tqdm==4.64.0',
+	'cvr==0.2.0',
+	'geopy==2.2.0'
     ],
     setup_requires=['pytest-runner'],
     tests_require=['pytest',

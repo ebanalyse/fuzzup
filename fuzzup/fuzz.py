@@ -1,11 +1,9 @@
 from typing import List, Dict, Tuple
 from itertools import compress
-
 from rapidfuzz.process import cdist, extract
 import numpy as np
 import pandas as pd
 from scipy.stats import rankdata
-
 from fuzzup.utils import flatten
 
 # constants
@@ -126,7 +124,6 @@ def fuzzy_cluster(
         List[Dict]: Clusters of entities.
     """
 
-    # TODO: implement by_entity_group
     assert isinstance(words, list), "'words' must be a list"
 
     # Remove existing cluster_id entries in words
@@ -234,7 +231,6 @@ def compute_prominence(
 
     Returns:
         List[Dict]: clusters and their prominence.
-
     Examples:
         ...
     """
@@ -327,6 +323,8 @@ def compute_prominence_bygroup(
     ]
     out = flatten(out)
 
+    # Todo, might take this kind of logic into a completely seperate function, i.e. in the whitelist matching
+    # so the WL matching control is centralized
     # If you only want the most prominent entities returned, pop all entities that are not the most prominent
     if return_first_rank:
         out = [i for i in out if i["prominence_rank"] == 1]

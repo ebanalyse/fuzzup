@@ -23,7 +23,7 @@ def test_whitelist():
         {"word": "Uldum", "entity_group": "ORG", "cluster_id": "bambolino"},
     ]
     clusters = fuzzy_cluster(test_data)
-    out = c(clusters, aggregate_cluster=False)
+    out = c(clusters, aggregate_cluster=False, match_strategy=True)
     assert len(out) == 1
 
 
@@ -37,7 +37,6 @@ def test_whitelist_major_cities():
     matches = apply_whitelists(whitelists=[c, m, n], clusters=clusters)
     copenhagen_bool = False
     aarhus_bool = False
-    __import__("pdb").set_trace()
     for label in matches["eblocal_name"]:
         matches = label["matches"]
         if "København K" in matches:
@@ -45,6 +44,49 @@ def test_whitelist_major_cities():
         if "Aarhus C" in matches:
             aarhus_bool = True
     assert copenhagen_bool and aarhus_bool
+
+
+def test_whitelist_no_first_match():
+
+    test_data = [
+        {
+            "word": "Volapyk",
+            "entity_group": "LOC",
+            "cluster_id": "Volapyk",
+            "prominence_rank": 1,
+        },
+        {
+            "word": "Volapyk",
+            "entity_group": "LOC",
+            "cluster_id": "Volapyk",
+            "prominence_rank": 1,
+        },
+        {
+            "word": "Volapyk",
+            "entity_group": "LOC",
+            "cluster_id": "Volapyk",
+            "prominence_rank": 1,
+        },
+        {
+            "word": "Aarhus",
+            "entity_group": "LOC",
+            "cluster_id": "Aarhus C",
+            "prominence_rank": 2,
+        },
+        {
+            "word": "Aarhus",
+            "entity_group": "LOC",
+            "cluster_id": "Aarhus C",
+            "prominence_rank": 2,
+        },
+        {
+            "word": "Aarhus",
+            "entity_group": "LOC",
+            "cluster_id": "Aarhus C",
+            "prominence_rank": 2,
+        },
+    ]
+    assert True
 
 
 def test_whitelist_no_match():
@@ -162,7 +204,7 @@ def test_format_no_match_on_subcategory():
 
     #### Format output
     # set desired columnsmunicipality_id
-    cols = ["type", "id", "label"]
+    cols = ["type", "id", "label", "version"]
 
     # format output
     out = format_output(test_data, columns=cols, drop_duplicates=True)

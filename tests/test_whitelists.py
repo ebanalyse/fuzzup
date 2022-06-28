@@ -46,7 +46,7 @@ def test_whitelist_major_cities():
     assert copenhagen_bool and aarhus_bool
 
 
-def test_whitelist_no_first_match():
+def test_whitelist_match_strategy_rank_2():
 
     test_data = [
         {
@@ -85,8 +85,208 @@ def test_whitelist_no_first_match():
             "cluster_id": "Aarhus C",
             "prominence_rank": 2,
         },
+        {
+            "word": "Aalborg",
+            "entity_group": "LOC",
+            "cluster_id": "Aalborg",
+            "prominence_rank": 2,
+        },
+        {
+            "word": "Aalborg",
+            "entity_group": "LOC",
+            "cluster_id": "Aalborg",
+            "prominence_rank": 2,
+        },
+        {
+            "word": "Aalborg",
+            "entity_group": "LOC",
+            "cluster_id": "Aalborg",
+            "prominence_rank": 2,
+        },
+        {
+            "word": "Holbæk",
+            "entity_group": "LOC",
+            "cluster_id": "Aalborg",
+            "prominence_rank": 3,
+        },
+        {
+            "word": "Holbæk",
+            "entity_group": "LOC",
+            "cluster_id": "Aalborg",
+            "prominence_rank": 3,
+        },
     ]
-    assert True
+    clusters = fuzzy_cluster(test_data)
+    out = c(clusters, aggregate_cluster=False, match_strategy=True)
+
+    # Assert that all outputs are of rank 2 and not 1 or 3
+    for item in out:
+        assert item["prominence_rank"] == 2
+
+
+def test_match_strategy_rank_1():
+    test_data = [
+        {
+            "word": "København",
+            "entity_group": "LOC",
+            "cluster_id": "København",
+            "prominence_rank": 1,
+        },
+        {
+            "word": "København",
+            "entity_group": "LOC",
+            "cluster_id": "København",
+            "prominence_rank": 1,
+        },
+        {
+            "word": "København",
+            "entity_group": "LOC",
+            "cluster_id": "København",
+            "prominence_rank": 1,
+        },
+        {
+            "word": "København",
+            "entity_group": "LOC",
+            "cluster_id": "København",
+            "prominence_rank": 1,
+        },
+        {
+            "word": "Aarhus",
+            "entity_group": "LOC",
+            "cluster_id": "Aarhus C",
+            "prominence_rank": 2,
+        },
+        {
+            "word": "Aarhus",
+            "entity_group": "LOC",
+            "cluster_id": "Aarhus C",
+            "prominence_rank": 2,
+        },
+        {
+            "word": "Aarhus",
+            "entity_group": "LOC",
+            "cluster_id": "Aarhus C",
+            "prominence_rank": 2,
+        },
+        {
+            "word": "Aalborg",
+            "entity_group": "LOC",
+            "cluster_id": "Aalborg",
+            "prominence_rank": 2,
+        },
+        {
+            "word": "Aalborg",
+            "entity_group": "LOC",
+            "cluster_id": "Aalborg",
+            "prominence_rank": 2,
+        },
+        {
+            "word": "Aalborg",
+            "entity_group": "LOC",
+            "cluster_id": "Aalborg",
+            "prominence_rank": 2,
+        },
+        {
+            "word": "Holbæk",
+            "entity_group": "LOC",
+            "cluster_id": "Aalborg",
+            "prominence_rank": 3,
+        },
+        {
+            "word": "Holbæk",
+            "entity_group": "LOC",
+            "cluster_id": "Aalborg",
+            "prominence_rank": 3,
+        },
+    ]
+    clusters = fuzzy_cluster(test_data)
+
+    out = c(clusters, aggregate_cluster=False, match_strategy=True)
+    # with no match strategy, we wanna return as many entities as we passed the function
+    for item in out:
+        assert item["cluster_id"] == "København"
+
+
+def test_no_match_strategy():
+    test_data = [
+        {
+            "word": "København",
+            "entity_group": "LOC",
+            "cluster_id": "København",
+            "prominence_rank": 1,
+        },
+        {
+            "word": "København",
+            "entity_group": "LOC",
+            "cluster_id": "København",
+            "prominence_rank": 1,
+        },
+        {
+            "word": "København",
+            "entity_group": "LOC",
+            "cluster_id": "København",
+            "prominence_rank": 1,
+        },
+        {
+            "word": "København",
+            "entity_group": "LOC",
+            "cluster_id": "København",
+            "prominence_rank": 1,
+        },
+        {
+            "word": "Aarhus",
+            "entity_group": "LOC",
+            "cluster_id": "Aarhus C",
+            "prominence_rank": 2,
+        },
+        {
+            "word": "Aarhus",
+            "entity_group": "LOC",
+            "cluster_id": "Aarhus C",
+            "prominence_rank": 2,
+        },
+        {
+            "word": "Aarhus",
+            "entity_group": "LOC",
+            "cluster_id": "Aarhus C",
+            "prominence_rank": 2,
+        },
+        {
+            "word": "Aalborg",
+            "entity_group": "LOC",
+            "cluster_id": "Aalborg",
+            "prominence_rank": 2,
+        },
+        {
+            "word": "Aalborg",
+            "entity_group": "LOC",
+            "cluster_id": "Aalborg",
+            "prominence_rank": 2,
+        },
+        {
+            "word": "Aalborg",
+            "entity_group": "LOC",
+            "cluster_id": "Aalborg",
+            "prominence_rank": 2,
+        },
+        {
+            "word": "Holbæk",
+            "entity_group": "LOC",
+            "cluster_id": "Aalborg",
+            "prominence_rank": 3,
+        },
+        {
+            "word": "Holbæk",
+            "entity_group": "LOC",
+            "cluster_id": "Aalborg",
+            "prominence_rank": 3,
+        },
+    ]
+    clusters = fuzzy_cluster(test_data)
+
+    out = c(clusters, aggregate_cluster=False, match_strategy=False)
+    # with no match strategy, we wanna return as many entities as we passed the function
+    assert len(out) == len(test_data)
 
 
 def test_whitelist_no_match():

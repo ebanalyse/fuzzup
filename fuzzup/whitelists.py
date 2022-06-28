@@ -321,6 +321,15 @@ def match_whitelist(
     assert isinstance(words, list), "'words' must be a list"
     assert isinstance(whitelist, (list, dict)), "'whitelist' must be a list or dit"
 
+    def filter_rank_df(
+        df_filter: pd.DataFrame, df: pd.DataFrame, rank: int = 1
+    ) -> pd.DataFrame:
+        rank_list = df_filter[
+            (df_filter["prominence_rank"] == rank) & (df_filter["count"] >= rank)
+        ].cluster_id.to_list()
+        df = df.query("cluster_id in @rank_list")
+        return df
+
     def count_word_prominence_freq(strings: List[str]) -> pd.Series:
         """
         This function will take a list of strings, compare it to their prominence rank and
@@ -359,24 +368,6 @@ def match_whitelist(
         else:
             return []
 
-    #   if match_strategy:
-    #       """Match strategy here will be handling which strings to match on
-    #       i.e. if there is no match on prominence 1, then try to match on prominence 2 given certain conditoins"""
-    #       word_prom_freq_series = count_word_prominence_freq(words)
-
-    #       for index, word_dict in enumerate(word_prom_freq_series.index):
-    #           if word_dict["word"] in whitelist and word_dict["prominence_rank"] == 1:
-    #               # Remove all other matches, as we have found a match with prom rank 1
-    #               strings = [i["word"] for i in words if i["prominence_rank"] == 1]
-    #               words = [i for i in words if i["prominence_rank"] == 1]
-    #               break  # We are not interested in rank 2 if we have a rank 1 match
-    #           elif word_dict["word"] in whitelist and word_dict["prominence_rank"] == 2:
-    #               strings = []
-    #               # check that the count is 2, else remove
-    #               if word_prom_freq_series[index] >= 2:
-    #                   strings.append(word_dict["word"])
-    # overwrite words with the filtered list
-
     # compute distances - length of the whitelist
     # Only takes strings ~ so no information about prominence here.
     dists = cdist(whitelist, strings, score_cutoff=score_cutoff, **kwargs)
@@ -391,15 +382,20 @@ def match_whitelist(
         df = pd.DataFrame.from_records(words)
         df["matches"] = matches
 
-        if "prominence_rank" in df and if match_strategy=True:
+        # MATCH STRATEGY
+        if "prominence_rank" in df and match_strategy == True:
             df_filter = (
                 df.groupby(["cluster_id", "prominence_rank"])["word"]
                 .count()
                 .reset_index()
                 .rename({"word": "count"}, axis=1)
             )
-            __import__("pdb").set_trace()
-
+            # if none of the first_rank have a match, proceed to strategy
+            if not bool(df[df["prominence_rank"] == 1].matches.str.len().any()):
+                # FILTER DF TO ONLY INCLUDE RANK 2
+                df = filter_rank_df(df_filter=df_filter, df=df, rank=2)
+            else:  # Return the first rank entities
+                df = filter_rank_df(df_filter=df_filter, df=df, rank=1)
         if aggregate_cluster:
             matches = pd.DataFrame(
                 df.groupby(by=["cluster_id"]).apply(aggregate_to_cluster),

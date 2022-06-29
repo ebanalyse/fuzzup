@@ -295,8 +295,8 @@ def match_whitelist(
     score_cutoff: float = 80,
     to_dataframe: bool = False,
     aggregate_cluster: bool = False,
-    match_strategy: bool = True,
     individual_wl_match: bool = True,
+    match_strategy: bool = False,
     entity_group: List[str] = None,
     **kwargs,
 ) -> List[Dict]:
@@ -405,10 +405,15 @@ def match_whitelist(
                 .rename({"word": "count"}, axis=1)
             )
 
+            # If rank 2 has an occurance of at least 2, regardless of prominence_score
             if (df_filter[df_filter["prominence_rank"] == 2]["count"] >= 2).any():
                 df = filter_rank_df(
                     df_filter=df_filter, df=df, rank_limit=2, min_count=2
                 )
+
+            # Regress to match-strategy of returning rank 1 only
+            else:
+                df = df[df["prominence_rank"] == 1]  # return first rank only
 
         if individual_wl_match is True and "prominence_rank" in df:
             # here comes the funky part.. re-rank the whole thing all over again :-)
@@ -490,7 +495,9 @@ class Whitelist:
 # TODO: One of the few places we process whitelist directly
 # After this, we end up with a list of dictionaries ...
 def apply_whitelists(
-    whitelists: List[Whitelist], clusters: List[Dict], **kwargs
+    whitelists: List[Whitelist],
+    clusters: List[Dict],
+    **kwargs,
 ) -> pd.DataFrame:
     """Apply Multiple Whitelists
 

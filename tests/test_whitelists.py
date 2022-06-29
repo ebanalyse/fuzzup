@@ -10,11 +10,16 @@ from fuzzup.whitelists import (
     EBLocalNames,
     Companies,
 )
+
+from rapidfuzz.fuzz import WRatio, token_ratio
+
 from fuzzup.fuzz import fuzzy_cluster, fuzzy_cluster_bygroup
 
 c = EBLocalNames()
 m = Municipalities()
 n = Companies()
+
+WHITELISTS = [c, m, n]
 
 
 def test_whitelist():
@@ -44,6 +49,104 @@ def test_whitelist_major_cities():
         if "Aarhus C" in matches:
             aarhus_bool = True
     assert copenhagen_bool and aarhus_bool
+
+
+def test_match_strategy_weighting():
+    """This test-case involves the situation, where you use match_strategy
+    but prominence_ranks are not based on basic counts. Meaning, they have been
+    linear interpolated or similar.
+    regardless of the ranks, we still want the rank 2 entity to have appeared at least twice
+    in this case when using match-strategy
+    """
+    test_data = [
+        {
+            "score": 0.9999998807907104,
+            "word": "Limfjordstunnelen",
+            "start": 17,
+            "end": 34,
+            "label": "LOC",
+            "entity_group": "LOC",
+            "cluster_id": "Limfjordstunnelen E45",
+            "prominence_score": 2.9771830985915493,
+            "prominence_rank": 1,
+        },
+        {
+            "score": 0.9999991655349731,
+            "word": "Limfjordstunnelen",
+            "start": 85,
+            "end": 102,
+            "label": "LOC",
+            "entity_group": "LOC",
+            "cluster_id": "Limfjordstunnelen E45",
+            "prominence_score": 2.9771830985915493,
+            "prominence_rank": 1,
+        },
+        {
+            "score": 0.9972279071807861,
+            "word": "Limfjordstunnelen E45",
+            "start": 192,
+            "end": 213,
+            "label": "LOC",
+            "entity_group": "LOC",
+            "cluster_id": "Limfjordstunnelen E45",
+            "prominence_score": 2.9771830985915493,
+            "prominence_rank": 1,
+        },
+        {
+            "score": 1.0,
+            "word": "Aalborg",
+            "start": 218,
+            "end": 225,
+            "label": "LOC",
+            "entity_group": "LOC",
+            "cluster_id": "Aalborg",
+            "prominence_score": 0.9811267605633802,
+            "prominence_rank": 2,
+        },
+        {
+            "score": 1.0,
+            "word": "Nørresundby",
+            "start": 230,
+            "end": 241,
+            "label": "LOC",
+            "entity_group": "LOC",
+            "cluster_id": "Nørresundby",
+            "prominence_score": 0.98,
+            "prominence_rank": 3,
+        },
+        {
+            "score": 1.0,
+            "word": "Nordjyllands Politi",
+            "start": 347,
+            "end": 366,
+            "label": "ORG",
+            "entity_group": "ORG",
+            "cluster_id": "Nordjyllands Politi",
+            "prominence_score": 1.0,
+            "prominence_rank": 1,
+        },
+        {
+            "score": 0.9999994039535522,
+            "word": "Twitter",
+            "start": 370,
+            "end": 377,
+            "label": "ORG",
+            "entity_group": "ORG",
+            "cluster_id": "Twitter",
+            "prominence_score": 0.98,
+            "prominence_rank": 2,
+        },
+    ]
+    whitelist_clusters = apply_whitelists(
+        whitelists=WHITELISTS,
+        clusters=test_data,
+        score_cutoff=97,
+        scorer=WRatio,
+        aggregate_cluster=True,
+        match_strategy=True,
+    )
+    for key, val in whitelist_clusters.items():
+        assert not len(val)  # make sure all values are empty
 
 
 def test_whitelist_match_strategy_rank_2():

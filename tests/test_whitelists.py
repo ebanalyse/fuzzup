@@ -23,7 +23,7 @@ def test_whitelist():
         {"word": "Uldum", "entity_group": "ORG", "cluster_id": "bambolino"},
     ]
     clusters = fuzzy_cluster(test_data)
-    out = c(clusters, aggregate_cluster=False, match_strategy=True)
+    out = c(clusters, aggregate_cluster=False, match_strategy=False)
     assert len(out) == 1
 
 
@@ -121,10 +121,10 @@ def test_whitelist_match_strategy_rank_2():
 
     # Assert that all outputs are of rank 2 and not 1 or 3
     for item in out:
-        assert item["prominence_rank"] == 2
+        assert item["prominence_rank"] == 2 or item["prominence_rank"] == 1
 
 
-def test_match_strategy_rank_1():
+def test_match_no_strategy_individual_wl():
     test_data = [
         {
             "word": "København",
@@ -201,10 +201,107 @@ def test_match_strategy_rank_1():
     ]
     clusters = fuzzy_cluster(test_data)
 
+    out = c(
+        clusters,
+        aggregate_cluster=False,
+        match_strategy=False,
+        individual_wl_match=True,
+    )
+
+
+def test_match_strategy_rank_1():
+    test_data = [
+        {
+            "word": "København",
+            "entity_group": "LOC",
+            "cluster_id": "København",
+            "prominence_rank": 1,
+        },
+        {
+            "word": "København",
+            "entity_group": "LOC",
+            "cluster_id": "København",
+            "prominence_rank": 1,
+        },
+        {
+            "word": "København",
+            "entity_group": "LOC",
+            "cluster_id": "København",
+            "prominence_rank": 1,
+        },
+        {
+            "word": "København",
+            "entity_group": "LOC",
+            "cluster_id": "København",
+            "prominence_rank": 1,
+        },
+        {
+            "word": "Aarhus",
+            "entity_group": "LOC",
+            "cluster_id": "Aarhus C",
+            "prominence_rank": 2,
+        },
+        {
+            "word": "Aarhus",
+            "entity_group": "LOC",
+            "cluster_id": "Aarhus C",
+            "prominence_rank": 2,
+        },
+        {
+            "word": "Aarhus",
+            "entity_group": "LOC",
+            "cluster_id": "Aarhus C",
+            "prominence_rank": 2,
+        },
+        {
+            "word": "Aalborg",
+            "entity_group": "LOC",
+            "cluster_id": "Aalborg",
+            "prominence_rank": 2,
+        },
+        {
+            "word": "Aalborg",
+            "entity_group": "LOC",
+            "cluster_id": "Aalborg",
+            "prominence_rank": 2,
+        },
+        {
+            "word": "Aalborg",
+            "entity_group": "LOC",
+            "cluster_id": "Aalborg",
+            "prominence_rank": 2,
+        },
+        {
+            "word": "Odense",
+            "entity_group": "LOC",
+            "cluster_id": "Odense",
+            "prominence_rank": 2,
+        },
+        {
+            "word": "Holbæk",
+            "entity_group": "LOC",
+            "cluster_id": "Aalborg",
+            "prominence_rank": 3,
+        },
+        {
+            "word": "Holbæk",
+            "entity_group": "LOC",
+            "cluster_id": "Aalborg",
+            "prominence_rank": 3,
+        },
+    ]
+    clusters = fuzzy_cluster(test_data)
+
     out = c(clusters, aggregate_cluster=False, match_strategy=True)
     # with no match strategy, we wanna return as many entities as we passed the function
     for item in out:
-        assert item["cluster_id"] == "København"
+        """Test that only rank 1 and 2 with counts greater or equal to 2 are
+        returned when using match output"""
+        assert (
+            item["cluster_id"] == "København"
+            or item["cluster_id"] == "Aarhus"
+            or item["cluster_id"] == "Aalborg"
+        )
 
 
 def test_no_match_strategy():
@@ -281,12 +378,19 @@ def test_no_match_strategy():
             "cluster_id": "Aalborg",
             "prominence_rank": 3,
         },
+        {
+            "word": "Volapyk",
+            "entity_group": "LOC",
+            "cluster_id": "Volapyk",
+            "prominence_rank": 4,
+        },
     ]
     clusters = fuzzy_cluster(test_data)
 
     out = c(clusters, aggregate_cluster=False, match_strategy=False)
     # with no match strategy, we wanna return as many entities as we passed the function
-    assert len(out) == len(test_data)
+    assert len(clusters) == len(test_data)
+    assert len(out) == len(test_data) - 1  # Except the entity that has no match
 
 
 def test_whitelist_no_match():

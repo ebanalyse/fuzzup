@@ -296,6 +296,7 @@ def match_whitelist(
     to_dataframe: bool = False,
     aggregate_cluster: bool = False,
     match_strategy: bool = True,
+    individual_wl_match: bool = True,
     entity_group: List[str] = None,
     **kwargs,
 ) -> List[Dict]:
@@ -322,10 +323,14 @@ def match_whitelist(
     assert isinstance(whitelist, (list, dict)), "'whitelist' must be a list or dit"
 
     def filter_rank_df(
-        df_filter: pd.DataFrame, df: pd.DataFrame, rank: int = 1
+        df_filter: pd.DataFrame,
+        df: pd.DataFrame,
+        rank_limit: int = 1,
+        min_count: int = 2,
     ) -> pd.DataFrame:
         rank_list = df_filter[
-            (df_filter["prominence_rank"] == rank) & (df_filter["count"] >= rank)
+            (df_filter["prominence_rank"] <= rank_limit)
+            & (df_filter["count"] >= min_count)
         ].cluster_id.to_list()
         df = df.query("cluster_id in @rank_list")
         return df
@@ -337,12 +342,18 @@ def match_whitelist(
         """
         return pd.value_counts(np.array(strings))
 
+    def convert_version_list_to_set(row: pd.Series) -> pd.Series:
+        """This method will convert any list of version numbers to a set of unique versions"""
+        row["versions"] = set(row["versions"].tolist())
+        return row
+
     # if the whitelist is a dictionary, then generate a list of keys for later use
     is_dict = False
     if isinstance(whitelist, dict):
         is_dict = True
         whitelist_dict = whitelist
         whitelist = list(whitelist.keys())
+        whitelist_versions = [x.get("version") for x in whitelist_dict.values()]
 
     # handle trivial case (empty list)
     if not words or not whitelist:
@@ -356,7 +367,6 @@ def match_whitelist(
         if entity_group is not None:
             words = [x for x in words if x.get("entity_group") in entity_group]
         strings = [x.get("word") for x in words]
-        # Count number of each string so we can use it to filter later
 
     else:
         output_ner = False
@@ -374,28 +384,44 @@ def match_whitelist(
 
     # All matches on the whitelist ~ pass all words here to start with and then handle matches afterwards
     matches = [np.array(whitelist)[np.where(col)] for col in dists.T]
-
+    if is_dict:
+        versions = [np.array(whitelist_versions)[np.where(col)] for col in dists.T]
     if not output_ner:
         df = pd.DataFrame.from_dict({"word": strings, "matches": matches})
 
     if output_ner:
         df = pd.DataFrame.from_records(words)
         df["matches"] = matches
+        if is_dict:
+            df["versions"] = versions
+            df = df.apply(convert_version_list_to_set, axis=1)
 
         # MATCH STRATEGY
-        if "prominence_rank" in df and match_strategy == True:
+        if "prominence_rank" in df and match_strategy is True:
             df_filter = (
                 df.groupby(["cluster_id", "prominence_rank"])["word"]
                 .count()
                 .reset_index()
                 .rename({"word": "count"}, axis=1)
             )
-            # if none of the first_rank have a match, proceed to strategy
-            if not bool(df[df["prominence_rank"] == 1].matches.str.len().any()):
-                # FILTER DF TO ONLY INCLUDE RANK 2
-                df = filter_rank_df(df_filter=df_filter, df=df, rank=2)
-            else:  # Return the first rank entities
-                df = filter_rank_df(df_filter=df_filter, df=df, rank=1)
+
+            if (df_filter[df_filter["prominence_rank"] == 2]["count"] >= 2).any():
+                df = filter_rank_df(
+                    df_filter=df_filter, df=df, rank_limit=2, min_count=2
+                )
+
+        if individual_wl_match is True and "prominence_rank" in df:
+            # here comes the funky part.. re-rank the whole thing all over again :-)
+            # Each whitelist is passed exactly once, and we actually don't need the versions list. as it can only
+            # match to whatever whitelist is passed...
+            # simply count the passed entities and re-rank them
+            # this WILL break the linear and positional weighting
+            # Actually, it will make the initial prominence module obsolete...
+            # Could import fuzz.py, but the **kwargs requirement would honestly turn it into a clusterfuck
+
+            df["cluster_id"].rank()
+            pass
+
         if aggregate_cluster:
             matches = pd.DataFrame(
                 df.groupby(by=["cluster_id"]).apply(aggregate_to_cluster),
@@ -524,11 +550,7 @@ def format_output(
     Returns:
         pd.DataFrame: Output in desired format.
     """
-    results = [
-        format_helper(x=results.get(x), columns=columns)
-        for x in results
-        if x is not "version"
-    ]
+    results = [format_helper(x=results.get(x), columns=columns) for x in results]
     results = pd.concat(results, ignore_index=True)
     if drop_duplicates:
         results.drop_duplicates(inplace=True, keep="first")

@@ -562,18 +562,78 @@ def test_whitelist_formatting():
     clusters = fuzzy_cluster(test_data)
 
     # Apply multiple whitelists
-    out = apply_whitelists([c, m, n], clusters, score_cutoff=90)
+    out = apply_whitelists([c, m, n], clusters, score_cutoff=90, match_strategy=True)
 
     #### Format output
     # set desired columnsmunicipality_id
-    cols = ["type", "id", "label"]
+    cols = ["type", "id", "label", "version"]
 
     # format output
     out = format_output(out, columns=cols, drop_duplicates=True)
-
     assert isinstance(out, pd.DataFrame)
     assert len(out) > 0
     "Frederiksberg" in dict(out["label"]).values()
+
+
+def test_whitelist_formatting_match_strategy():
+    # simulate data
+    test_data = [
+        {
+            "word": "Holbæk",
+            "entity_group": "LOC",
+            "cluster_id": "Holbæk",
+            "prominence_rank": 2,
+        },
+        {
+            "word": "Holbæk",
+            "entity_group": "LOC",
+            "cluster_id": "Holbæk",
+            "prominence_rank": 2,
+        },
+        {
+            "word": "Holbæk Kommune",
+            "entity_group": "LOC",
+            "cluster_id": "Holbæk Kommune",
+            "prominence_rank": 1,
+        },
+        {
+            "word": "Københavns Kommune",
+            "entity_group": "LOC",
+            "cluster_id": "Københavns Kommune",
+            "prominence_rank": 2,
+        },
+        {
+            "word": "Frederiksberg Centret",
+            "entity_group": "ORG",
+            "cluster_id": "Frederiksberg Centret",
+            "prominence_rank": 3,
+        },
+        {
+            "word": "Frederiksberg Centret",
+            "entity_group": "ORG",
+            "cluster_id": "Frederiksberg Centret",
+            "prominence_rank": 3,
+        },
+    ]
+    clusters = fuzzy_cluster(test_data)
+
+    # Apply multiple whitelists
+    out = apply_whitelists([c, m, n], clusters, score_cutoff=90, match_strategy=True)
+
+    #### Format output
+    # set desired columnsmunicipality_id
+    cols = ["type", "id", "label", "version"]
+
+    # format output
+    out = format_output(out, columns=cols, drop_duplicates=True)
+    __import__("pdb").set_trace()
+    label_dict_values = dict(out["label"]).values()
+    assert isinstance(out, pd.DataFrame)
+    assert len(out) > 0
+    assert "Frederiksberg" not in label_dict_values
+    assert "Holbæk Kommune" in label_dict_values
+    assert "Holbæk" in label_dict_values
+    assert "København Kommune" not in label_dict_values
 
 
 def test_format_no_match_on_subcategory():

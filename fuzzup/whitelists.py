@@ -328,10 +328,10 @@ def match_whitelist(
         rank_limit: int = 1,
         min_count: int = 2,
     ) -> pd.DataFrame:
-        rank_list = df_filter[
-            (df_filter["prominence_rank"] <= rank_limit)
-            & (df_filter["count"] >= min_count)
-        ].cluster_id.to_list()
+
+        rank_list = df_filter.query(
+            "count >= 2 and prominence_rank == 2 or prominence_rank==1"
+        ).cluster_id.tolist()
         df = df.query("cluster_id in @rank_list")
         return df
 

@@ -626,7 +626,6 @@ def test_whitelist_formatting_match_strategy():
 
     # format output
     out = format_output(out, columns=cols, drop_duplicates=True)
-    __import__("pdb").set_trace()
     label_dict_values = dict(out["label"]).values()
     assert isinstance(out, pd.DataFrame)
     assert len(out) > 0

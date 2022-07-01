@@ -202,7 +202,6 @@ def fuzzy_cluster_bygroup(words: List[Dict], **kwargs) -> List[Dict]:
     return out
 
 
-# i.e. in apply_whitelists? -> Apply them to rank 2 if no match on rank 2 etc.
 def compute_prominence(
     clusters: List[Dict],
     to_dataframe: bool = False,

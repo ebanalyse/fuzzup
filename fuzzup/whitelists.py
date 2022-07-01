@@ -83,7 +83,7 @@ def get_eblocal_names():
     eblocals = requests.get(url).json()
     # remove "hits"
     meta = eblocals[0]
-    meta["list_type"] = "eblocal_aliases?big_cities=true"
+    meta["list_type"] = "eblocal_aliases_big_cities"
     eblocals.pop(0)
 
     out = {
@@ -236,7 +236,7 @@ def get_eblocal_municipality():
 def get_municipalities():
     url = "https://api.dataforsyningen.dk/kommuner"
     meta = {"version": "1"}
-    meta["list_type"] = "dawa/kommuner"
+    meta["list_type"] = "dawa_kommuner"
     data = requests.get(url).json()
     whitelist = {
         " ".join([x.get("navn"), "Kommune"]): {
@@ -252,13 +252,12 @@ def get_municipalities():
     return whitelist
 
 
-# TODO : Add version number in eb_local -> do not pop the first entry,put it in seperate key
 def get_eblocal_names():
     url = "https://misty-beirut-ryz6j4qt64tt.vapor-farm-b1.com/api/eblocal_aliases?big_cities=true"
     eblocals = requests.get(url).json()
     # remove "hits"
     meta = eblocals[0]
-    meta["list_type"] = "eblocal_aliases?big_cities=true"
+    meta["list_type"] = "eblocal_aliases_big_cities"
     eblocals.pop(0)
     out = {
         x["name"]: {
@@ -288,7 +287,6 @@ def aggregate_to_cluster(x):
     return res
 
 
-# TODO: Change this method so that it can match RANK 2 entities as well ~
 def match_whitelist(
     words: List[Dict],
     whitelist: List[str],
@@ -415,18 +413,6 @@ def match_whitelist(
             else:
                 df = df[df["prominence_rank"] == 1]  # return first rank only
 
-        if individual_wl_match is True and "prominence_rank" in df:
-            # here comes the funky part.. re-rank the whole thing all over again :-)
-            # Each whitelist is passed exactly once, and we actually don't need the versions list. as it can only
-            # match to whatever whitelist is passed...
-            # simply count the passed entities and re-rank them
-            # this WILL break the linear and positional weighting
-            # Actually, it will make the initial prominence module obsolete...
-            # Could import fuzz.py, but the **kwargs requirement would honestly turn it into a clusterfuck
-
-            df["cluster_id"].rank()
-            pass
-
         if aggregate_cluster:
             matches = pd.DataFrame(
                 df.groupby(by=["cluster_id"]).apply(aggregate_to_cluster),
@@ -492,8 +478,6 @@ class Whitelist:
         return out
 
 
-# TODO: One of the few places we process whitelist directly
-# After this, we end up with a list of dictionaries ...
 def apply_whitelists(
     whitelists: List[Whitelist],
     clusters: List[Dict],

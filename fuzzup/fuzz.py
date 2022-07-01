@@ -202,11 +202,6 @@ def fuzzy_cluster_bygroup(words: List[Dict], **kwargs) -> List[Dict]:
     return out
 
 
-# TODO : Change this function so that it returns prominence according to whitelist OR
-# pass a Whitelist object to the class ?
-# At the moment, this logic is called before a whitelist is even instantiated.
-# maybe this logic is more easily handled somewhere else
-# i.e. in apply_whitelists? -> Apply them to rank 2 if no match on rank 2 etc.
 def compute_prominence(
     clusters: List[Dict],
     to_dataframe: bool = False,
@@ -323,8 +318,6 @@ def compute_prominence_bygroup(
     ]
     out = flatten(out)
 
-    # Todo, might take this kind of logic into a completely seperate function, i.e. in the whitelist matching
-    # so the WL matching control is centralized
     # If you only want the most prominent entities returned, pop all entities that are not the most prominent
     if return_first_rank:
         out = [i for i in out if i["prominence_rank"] == 1]

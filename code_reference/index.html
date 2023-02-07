@@ -1,0 +1,2630 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.2.2">
+    
+    
+      
+        <title>Code Reference - Fuzz Up</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.e8d9bf0c.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.e6a45f82.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../css/ansi-colours.css">
+    
+      <link rel="stylesheet" href="../css/jupyter-cells.css">
+    
+      <link rel="stylesheet" href="../css/pandas-dataframe.css">
+    
+    <script>__md_scope=new URL("..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#code-reference" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Fuzz Up" class="md-header__button md-logo" aria-label="Fuzz Up" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Fuzz Up
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Code Reference
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Fuzz Up" class="md-nav__button md-logo" aria-label="Fuzz Up" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    Fuzz Up
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../showcase/" class="md-nav__link">
+        Showcase
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Code Reference
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Code Reference
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#fuzzup.fuzz" class="md-nav__link">
+    fuzzup.fuzz
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fuzzup.fuzz.compute_fuzzy_matrix" class="md-nav__link">
+    compute_fuzzy_matrix()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fuzzup.fuzz.compute_prominence" class="md-nav__link">
+    compute_prominence()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fuzzup.fuzz.compute_prominence_bygroup" class="md-nav__link">
+    compute_prominence_bygroup()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fuzzup.fuzz.compute_prominence_placement" class="md-nav__link">
+    compute_prominence_placement()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fuzzup.fuzz.fuzzy_cluster" class="md-nav__link">
+    fuzzy_cluster()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fuzzup.fuzz.fuzzy_cluster_bygroup" class="md-nav__link">
+    fuzzy_cluster_bygroup()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fuzzup.fuzz.naive_cluster" class="md-nav__link">
+    naive_cluster()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fuzzup.datasets" class="md-nav__link">
+    fuzzup.datasets
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fuzzup.datasets.simulate_ner_data" class="md-nav__link">
+    simulate_ner_data()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fuzzup.whitelists" class="md-nav__link">
+    fuzzup.whitelists
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fuzzup.whitelists.Cities" class="md-nav__link">
+    Cities
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fuzzup.whitelists.EBLocalNames" class="md-nav__link">
+    EBLocalNames
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fuzzup.whitelists.Municipalities" class="md-nav__link">
+    Municipalities
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fuzzup.whitelists.Neighborhoods" class="md-nav__link">
+    Neighborhoods
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fuzzup.whitelists.Whitelist" class="md-nav__link">
+    Whitelist
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fuzzup.whitelists.apply_whitelists" class="md-nav__link">
+    apply_whitelists()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fuzzup.whitelists.format_output" class="md-nav__link">
+    format_output()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fuzzup.whitelists.get_neighborhoods" class="md-nav__link">
+    get_neighborhoods()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fuzzup.whitelists.get_politicians" class="md-nav__link">
+    get_politicians()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fuzzup.whitelists.match_whitelist" class="md-nav__link">
+    match_whitelist()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fuzzup.utils" class="md-nav__link">
+    fuzzup.utils
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#fuzzup.fuzz" class="md-nav__link">
+    fuzzup.fuzz
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fuzzup.fuzz.compute_fuzzy_matrix" class="md-nav__link">
+    compute_fuzzy_matrix()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fuzzup.fuzz.compute_prominence" class="md-nav__link">
+    compute_prominence()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fuzzup.fuzz.compute_prominence_bygroup" class="md-nav__link">
+    compute_prominence_bygroup()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fuzzup.fuzz.compute_prominence_placement" class="md-nav__link">
+    compute_prominence_placement()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fuzzup.fuzz.fuzzy_cluster" class="md-nav__link">
+    fuzzy_cluster()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fuzzup.fuzz.fuzzy_cluster_bygroup" class="md-nav__link">
+    fuzzy_cluster_bygroup()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fuzzup.fuzz.naive_cluster" class="md-nav__link">
+    naive_cluster()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fuzzup.datasets" class="md-nav__link">
+    fuzzup.datasets
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fuzzup.datasets.simulate_ner_data" class="md-nav__link">
+    simulate_ner_data()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fuzzup.whitelists" class="md-nav__link">
+    fuzzup.whitelists
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fuzzup.whitelists.Cities" class="md-nav__link">
+    Cities
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fuzzup.whitelists.EBLocalNames" class="md-nav__link">
+    EBLocalNames
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fuzzup.whitelists.Municipalities" class="md-nav__link">
+    Municipalities
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fuzzup.whitelists.Neighborhoods" class="md-nav__link">
+    Neighborhoods
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fuzzup.whitelists.Whitelist" class="md-nav__link">
+    Whitelist
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fuzzup.whitelists.apply_whitelists" class="md-nav__link">
+    apply_whitelists()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fuzzup.whitelists.format_output" class="md-nav__link">
+    format_output()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fuzzup.whitelists.get_neighborhoods" class="md-nav__link">
+    get_neighborhoods()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fuzzup.whitelists.get_politicians" class="md-nav__link">
+    get_politicians()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fuzzup.whitelists.match_whitelist" class="md-nav__link">
+    match_whitelist()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fuzzup.utils" class="md-nav__link">
+    fuzzup.utils
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+
+
+<h1 id="code-reference">Code Reference</h1>
+
+
+  <div class="doc doc-object doc-module">
+
+<a id="fuzzup.fuzz"></a>
+    <div class="doc doc-contents first">
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
+<h2 id="fuzzup.fuzz.compute_fuzzy_matrix" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">compute_fuzzy_matrix</span><span class="p">(</span><span class="n">strings</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Compute Fuzzy Matrix</p>
+<p>Computes matrix with pairwise fuzzy ratios (=edit)
+distances between all strings.</p>
+<p>The result can be thought of as a correlation
+matrix with all diagonal elements equal to 100.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>strings</code></td>
+        <td><code>List[str]</code></td>
+        <td><p>strings for clustering.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>kwargs</code></td>
+        <td></td>
+        <td><p>all optional arguments for
+rapidfuzz.process.cdist.</p></td>
+        <td><code>{}</code></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>pd.DataFrame</code></td>
+      <td><p>pairwise fuzzy ratios between
+    strings.</p></td>
+    </tr>
+  </tbody>
+</table>
+<p><strong>Examples:</strong></p>
+    <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">person_names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Donald Trump&#39;</span><span class="p">,</span> <span class="s1">&#39;Donald Trump&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;J. biden&#39;</span><span class="p">,</span> <span class="s1">&#39;joe biden&#39;</span><span class="p">,</span> <span class="s1">&#39;Biden&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;Bide&#39;</span><span class="p">,</span> <span class="s1">&#39;mark esper&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;Christopher c . miller&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;jim mattis&#39;</span><span class="p">,</span> <span class="s1">&#39;Nancy Pelosi&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;trumps&#39;</span><span class="p">,</span> <span class="s1">&#39;Trump&#39;</span><span class="p">,</span> <span class="s1">&#39;Donald&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;miller&#39;</span><span class="p">]</span>
+<span class="o">....</span>
+</code></pre></div>
+
+        <details class="quote">
+          <summary>Source code in <code>fuzzup/fuzz.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">compute_fuzzy_matrix</span><span class="p">(</span><span class="n">strings</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute Fuzzy Matrix</span>
+
+<span class="sd">    Computes matrix with pairwise fuzzy ratios (=edit)</span>
+<span class="sd">    distances between all strings.</span>
+
+<span class="sd">    The result can be thought of as a correlation</span>
+<span class="sd">    matrix with all diagonal elements equal to 100.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        strings (List[str]): strings for clustering.</span>
+<span class="sd">        kwargs: all optional arguments for</span>
+<span class="sd">            rapidfuzz.process.cdist.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        pd.DataFrame: pairwise fuzzy ratios between</span>
+<span class="sd">            strings.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; person_names = [&#39;Donald Trump&#39;, &#39;Donald Trump&#39;,</span>
+<span class="sd">                            &#39;J. biden&#39;, &#39;joe biden&#39;, &#39;Biden&#39;,</span>
+<span class="sd">                            &#39;Bide&#39;, &#39;mark esper&#39;,</span>
+<span class="sd">                            &#39;Christopher c . miller&#39;,</span>
+<span class="sd">                            &#39;jim mattis&#39;, &#39;Nancy Pelosi&#39;,</span>
+<span class="sd">                            &#39;trumps&#39;, &#39;Trump&#39;, &#39;Donald&#39;,</span>
+<span class="sd">                            &#39;miller&#39;]</span>
+<span class="sd">        ....</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># subset unique strings.</span>
+    <span class="n">strings</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">strings</span><span class="p">))</span>
+
+    <span class="c1"># compute edit distances</span>
+    <span class="n">dists</span> <span class="o">=</span> <span class="n">cdist</span><span class="p">(</span><span class="n">strings</span><span class="p">,</span> <span class="n">strings</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="n">dists</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">dists</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">strings</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">strings</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">dists</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
+<h2 id="fuzzup.fuzz.compute_prominence" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">compute_prominence</span><span class="p">(</span><span class="n">clusters</span><span class="p">,</span> <span class="n">to_dataframe</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">merge_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">weight_position</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">weight_multipliers</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Compute Prominence</p>
+<p>Computes prominence of entity clusters.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>clusters</code></td>
+        <td><code>List[Dict]</code></td>
+        <td><p>Entity clusters.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>to_dataframe</code></td>
+        <td><code>bool</code></td>
+        <td><p>Export output
+as pandas dataframe? Defaults to False.</p></td>
+        <td><code>False</code></td>
+      </tr>
+      <tr>
+        <td><code>merge_output</code></td>
+        <td><code>bool</code></td>
+        <td><p>Merge resulting
+cluster meta data with input data. Defaults to True.</p></td>
+        <td><code>True</code></td>
+      </tr>
+      <tr>
+        <td><code>weight_position</code></td>
+        <td><code>float</code></td>
+        <td><p>threshold for position-adjusted
+weight interpolation. Defaults to None implying
+no adjustment for positions in text.</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>weight_multipliers</code></td>
+        <td><code>ndarray</code></td>
+        <td><p>weight multipliers.</p></td>
+        <td><code>None</code></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>List[Dict]</code></td>
+      <td><p>clusters and their prominence.</p></td>
+    </tr>
+  </tbody>
+</table>
+<p><strong>Examples:</strong></p>
+    <p>...</p>
+
+        <details class="quote">
+          <summary>Source code in <code>fuzzup/fuzz.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">compute_prominence</span><span class="p">(</span>
+    <span class="n">clusters</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">],</span>
+    <span class="n">to_dataframe</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">merge_output</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">weight_position</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">weight_multipliers</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute Prominence</span>
+
+<span class="sd">    Computes prominence of entity clusters.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        clusters (List[Dict]): Entity clusters.</span>
+<span class="sd">        to_dataframe (bool, optional): Export output</span>
+<span class="sd">            as pandas dataframe? Defaults to False.</span>
+<span class="sd">        merge_output (bool, optional): Merge resulting</span>
+<span class="sd">            cluster meta data with input data. Defaults to True.</span>
+<span class="sd">        weight_position: threshold for position-adjusted</span>
+<span class="sd">            weight interpolation. Defaults to None implying</span>
+<span class="sd">            no adjustment for positions in text.</span>
+<span class="sd">        weight_multipliers: weight multipliers.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        List[Dict]: clusters and their prominence.</span>
+<span class="sd">    Examples:</span>
+<span class="sd">        ...</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># handle trivial case (empty list)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">clusters</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">to_dataframe</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+
+    <span class="c1"># validate inputs</span>
+    <span class="k">if</span> <span class="n">weight_position</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">weight_position</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;choose &#39;weight_position&#39; between 0 and 1&quot;</span>
+    <span class="k">if</span> <span class="n">weight_multipliers</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">weight_multipliers</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span>
+            <span class="n">clusters</span>
+        <span class="p">),</span> <span class="s2">&quot;Multipliers must have same length as number of entities&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">weight_multipliers</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">clusters</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">clusters</span><span class="p">)</span>
+
+    <span class="n">prominence</span> <span class="o">=</span> <span class="n">clusters</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">prominence_score</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># adjust prominence score for word positions (=offsets)</span>
+    <span class="k">if</span> <span class="n">weight_position</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">clusters</span><span class="o">.</span><span class="n">start</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">offset_min</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">clusters</span><span class="o">.</span><span class="n">start</span><span class="p">)</span>
+        <span class="n">offset_max</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">clusters</span><span class="o">.</span><span class="n">start</span><span class="p">)</span>
+        <span class="c1"># linear interpolation</span>
+        <span class="n">xp</span> <span class="o">=</span> <span class="p">[</span><span class="n">offset_min</span><span class="p">,</span> <span class="n">offset_max</span><span class="p">]</span>
+        <span class="n">yp</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">weight_position</span><span class="p">]</span>
+        <span class="n">prominence_position</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">xp</span><span class="p">,</span> <span class="n">yp</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">clusters</span><span class="o">.</span><span class="n">start</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">prominence_position</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">prominence_score</span> <span class="o">=</span> <span class="n">prominence_score</span> <span class="o">*</span> <span class="n">prominence_position</span> <span class="o">*</span> <span class="n">weight_multipliers</span>
+
+    <span class="c1"># aggregate prominence to group level</span>
+    <span class="n">prominence</span><span class="p">[</span><span class="s2">&quot;prominence_score&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">prominence_score</span>
+    <span class="n">prominence</span> <span class="o">=</span> <span class="n">prominence</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">CLUSTER_ID</span><span class="p">)[</span><span class="s2">&quot;prominence_score&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+
+    <span class="c1"># rank clusters by prominence</span>
+    <span class="n">ranks</span> <span class="o">=</span> <span class="n">rankdata</span><span class="p">(</span><span class="n">prominence</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;max&quot;</span><span class="p">)</span>
+    <span class="n">ranks</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">ranks</span><span class="p">)</span> <span class="o">-</span> <span class="n">ranks</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="c1"># organize output as data frame</span>
+    <span class="n">prominence</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">prominence</span><span class="p">)</span>
+    <span class="n">prominence</span><span class="p">[</span><span class="s2">&quot;prominence_rank&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ranks</span>
+    <span class="n">prominence</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">merge_output</span><span class="p">:</span>
+        <span class="n">prominence</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">clusters</span><span class="p">,</span> <span class="n">prominence</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">to_dataframe</span><span class="p">:</span>
+        <span class="n">prominence</span> <span class="o">=</span> <span class="n">prominence</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="n">orient</span><span class="o">=</span><span class="s2">&quot;records&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">prominence</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
+<h2 id="fuzzup.fuzz.compute_prominence_bygroup" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">compute_prominence_bygroup</span><span class="p">(</span><span class="n">clusters</span><span class="p">,</span> <span class="n">return_first_rank</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Compute Prominence by Group</p>
+<p>Computes prominence by entity group. Simply
+calls compute_prominence() groupwise.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>clusters</code></td>
+        <td><code>List[Dict]</code></td>
+        <td><p>Entity clusters.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>kwargs</code></td>
+        <td></td>
+        <td><p>all optional arguments for
+compute_prominence().</p></td>
+        <td><code>{}</code></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>List[Dict]</code></td>
+      <td><p>entity clusters with
+    prominence scores.</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>fuzzup/fuzz.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">compute_prominence_bygroup</span><span class="p">(</span>
+    <span class="n">clusters</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">],</span> <span class="n">return_first_rank</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute Prominence by Group</span>
+
+<span class="sd">    Computes prominence by entity group. Simply</span>
+<span class="sd">    calls compute_prominence() groupwise.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        clusters (List[Dict]): Entity clusters.</span>
+<span class="sd">        kwargs: all optional arguments for</span>
+<span class="sd">            compute_prominence().</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        List[Dict]: entity clusters with</span>
+<span class="sd">            prominence scores.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># handle trivial case.</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">clusters</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[]</span>
+
+    <span class="n">clusters</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">clusters</span><span class="p">)</span>
+    <span class="n">clusters</span> <span class="o">=</span> <span class="n">clusters</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;entity_group&quot;</span><span class="p">])</span>
+
+    <span class="n">out</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">compute_prominence</span><span class="p">(</span>
+            <span class="n">clusters</span><span class="o">=</span><span class="n">clusters</span><span class="o">.</span><span class="n">get_group</span><span class="p">(</span><span class="n">group</span><span class="p">)</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="n">orient</span><span class="o">=</span><span class="s2">&quot;records&quot;</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">clusters</span><span class="o">.</span><span class="n">groups</span>
+    <span class="p">]</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">flatten</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+
+    <span class="c1"># If you only want the most prominent entities returned, pop all entities that are not the most prominent</span>
+    <span class="k">if</span> <span class="n">return_first_rank</span><span class="p">:</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">out</span> <span class="k">if</span> <span class="n">i</span><span class="p">[</span><span class="s2">&quot;prominence_rank&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">out</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
+<h2 id="fuzzup.fuzz.compute_prominence_placement" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">compute_prominence_placement</span><span class="p">(</span><span class="n">clusters</span><span class="p">,</span> <span class="n">placement_col</span><span class="o">=</span><span class="s1">&#39;placement&#39;</span><span class="p">,</span> <span class="n">wgt_body</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">wgt_lead</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">wgt_title</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span> <span class="n">bygroup</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Compute Prominence from Article Placement</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>clusters</code></td>
+        <td><code>list</code></td>
+        <td><p>NER predictions.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>placement_col</code></td>
+        <td><code>str</code></td>
+        <td><p>Name of column containing article
+placement of entities. Defaults to "placement".</p></td>
+        <td><code>&#39;placement&#39;</code></td>
+      </tr>
+      <tr>
+        <td><code>wgt_body</code></td>
+        <td><code>float</code></td>
+        <td><p>Weight of entities in body
+text. Defaults to 1.0.</p></td>
+        <td><code>1.0</code></td>
+      </tr>
+      <tr>
+        <td><code>wgt_lead</code></td>
+        <td><code>float</code></td>
+        <td><p>Weight of entities in lead
+text. Defaults to 2.0.</p></td>
+        <td><code>2.0</code></td>
+      </tr>
+      <tr>
+        <td><code>wgt_title</code></td>
+        <td><code>float</code></td>
+        <td><p>Weight of entities in title.
+Defaults to 3.0.</p></td>
+        <td><code>3.0</code></td>
+      </tr>
+      <tr>
+        <td><code>bygroup</code></td>
+        <td><code>bool</code></td>
+        <td><p>use compute_prominence_bygroup()
+in stead of compute_prominence()? Defaults to True.</p></td>
+        <td><code>False</code></td>
+      </tr>
+      <tr>
+        <td><code>kwargs</code></td>
+        <td></td>
+        <td><p>all optional arguments for compute_prominence(bygroup).</p></td>
+        <td><code>{}</code></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>list</code></td>
+      <td><p>predictions with prominence scores.</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>fuzzup/fuzz.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">compute_prominence_placement</span><span class="p">(</span>
+    <span class="n">clusters</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
+    <span class="n">placement_col</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;placement&quot;</span><span class="p">,</span>
+    <span class="n">wgt_body</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">wgt_lead</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">2.0</span><span class="p">,</span>
+    <span class="n">wgt_title</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">3.0</span><span class="p">,</span>
+    <span class="n">bygroup</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute Prominence from Article Placement</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        clusters (list): NER predictions.</span>
+<span class="sd">        placement_col (str, optional): Name of column containing article</span>
+<span class="sd">            placement of entities. Defaults to &quot;placement&quot;.</span>
+<span class="sd">        wgt_body (float, optional): Weight of entities in body</span>
+<span class="sd">            text. Defaults to 1.0.</span>
+<span class="sd">        wgt_lead (float, optional): Weight of entities in lead</span>
+<span class="sd">            text. Defaults to 2.0.</span>
+<span class="sd">        wgt_title (float, optional): Weight of entities in title.</span>
+<span class="sd">            Defaults to 3.0.</span>
+<span class="sd">        bygroup (bool, optional): use compute_prominence_bygroup()</span>
+<span class="sd">            in stead of compute_prominence()? Defaults to True.</span>
+<span class="sd">        kwargs: all optional arguments for compute_prominence(bygroup).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list: predictions with prominence scores.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">clusters</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[]</span>
+
+    <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">placement_col</span> <span class="ow">in</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">clusters</span><span class="p">]</span>
+    <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;key </span><span class="si">{</span><span class="n">placement_col</span><span class="si">}</span><span class="s2"> must be present in all dicts&quot;</span>
+
+    <span class="n">weights</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;body&quot;</span><span class="p">:</span> <span class="n">wgt_body</span><span class="p">,</span> <span class="s2">&quot;lead&quot;</span><span class="p">:</span> <span class="n">wgt_lead</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="n">wgt_title</span><span class="p">}</span>
+
+    <span class="n">multipliers</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">weights</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">placement_col</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">clusters</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="n">bygroup</span><span class="p">:</span>
+        <span class="n">prominence_function</span> <span class="o">=</span> <span class="n">compute_prominence_bygroup</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">prominence_function</span> <span class="o">=</span> <span class="n">compute_prominence</span>
+
+    <span class="n">clusters</span> <span class="o">=</span> <span class="n">prominence_function</span><span class="p">(</span><span class="n">clusters</span><span class="p">,</span> <span class="n">weight_multipliers</span><span class="o">=</span><span class="n">multipliers</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">clusters</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
+<h2 id="fuzzup.fuzz.fuzzy_cluster" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">fuzzy_cluster</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">cutoff</span><span class="o">=</span><span class="mi">70</span><span class="p">,</span> <span class="n">to_dataframe</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">merge_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p><em>summary</em></p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>words</code></td>
+        <td><code>List[Dict]</code></td>
+        <td><p>Words/entities for clustering.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>cutoff</code></td>
+        <td><code>int</code></td>
+        <td><p>Cutoff threshold value for fuzzy
+ratios when forming clusters. Defaults to 70.</p></td>
+        <td><code>70</code></td>
+      </tr>
+      <tr>
+        <td><code>to_dataframe</code></td>
+        <td><code>bool</code></td>
+        <td><p>Output as dataframe?
+Defaults to True.</p></td>
+        <td><code>False</code></td>
+      </tr>
+      <tr>
+        <td><code>merge_output</code></td>
+        <td><code>bool</code></td>
+        <td><p>Merge output with
+original input? Defaults to False.</p></td>
+        <td><code>True</code></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>List[Dict]</code></td>
+      <td><p>Clusters of entities.</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>fuzzup/fuzz.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">fuzzy_cluster</span><span class="p">(</span>
+    <span class="n">words</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">],</span>
+    <span class="n">cutoff</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">70</span><span class="p">,</span>
+    <span class="n">to_dataframe</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">merge_output</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;_summary_</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        words (List[Dict]): Words/entities for clustering.</span>
+<span class="sd">        cutoff (int, optional): Cutoff threshold value for fuzzy</span>
+<span class="sd">            ratios when forming clusters. Defaults to 70.</span>
+<span class="sd">        to_dataframe (bool, optional): Output as dataframe?</span>
+<span class="sd">            Defaults to True.</span>
+<span class="sd">        merge_output (bool, optional): Merge output with</span>
+<span class="sd">            original input? Defaults to False.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        List[Dict]: Clusters of entities.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="nb">list</span><span class="p">),</span> <span class="s2">&quot;&#39;words&#39; must be a list&quot;</span>
+
+    <span class="c1"># Remove existing cluster_id entries in words</span>
+    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">&quot;cluster_id&quot;</span> <span class="ow">in</span> <span class="n">word</span><span class="p">:</span>
+            <span class="k">del</span> <span class="n">word</span><span class="p">[</span><span class="s2">&quot;cluster_id&quot;</span><span class="p">]</span>
+
+    <span class="c1"># handle trivial case (empty list)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">words</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">to_dataframe</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">all</span><span class="p">([</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">words</span><span class="p">]):</span>
+        <span class="n">output_ner</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">strings</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;word&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">words</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">output_ner</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">strings</span> <span class="o">=</span> <span class="n">words</span>
+
+    <span class="c1"># compute fuzzy ratios</span>
+    <span class="n">fuzzy_matrix</span> <span class="o">=</span> <span class="n">compute_fuzzy_matrix</span><span class="p">(</span><span class="n">strings</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="n">clusters</span> <span class="o">=</span> <span class="n">naive_cluster</span><span class="p">(</span><span class="n">fuzzy_matrix</span><span class="p">,</span> <span class="n">cutoff</span><span class="o">=</span><span class="n">cutoff</span><span class="p">)</span>
+
+    <span class="c1"># generate cluster ids (longest entity variation).</span>
+    <span class="n">cluster_ids</span> <span class="o">=</span> <span class="p">[</span><span class="nb">max</span><span class="p">(</span><span class="n">cluster</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="nb">len</span><span class="p">)</span> <span class="k">for</span> <span class="n">cluster</span> <span class="ow">in</span> <span class="n">clusters</span><span class="p">]</span>
+
+    <span class="c1"># organize output properly (for compatibility with transformers NER pipeline)</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">cluster</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">clusters</span><span class="p">):</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">({</span><span class="s2">&quot;word&quot;</span><span class="p">:</span> <span class="n">cluster</span><span class="p">,</span> <span class="n">CLUSTER_ID</span><span class="p">:</span> <span class="n">cluster_ids</span><span class="p">[</span><span class="n">idx</span><span class="p">]})</span>
+        <span class="p">)</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># merge output with original input</span>
+    <span class="k">if</span> <span class="n">output_ner</span> <span class="ow">and</span> <span class="n">merge_output</span><span class="p">:</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">words</span><span class="p">),</span> <span class="n">output</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">to_dataframe</span><span class="p">:</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="n">orient</span><span class="o">=</span><span class="s2">&quot;records&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">output</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
+<h2 id="fuzzup.fuzz.fuzzy_cluster_bygroup" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">fuzzy_cluster_bygroup</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Fuzzy Cluster By Group</p>
+<p>Fuzzy clustering by entity group. Simply
+calls fuzzy_cluster() groupwise.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>words</code></td>
+        <td><code>List[Dict]</code></td>
+        <td><p>Words/entities.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>kwargs</code></td>
+        <td></td>
+        <td><p>all optional arguments for
+fuzzy_cluster().</p></td>
+        <td><code>{}</code></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>List[Dict]</code></td>
+      <td><p>entity clusters.</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>fuzzup/fuzz.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">fuzzy_cluster_bygroup</span><span class="p">(</span><span class="n">words</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fuzzy Cluster By Group</span>
+
+<span class="sd">    Fuzzy clustering by entity group. Simply</span>
+<span class="sd">    calls fuzzy_cluster() groupwise.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        words (List[Dict]): Words/entities.</span>
+<span class="sd">        kwargs: all optional arguments for</span>
+<span class="sd">            fuzzy_cluster().</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        List[Dict]: entity clusters.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># handle trivial case.</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[]</span>
+
+    <span class="n">words</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
+    <span class="n">words</span> <span class="o">=</span> <span class="n">words</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;entity_group&quot;</span><span class="p">])</span>
+
+    <span class="n">out</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">fuzzy_cluster</span><span class="p">(</span><span class="n">words</span><span class="o">=</span><span class="n">words</span><span class="o">.</span><span class="n">get_group</span><span class="p">(</span><span class="n">group</span><span class="p">)</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="n">orient</span><span class="o">=</span><span class="s2">&quot;records&quot;</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">words</span><span class="o">.</span><span class="n">groups</span>
+    <span class="p">]</span>
+
+    <span class="n">out</span> <span class="o">=</span> <span class="n">flatten</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">out</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
+<h2 id="fuzzup.fuzz.naive_cluster" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">naive_cluster</span><span class="p">(</span><span class="n">fuzzy_matrix</span><span class="p">,</span> <span class="n">cutoff</span><span class="o">=</span><span class="mi">70</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Naive Clustering</p>
+<p>Conducts naive clustering based on matrix with
+pairwise correlations, fuzzy ratios etc.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>fuzzy_matrix</code></td>
+        <td><code>pd.DataFrame</code></td>
+        <td><p>Matrix with
+pairwise fuzzy ratios between words.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>cutoff</code></td>
+        <td><code>float</code></td>
+        <td><p>Threshold for naive
+clustering algorithm with respect to
+pairwise fuzzy ratios. Defaults to 70.</p></td>
+        <td><code>70</code></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>list</code></td>
+      <td><p>resulting clusters.</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>fuzzup/fuzz.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">naive_cluster</span><span class="p">(</span><span class="n">fuzzy_matrix</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">cutoff</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">70</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Naive Clustering</span>
+
+<span class="sd">    Conducts naive clustering based on matrix with</span>
+<span class="sd">    pairwise correlations, fuzzy ratios etc.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        fuzzy_matrix (pd.DataFrame): Matrix with</span>
+<span class="sd">            pairwise fuzzy ratios between words.</span>
+<span class="sd">        cutoff (float, optional): Threshold for naive</span>
+<span class="sd">            clustering algorithm with respect to</span>
+<span class="sd">            pairwise fuzzy ratios. Defaults to 70.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list: resulting clusters.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">fuzzy_matrix</span>
+    <span class="n">clusters</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">m</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">var</span> <span class="o">=</span> <span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="n">cluster</span><span class="p">,</span> <span class="n">m</span> <span class="o">=</span> <span class="n">helper_clustering</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">cutoff</span><span class="o">=</span><span class="n">cutoff</span><span class="p">)</span>
+        <span class="n">clusters</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">clusters</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-module">
+
+<a id="fuzzup.datasets"></a>
+    <div class="doc doc-contents first">
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
+<h2 id="fuzzup.datasets.simulate_ner_data" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">simulate_ner_data</span><span class="p">()</span></code>
+
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Simulate NER data</p>
+
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>List[Dict]</code></td>
+      <td><p>Simulated NER data.</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>fuzzup/datasets.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">simulate_ner_data</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Simulate NER data</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        List[Dict]: Simulated NER data.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">PERSONS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Donald Trump&#39;</span><span class="p">,</span> <span class="s1">&#39;Donald Trump&#39;</span><span class="p">,</span> <span class="s1">&#39;J. biden&#39;</span><span class="p">,</span> <span class="s1">&#39;joe biden&#39;</span><span class="p">,</span> <span class="s1">&#39;Biden&#39;</span><span class="p">,</span> <span class="s1">&#39;Bide&#39;</span><span class="p">,</span> <span class="s1">&#39;mark esper&#39;</span><span class="p">,</span> <span class="s1">&#39;Christopher c . miller&#39;</span><span class="p">,</span> <span class="s1">&#39;jim mattis&#39;</span><span class="p">,</span> <span class="s1">&#39;Nancy Pelosi&#39;</span><span class="p">,</span> <span class="s1">&#39;trumps&#39;</span><span class="p">,</span> <span class="s1">&#39;Trump&#39;</span><span class="p">,</span> <span class="s1">&#39;Donald&#39;</span><span class="p">,</span> <span class="s1">&#39;miller&#39;</span><span class="p">]</span>
+    <span class="c1"># align format with output from Hugging Face `transformers` pipeline</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">PERSONS</span><span class="p">)</span>
+    <span class="n">PERSONS_NER</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">PERSONS</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;word&#39;</span><span class="p">])</span>
+    <span class="n">PERSONS_NER</span><span class="p">[</span><span class="s2">&quot;entity_group&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;PER&quot;</span>
+    <span class="n">PERSONS_NER</span><span class="p">[</span><span class="s2">&quot;score&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">PERSONS_NER</span><span class="p">[</span><span class="s2">&quot;start&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">PERSONS_NER</span><span class="p">[</span><span class="s2">&quot;end&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">placements</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;lead&quot;</span><span class="p">,</span> <span class="s2">&quot;body&quot;</span><span class="p">]</span>
+    <span class="n">PERSONS_NER</span><span class="p">[</span><span class="s2">&quot;placement&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choices</span><span class="p">(</span><span class="n">placements</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">PERSONS_NER</span> <span class="o">=</span> <span class="n">PERSONS_NER</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="n">orient</span><span class="o">=</span><span class="s2">&quot;records&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">PERSONS_NER</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-module">
+
+<a id="fuzzup.whitelists"></a>
+    <div class="doc doc-contents first">
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
+<h2 id="fuzzup.whitelists.Cities" class="doc doc-heading">
+        <code>
+Cities            (<a class="autorefs autorefs-internal" title="fuzzup.whitelists.Whitelist" href="#fuzzup.whitelists.Whitelist">Whitelist</a>)
+        </code>
+
+
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Danish Cities</p>
+<p>Whitelist of names of Danish cities
+initialized from the DAWA API.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>fuzzup/whitelists.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Cities</span><span class="p">(</span><span class="n">Whitelist</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Danish Cities</span>
+
+<span class="sd">    Whitelist of names of Danish cities</span>
+<span class="sd">    initialized from the DAWA API.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">function_load</span><span class="o">=</span><span class="n">get_eblocal_byer</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;city&quot;</span><span class="p">,</span> <span class="n">entity_group</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;LOC&quot;</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
+</code></pre></div>
+        </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
+<h2 id="fuzzup.whitelists.EBLocalNames" class="doc doc-heading">
+        <code>
+EBLocalNames            (<a class="autorefs autorefs-internal" title="fuzzup.whitelists.Whitelist" href="#fuzzup.whitelists.Whitelist">Whitelist</a>)
+        </code>
+
+
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>EB Local Names</p>
+<p>Whitelist with Ekstra Bladet Local Names.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>fuzzup/whitelists.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">EBLocalNames</span><span class="p">(</span><span class="n">Whitelist</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;EB Local Names</span>
+
+<span class="sd">    Whitelist with Ekstra Bladet Local Names.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">function_load</span><span class="o">=</span><span class="n">get_eblocal_names</span><span class="p">,</span>
+            <span class="n">title</span><span class="o">=</span><span class="s2">&quot;eblocal_name&quot;</span><span class="p">,</span>
+            <span class="n">entity_group</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;LOC&quot;</span><span class="p">],</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
+</code></pre></div>
+        </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
+<h2 id="fuzzup.whitelists.Municipalities" class="doc doc-heading">
+        <code>
+Municipalities            (<a class="autorefs autorefs-internal" title="fuzzup.whitelists.Whitelist" href="#fuzzup.whitelists.Whitelist">Whitelist</a>)
+        </code>
+
+
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Danish Cities</p>
+<p>Whitelist of names of Danish Municipalities
+initialized from the DAWA API.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>fuzzup/whitelists.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Municipalities</span><span class="p">(</span><span class="n">Whitelist</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Danish Cities</span>
+
+<span class="sd">    Whitelist of names of Danish Municipalities</span>
+<span class="sd">    initialized from the DAWA API.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">function_load</span><span class="o">=</span><span class="n">get_municipalities</span><span class="p">,</span>
+            <span class="n">title</span><span class="o">=</span><span class="s2">&quot;municipality&quot;</span><span class="p">,</span>
+            <span class="n">entity_group</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;LOC&quot;</span><span class="p">],</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
+</code></pre></div>
+        </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
+<h2 id="fuzzup.whitelists.Neighborhoods" class="doc doc-heading">
+        <code>
+Neighborhoods            (<a class="autorefs autorefs-internal" title="fuzzup.whitelists.Whitelist" href="#fuzzup.whitelists.Whitelist">Whitelist</a>)
+        </code>
+
+
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Danish Neighborhoods</p>
+<p>Whitelist of names of Danish Neighborhoods
+initialized from the DAWA API.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>fuzzup/whitelists.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Neighborhoods</span><span class="p">(</span><span class="n">Whitelist</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Danish Neighborhoods</span>
+
+<span class="sd">    Whitelist of names of Danish Neighborhoods</span>
+<span class="sd">    initialized from the DAWA API.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">function_load</span><span class="o">=</span><span class="n">get_eblocal_neighborhoods</span><span class="p">,</span>
+            <span class="n">title</span><span class="o">=</span><span class="s2">&quot;neighborhood&quot;</span><span class="p">,</span>
+            <span class="n">entity_group</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;LOC&quot;</span><span class="p">],</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
+</code></pre></div>
+        </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
+<h2 id="fuzzup.whitelists.Whitelist" class="doc doc-heading">
+        <code>
+Whitelist        </code>
+
+
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Whitelist</p>
+<p>Whitelist objects containing whitelists and
+relevant meta data regarding how to apply
+it.</p>
+
+<p><strong>Attributes:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>entity_group</code></td>
+        <td><code>str</code></td>
+        <td><p>the entity group of interest
+for the given whitelist.</p></td>
+      </tr>
+      <tr>
+        <td><code>title</code></td>
+        <td><code>str</code></td>
+        <td><p>title of the type of entity the
+whitelist relates to.</p></td>
+      </tr>
+      <tr>
+        <td><code>whitelist</code></td>
+        <td><code>dict</code></td>
+        <td><p>whitelist with keys to
+match with. The values contain mappings
+for the given key.</p></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>fuzzup/whitelists.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Whitelist</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Whitelist</span>
+
+<span class="sd">    Whitelist objects containing whitelists and</span>
+<span class="sd">    relevant meta data regarding how to apply</span>
+<span class="sd">    it.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        entity_group (str): the entity group of interest</span>
+<span class="sd">            for the given whitelist.</span>
+<span class="sd">        title (str): title of the type of entity the</span>
+<span class="sd">            whitelist relates to.</span>
+<span class="sd">        whitelist (dict): whitelist with keys to</span>
+<span class="sd">            match with. The values contain mappings</span>
+<span class="sd">            for the given key.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">function_load</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">entity_group</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">entity_group</span> <span class="o">=</span> <span class="n">entity_group</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="n">title</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loading whitelist: </span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">whitelist</span> <span class="o">=</span> <span class="n">function_load</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Done loading.&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">words</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="n">match_whitelist</span><span class="p">(</span>
+            <span class="n">words</span><span class="o">=</span><span class="n">words</span><span class="p">,</span>
+            <span class="n">whitelist</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">whitelist</span><span class="p">,</span>
+            <span class="n">entity_group</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">entity_group</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">out</span>
+</code></pre></div>
+        </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
+<h2 id="fuzzup.whitelists.apply_whitelists" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">apply_whitelists</span><span class="p">(</span><span class="n">whitelists</span><span class="p">,</span> <span class="n">clusters</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Apply Multiple Whitelists</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>whitelists</code></td>
+        <td><code>List[Whitelist]</code></td>
+        <td><p>Whitelists.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>clusters</code></td>
+        <td><code>List[Dict]</code></td>
+        <td><p>Results from fuzzy clustering etc.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>kwargs</code></td>
+        <td></td>
+        <td><p>all optional arguments for whitelist matching.</p></td>
+        <td><code>{}</code></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>Dict</code></td>
+      <td><p>output from whitelist applications.</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>fuzzup/whitelists.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">apply_whitelists</span><span class="p">(</span>
+    <span class="n">whitelists</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Whitelist</span><span class="p">],</span>
+    <span class="n">clusters</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">],</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Apply Multiple Whitelists</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        whitelists (List[Whitelist]): Whitelists.</span>
+<span class="sd">        clusters (List[Dict]): Results from fuzzy clustering etc.</span>
+<span class="sd">        kwargs: all optional arguments for whitelist matching.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Dict: output from whitelist applications.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="p">{</span><span class="n">wl</span><span class="o">.</span><span class="n">title</span><span class="p">:</span> <span class="n">wl</span><span class="p">(</span><span class="n">clusters</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="k">for</span> <span class="n">wl</span> <span class="ow">in</span> <span class="n">whitelists</span><span class="p">}</span>
+    <span class="k">return</span> <span class="n">out</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
+<h2 id="fuzzup.whitelists.format_output" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">format_output</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;neighborhood_code&#39;</span><span class="p">,</span> <span class="s1">&#39;city_code&#39;</span><span class="p">,</span> <span class="s1">&#39;municipality_code&#39;</span><span class="p">],</span> <span class="n">drop_duplicates</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
+
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Format Output</p>
+<p>Formats output from whitelist format by extracting
+only specific columns and converting them to
+a pandas DataFrame.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>results</code></td>
+        <td><code>List[Dict]</code></td>
+        <td><p>Results from Fuzzy Clustering.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>columns</code></td>
+        <td><code>List[str]</code></td>
+        <td><p>Desired columns
+to extract. Defaults to
+['neighborhood_code', 'city_code',
+'municipality_code'].</p></td>
+        <td><code>[&#39;neighborhood_code&#39;, &#39;city_code&#39;, &#39;municipality_code&#39;]</code></td>
+      </tr>
+      <tr>
+        <td><code>drop_duplicates</code></td>
+        <td><code>bool</code></td>
+        <td><p>Drop duplicate
+matches? Defaults to True.</p></td>
+        <td><code>True</code></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>pd.DataFrame</code></td>
+      <td><p>Output in desired format.</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>fuzzup/whitelists.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">format_output</span><span class="p">(</span>
+    <span class="n">results</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">],</span>
+    <span class="n">columns</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;neighborhood_code&quot;</span><span class="p">,</span> <span class="s2">&quot;city_code&quot;</span><span class="p">,</span> <span class="s2">&quot;municipality_code&quot;</span><span class="p">],</span>
+    <span class="n">drop_duplicates</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Format Output</span>
+
+<span class="sd">    Formats output from whitelist format by extracting</span>
+<span class="sd">    only specific columns and converting them to</span>
+<span class="sd">    a pandas DataFrame.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        results (List[Dict]): Results from Fuzzy Clustering.</span>
+<span class="sd">        columns (List[str], optional): Desired columns</span>
+<span class="sd">            to extract. Defaults to</span>
+<span class="sd">            [&#39;neighborhood_code&#39;, &#39;city_code&#39;,</span>
+<span class="sd">            &#39;municipality_code&#39;].</span>
+<span class="sd">        drop_duplicates (bool, optional): Drop duplicate</span>
+<span class="sd">            matches? Defaults to True.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        pd.DataFrame: Output in desired format.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[</span><span class="n">format_helper</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">results</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">drop_duplicates</span><span class="p">:</span>
+        <span class="n">results</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">keep</span><span class="o">=</span><span class="s2">&quot;first&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">results</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
+<h2 id="fuzzup.whitelists.get_neighborhoods" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">get_neighborhoods</span><span class="p">()</span></code>
+
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Get all neighborhoods in DK</p>
+
+        <details class="quote">
+          <summary>Source code in <code>fuzzup/whitelists.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_neighborhoods</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get all neighborhoods in DK&quot;&quot;&quot;</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://api.dataforsyningen.dk/steder?hovedtype=Bebyggelse&amp;undertype=bydel&quot;</span>
+    <span class="n">hoods</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="p">{</span><span class="n">hood</span><span class="p">[</span><span class="s2">&quot;primærtnavn&quot;</span><span class="p">]:</span> <span class="p">{</span><span class="s2">&quot;eblocal_code&quot;</span><span class="p">:</span> <span class="n">hood</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]}</span> <span class="k">for</span> <span class="n">hood</span> <span class="ow">in</span> <span class="n">hoods</span><span class="p">}</span>
+    <span class="k">return</span> <span class="n">out</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
+<h2 id="fuzzup.whitelists.get_politicians" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">get_politicians</span><span class="p">()</span></code>
+
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>copy pasta from https://github.com/cfblaeb/politik</p>
+
+        <details class="quote">
+          <summary>Source code in <code>fuzzup/whitelists.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_politicians</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    copy pasta from https://github.com/cfblaeb/politik</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># ft.dk only allows 100 rows per call</span>
+    <span class="n">table</span> <span class="o">=</span> <span class="s2">&quot;Aktør&quot;</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;http://oda.ft.dk/api/</span><span class="si">{</span><span class="n">table</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="n">totalcount</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
+        <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;$inlinecount&quot;</span><span class="p">:</span> <span class="s2">&quot;allpages&quot;</span><span class="p">})</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s2">&quot;odata.count&quot;</span><span class="p">]</span>
+    <span class="p">)</span>
+    <span class="n">ccount</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;# records: </span><span class="si">{</span><span class="n">totalcount</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">while</span> <span class="n">ccount</span> <span class="o">&lt;</span> <span class="n">totalcount</span><span class="p">:</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;$skip&quot;</span><span class="p">:</span> <span class="n">ccount</span><span class="p">})</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s2">&quot;value&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;typeid&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>  <span class="c1"># Type_ID 5 = Politiker i folketinget.</span>
+                <span class="k">if</span> <span class="nb">all</span><span class="p">(</span>
+                    <span class="p">[</span>
+                        <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;slutdato&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;startdato&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;fornavn&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;efternavn&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="p">]</span>
+                <span class="p">):</span>
+                    <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+        <span class="n">ccount</span> <span class="o">+=</span> <span class="mi">100</span>
+        <span class="k">if</span> <span class="n">ccount</span> <span class="o">%</span> <span class="mi">1000</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;# records processed: </span><span class="si">{</span><span class="n">ccount</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">totalcount</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of politicians identified: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># extract names</span>
+    <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;fornavn&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">x</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;efternavn&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+    <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="n">clean_string</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">names</span><span class="p">]</span>
+    <span class="n">names</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+
+    <span class="c1"># convert to fuzzup dict format</span>
+    <span class="n">names</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="p">:</span> <span class="p">{}</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">names</span><span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">names</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
+<h2 id="fuzzup.whitelists.match_whitelist" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">match_whitelist</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">whitelist</span><span class="p">,</span> <span class="n">score_cutoff</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">to_dataframe</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">aggregate_cluster</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">individual_wl_match</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">match_strategy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">entity_group</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Match entities with white list</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>words</code></td>
+        <td><code>List[Dict]</code></td>
+        <td><p>words/entities for matching.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>whitelist</code></td>
+        <td><code>List[str]</code></td>
+        <td><p>white list with words/entities
+to match with.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>score_cutoff</code></td>
+        <td><code>float</code></td>
+        <td><p>Cutoff threshold value for
+matching. Defaults to 80.</p></td>
+        <td><code>80</code></td>
+      </tr>
+      <tr>
+        <td><code>to_dataframe</code></td>
+        <td><code>bool</code></td>
+        <td><p>Return output as data frame.
+Defaults to False.</p></td>
+        <td><code>False</code></td>
+      </tr>
+      <tr>
+        <td><code>aggregate_cluster</code></td>
+        <td><code>bool</code></td>
+        <td><p>Aggregate matches to
+cluster level. Defaults to False.</p></td>
+        <td><code>False</code></td>
+      </tr>
+      <tr>
+        <td><code>kwargs</code></td>
+        <td></td>
+        <td><p>optinal arguments for cdist.</p></td>
+        <td><code>{}</code></td>
+      </tr>
+      <tr>
+        <td><code>entity_group</code></td>
+        <td><code>List[str]</code></td>
+        <td><p>which entity groups to match.</p></td>
+        <td><code>None</code></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>List[Dict]</code></td>
+      <td><p>words and their respective matches with the
+    white list.</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>fuzzup/whitelists.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">match_whitelist</span><span class="p">(</span>
+    <span class="n">words</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">],</span>
+    <span class="n">whitelist</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">score_cutoff</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">80</span><span class="p">,</span>
+    <span class="n">to_dataframe</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">aggregate_cluster</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">individual_wl_match</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">match_strategy</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">entity_group</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Match entities with white list</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        words (List[Dict]): words/entities for matching.</span>
+<span class="sd">        whitelist (List[str]): white list with words/entities</span>
+<span class="sd">            to match with.</span>
+<span class="sd">        score_cutoff (float, optional): Cutoff threshold value for</span>
+<span class="sd">            matching. Defaults to 80.</span>
+<span class="sd">        to_dataframe (bool, optional): Return output as data frame.</span>
+<span class="sd">            Defaults to False.</span>
+<span class="sd">        aggregate_cluster (bool, optional): Aggregate matches to</span>
+<span class="sd">            cluster level. Defaults to False.</span>
+<span class="sd">        kwargs: optinal arguments for cdist.</span>
+<span class="sd">        entity_group: which entity groups to match.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        List[Dict]: words and their respective matches with the</span>
+<span class="sd">            white list.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="nb">list</span><span class="p">),</span> <span class="s2">&quot;&#39;words&#39; must be a list&quot;</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">whitelist</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)),</span> <span class="s2">&quot;&#39;whitelist&#39; must be a list or dit&quot;</span>
+
+    <span class="k">def</span> <span class="nf">filter_rank_df</span><span class="p">(</span>
+        <span class="n">df_filter</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+        <span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+        <span class="n">rank_limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">min_count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+
+        <span class="n">rank_list</span> <span class="o">=</span> <span class="n">df_filter</span><span class="o">.</span><span class="n">query</span><span class="p">(</span>
+            <span class="s2">&quot;count &gt;= 2 and prominence_rank == 2 or prominence_rank==1&quot;</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">cluster_id</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;cluster_id in @rank_list&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">df</span>
+
+    <span class="k">def</span> <span class="nf">count_word_prominence_freq</span><span class="p">(</span><span class="n">strings</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function will take a list of strings, compare it to their prominence rank and</span>
+<span class="sd">        count, in order to decide which strings should be returned.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">strings</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">convert_version_list_to_set</span><span class="p">(</span><span class="n">row</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;This method will convert any list of version numbers to a set of unique versions&quot;&quot;&quot;</span>
+        <span class="n">row</span><span class="p">[</span><span class="s2">&quot;versions&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;versions&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">row</span>
+
+    <span class="c1"># if the whitelist is a dictionary, then generate a list of keys for later use</span>
+    <span class="n">is_dict</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">whitelist</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="n">is_dict</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">whitelist_dict</span> <span class="o">=</span> <span class="n">whitelist</span>
+        <span class="n">whitelist</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">whitelist</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="n">whitelist_versions</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;version&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">whitelist_dict</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
+
+    <span class="c1"># handle trivial case (empty list)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">words</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">whitelist</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">to_dataframe</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+    <span class="c1"># if all words are dictionaries, it is assumed to be NER format</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">all</span><span class="p">([</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">words</span><span class="p">]):</span>
+        <span class="n">output_ner</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="n">entity_group</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">words</span> <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;entity_group&quot;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">entity_group</span><span class="p">]</span>
+        <span class="n">strings</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;word&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">words</span><span class="p">]</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">output_ner</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">strings</span> <span class="o">=</span> <span class="n">words</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">strings</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">to_dataframe</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+
+    <span class="c1"># compute distances - length of the whitelist</span>
+    <span class="c1"># Only takes strings ~ so no information about prominence here.</span>
+    <span class="n">dists</span> <span class="o">=</span> <span class="n">cdist</span><span class="p">(</span><span class="n">whitelist</span><span class="p">,</span> <span class="n">strings</span><span class="p">,</span> <span class="n">score_cutoff</span><span class="o">=</span><span class="n">score_cutoff</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="c1"># All matches on the whitelist ~ pass all words here to start with and then handle matches afterwards</span>
+    <span class="n">matches</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">whitelist</span><span class="p">)[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">col</span><span class="p">)]</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">dists</span><span class="o">.</span><span class="n">T</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">is_dict</span><span class="p">:</span>
+        <span class="n">versions</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">whitelist_versions</span><span class="p">)[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">col</span><span class="p">)]</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">dists</span><span class="o">.</span><span class="n">T</span><span class="p">]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">output_ner</span><span class="p">:</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">({</span><span class="s2">&quot;word&quot;</span><span class="p">:</span> <span class="n">strings</span><span class="p">,</span> <span class="s2">&quot;matches&quot;</span><span class="p">:</span> <span class="n">matches</span><span class="p">})</span>
+
+    <span class="k">if</span> <span class="n">output_ner</span><span class="p">:</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_records</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;matches&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">matches</span>
+        <span class="k">if</span> <span class="n">is_dict</span><span class="p">:</span>
+            <span class="n">df</span><span class="p">[</span><span class="s2">&quot;versions&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">versions</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">convert_version_list_to_set</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># MATCH STRATEGY</span>
+        <span class="k">if</span> <span class="s2">&quot;prominence_rank&quot;</span> <span class="ow">in</span> <span class="n">df</span> <span class="ow">and</span> <span class="n">match_strategy</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">df_filter</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;cluster_id&quot;</span><span class="p">,</span> <span class="s2">&quot;prominence_rank&quot;</span><span class="p">])[</span><span class="s2">&quot;word&quot;</span><span class="p">]</span>
+                <span class="o">.</span><span class="n">count</span><span class="p">()</span>
+                <span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+                <span class="o">.</span><span class="n">rename</span><span class="p">({</span><span class="s2">&quot;word&quot;</span><span class="p">:</span> <span class="s2">&quot;count&quot;</span><span class="p">},</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="p">)</span>
+
+            <span class="c1"># If rank 2 has an occurance of at least 2, regardless of prominence_score</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">df_filter</span><span class="p">[</span><span class="n">df_filter</span><span class="p">[</span><span class="s2">&quot;prominence_rank&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span><span class="p">][</span><span class="s2">&quot;count&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">filter_rank_df</span><span class="p">(</span>
+                    <span class="n">df_filter</span><span class="o">=</span><span class="n">df_filter</span><span class="p">,</span> <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">rank_limit</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">min_count</span><span class="o">=</span><span class="mi">2</span>
+                <span class="p">)</span>
+
+            <span class="c1"># Regress to match-strategy of returning rank 1 only</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;prominence_rank&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span>  <span class="c1"># return first rank only</span>
+
+        <span class="k">if</span> <span class="n">aggregate_cluster</span><span class="p">:</span>
+            <span class="n">matches</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+                <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;cluster_id&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">aggregate_to_cluster</span><span class="p">),</span>
+                <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;matches&quot;</span><span class="p">],</span>
+                <span class="n">index</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">matches</span> <span class="o">=</span> <span class="n">matches</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;matches&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">matches</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">)</span>
+
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;matches&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;matches&quot;</span><span class="p">]]</span>
+
+    <span class="k">if</span> <span class="n">is_dict</span><span class="p">:</span>
+        <span class="n">mappings</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">matches</span><span class="o">.</span><span class="n">tolist</span><span class="p">():</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="p">[</span><span class="n">whitelist_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">match</span><span class="p">]</span>
+            <span class="n">mappings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;mappings&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mappings</span>
+
+    <span class="c1"># subset matches only</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;matches&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span> <span class="o">!=</span> <span class="s2">&quot;[]&quot;</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">to_dataframe</span><span class="p">:</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="n">orient</span><span class="o">=</span><span class="s2">&quot;records&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">df</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-module">
+
+<a id="fuzzup.utils"></a>
+    <div class="doc doc-contents first">
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../showcase/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Showcase" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Showcase
+            </div>
+          </div>
+        </a>
+      
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.bd0b6b67.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.9f3ca3d1.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,1762 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.2.2">
+    
+    
+      
+        <title>Showcase - Fuzz Up</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.e8d9bf0c.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.e6a45f82.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../css/ansi-colours.css">
+    
+      <link rel="stylesheet" href="../css/jupyter-cells.css">
+    
+      <link rel="stylesheet" href="../css/pandas-dataframe.css">
+    
+    <script>__md_scope=new URL("..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#fuzzup-showcase" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Fuzz Up" class="md-header__button md-logo" aria-label="Fuzz Up" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Fuzz Up
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Showcase
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Fuzz Up" class="md-nav__button md-logo" aria-label="Fuzz Up" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    Fuzz Up
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Showcase
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Showcase
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#designed-for-handling-output-from-ner" class="md-nav__link">
+    Designed for Handling Output from NER
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#use-case" class="md-nav__link">
+    Use-case
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#workflow" class="md-nav__link">
+    Workflow
+  </a>
+  
+    <nav class="md-nav" aria-label="Workflow">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-compute-pairwise-edit-distances" class="md-nav__link">
+    Step 1: Compute Pairwise Edit Distances
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-forming-clusters" class="md-nav__link">
+    Step 2: Forming Clusters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-compute-prominence-of-entity-clusters" class="md-nav__link">
+    Step 3: Compute Prominence of Entity Clusters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-4-matching-with-whitelists" class="md-nav__link">
+    Step 4: Matching with Whitelists
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../code_reference/" class="md-nav__link">
+        Code Reference
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#designed-for-handling-output-from-ner" class="md-nav__link">
+    Designed for Handling Output from NER
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#use-case" class="md-nav__link">
+    Use-case
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#workflow" class="md-nav__link">
+    Workflow
+  </a>
+  
+    <nav class="md-nav" aria-label="Workflow">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-compute-pairwise-edit-distances" class="md-nav__link">
+    Step 1: Compute Pairwise Edit Distances
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-forming-clusters" class="md-nav__link">
+    Step 2: Forming Clusters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-compute-prominence-of-entity-clusters" class="md-nav__link">
+    Step 3: Compute Prominence of Entity Clusters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-4-matching-with-whitelists" class="md-nav__link">
+    Step 4: Matching with Whitelists
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script>
+(function() {
+  function addWidgetsRenderer() {
+    var requireJsScript = document.createElement('script');
+    requireJsScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js';
+
+    var mimeElement = document.querySelector('script[type="application/vnd.jupyter.widget-view+json"]');
+    var jupyterWidgetsScript = document.createElement('script');
+    var widgetRendererSrc = 'https://unpkg.com/@jupyter-widgets/html-manager@*/dist/embed-amd.js';
+    var widgetState;
+
+    // Fallback for older version:
+    try {
+      widgetState = mimeElement && JSON.parse(mimeElement.innerHTML);
+
+      if (widgetState && (widgetState.version_major < 2 || !widgetState.version_major)) {
+        widgetRendererSrc = 'jupyter-js-widgets@*/dist/embed.js';
+      }
+    } catch(e) {}
+
+    jupyterWidgetsScript.src = widgetRendererSrc;
+
+    document.body.appendChild(requireJsScript);
+    document.body.appendChild(jupyterWidgetsScript);
+  }
+
+  document.addEventListener('DOMContentLoaded', addWidgetsRenderer);
+}());
+</script>
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="fuzzup-showcase"><code>fuzzup</code> Showcase</h1>
+<p><code>fuzzup</code> offers (1) a simple approach for clustering string entitities based on 
+<a href="https://en.wikipedia.org/wiki/Levenshtein_distance">Levenshtein Distance</a> using
+<a href="https://en.wikipedia.org/wiki/Fuzzy_matching_(computer-assisted_translation)">Fuzzy Matching</a>
+in conjunction with a simple rule-based clustering method. </p>
+<p><code>fuzzup</code> also provides (2) functions for computing the prominence of<br />
+entity clusters resulting from (1).</p>
+<p>In this section we will go through the nuts and bolts of <code>fuzzup</code> by applying it to a realistic setting.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="designed-for-handling-output-from-ner">Designed for Handling Output from NER</h2>
+<p>An important use-case for <code>fuzzup</code> is <em>organizing, structuring and analyzing</em> output from <a href="https://en.wikipedia.org/wiki/Named-entity_recognition">Named-Entity Recognition</a>(=NER).</p>
+<p>For this reason <code>fuzzup</code> has been handtailored to fit the output from NER predictions from the <a href="https://huggingface.co/">Hugging Face</a> <a href="https://github.com/huggingface/transformers">transformers</a> <a href="https://huggingface.co/docs/transformers/v4.16.2/en/main_classes/pipelines#transformers.TokenClassificationPipeline">NER pipeline</a> specifically.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="use-case">Use-case</h2>
+<p>First of, import dependencies needed later.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+
+<pre><code class="language-python">from rapidfuzz.fuzz import partial_token_set_ratio
+import pandas as pd
+import numpy as np
+
+from fuzzup.datasets import simulate_ner_data
+from fuzzup.fuzz import (
+    fuzzy_cluster, 
+    compute_prominence, 
+    compute_fuzzy_matrix,
+)
+from fuzzup.whitelists import match_whitelist
+</code></pre>
+
+
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Say, we have used a <code>transformers</code> Hugging Face NER pipeline to identify names of persons in a news article. The output from the algorithm is a list of string entities and looks like this (simulated data).</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+
+<pre><code class="language-python">PERSONS_NER = simulate_ner_data()
+pd.DataFrame.from_records(PERSONS_NER)
+</code></pre>
+
+
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="scoped">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+<thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>word</th>
+      <th>entity_group</th>
+      <th>score</th>
+      <th>start</th>
+      <th>end</th>
+      <th>placement</th>
+    </tr>
+  </thead>
+<tbody>
+    <tr>
+      <th>0</th>
+      <td>Donald Trump</td>
+      <td>PER</td>
+      <td>0.293968</td>
+      <td>96</td>
+      <td>13</td>
+      <td>lead</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Donald Trump</td>
+      <td>PER</td>
+      <td>0.981178</td>
+      <td>45</td>
+      <td>22</td>
+      <td>body</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>J. biden</td>
+      <td>PER</td>
+      <td>0.084998</td>
+      <td>10</td>
+      <td>54</td>
+      <td>body</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>joe biden</td>
+      <td>PER</td>
+      <td>0.607045</td>
+      <td>83</td>
+      <td>66</td>
+      <td>title</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Biden</td>
+      <td>PER</td>
+      <td>0.535421</td>
+      <td>45</td>
+      <td>58</td>
+      <td>lead</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Bide</td>
+      <td>PER</td>
+      <td>0.304502</td>
+      <td>67</td>
+      <td>77</td>
+      <td>lead</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>mark esper</td>
+      <td>PER</td>
+      <td>0.949895</td>
+      <td>43</td>
+      <td>60</td>
+      <td>body</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Christopher c . miller</td>
+      <td>PER</td>
+      <td>0.388053</td>
+      <td>76</td>
+      <td>97</td>
+      <td>title</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>jim mattis</td>
+      <td>PER</td>
+      <td>0.365383</td>
+      <td>78</td>
+      <td>72</td>
+      <td>title</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Nancy Pelosi</td>
+      <td>PER</td>
+      <td>0.313847</td>
+      <td>34</td>
+      <td>49</td>
+      <td>lead</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>trumps</td>
+      <td>PER</td>
+      <td>0.557752</td>
+      <td>36</td>
+      <td>24</td>
+      <td>title</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>Trump</td>
+      <td>PER</td>
+      <td>0.048489</td>
+      <td>24</td>
+      <td>6</td>
+      <td>body</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>Donald</td>
+      <td>PER</td>
+      <td>0.285257</td>
+      <td>80</td>
+      <td>46</td>
+      <td>title</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>miller</td>
+      <td>PER</td>
+      <td>0.078196</td>
+      <td>46</td>
+      <td>56</td>
+      <td>title</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>As you can see, the output is rather messy (partly due to the stochastic nature of the algorithm). Another reason for the output looking messy is, that for instance 'Joe Biden' has been mentioned a lot of times but in different ways, e.g. 'Joe Biden', 'J. Biden' and 'Biden'. </p>
+<p>We want to organize these strings entities by forming meaningful clusters from them, in which the entities are closely related based on their pairwise edit distances. </p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="workflow">Workflow</h2>
+<p><code>fuzzup</code> offers functionality for:</p>
+<ol>
+<li>Computing all of the mutual string distances (Levensteihn Distances/fuzzy ratios) between the string entities</li>
+<li>Forming clusters of string entities based on the distances from (1)</li>
+<li>Computing prominence of the clusters from (2) based on the number of entity occurrences, their positions in the text etc.</li>
+<li>Matching entities (clusters) with entity whitelists</li>
+</ol>
+<p>Together these steps constitute an end-to-end approach for organizing and structuring the output from NER. Below we go through a simple example of the <code>fuzzup</code> workflow.    </p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="step-1-compute-pairwise-edit-distances">Step 1: Compute Pairwise Edit Distances</h3>
+<p>First, <code>fuzzup</code> computes pairwise fuzzy ratios for all pairs of string entities.</p>
+<p><a href="https://en.wikipedia.org/wiki/Fuzzy_matching_(computer-assisted_translation)">Fuzzy ratios</a> are numbers between 0 and 100 are measures of similarity between strings. They are derived from the <a href="https://en.wikipedia.org/wiki/Levenshtein_distance">Levenshtein distance</a> - a string metric, that measures the distance between two strings. </p>
+<p>In short the Levenshtein distance (also known as 'edit distance') between two words is the minimum number of single-character edits (insertions, deletions or substitutions) required to change one word into the other. </p>
+<p><code>fuzzup</code> has a separate function <code>compute_fuzzy_matrix</code> for this, that presents the output - the mutual fuzzy ratios - as a cross-tabular matrix with all ratios. </p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+
+<pre><code class="language-python">from fuzzup.fuzz import fuzzy_cluster
+persons = [x.get('word') for x in PERSONS_NER]
+compute_fuzzy_matrix(persons, scorer=partial_token_set_ratio)
+</code></pre>
+
+
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="scoped">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+<thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Nancy Pelosi</th>
+      <th>Bide</th>
+      <th>mark esper</th>
+      <th>Christopher c . miller</th>
+      <th>Donald Trump</th>
+      <th>Donald</th>
+      <th>J. biden</th>
+      <th>jim mattis</th>
+      <th>trumps</th>
+      <th>joe biden</th>
+      <th>Trump</th>
+      <th>miller</th>
+      <th>Biden</th>
+    </tr>
+  </thead>
+<tbody>
+    <tr>
+      <th>Nancy Pelosi</th>
+      <td>100.000000</td>
+      <td>40.000000</td>
+      <td>26.666666</td>
+      <td>30.000000</td>
+      <td>23.529411</td>
+      <td>25.000000</td>
+      <td>26.666666</td>
+      <td>23.529411</td>
+      <td>25.000000</td>
+      <td>35.294117</td>
+      <td>0.000000</td>
+      <td>28.571428</td>
+      <td>33.333332</td>
+    </tr>
+    <tr>
+      <th>Bide</th>
+      <td>40.000000</td>
+      <td>100.000000</td>
+      <td>40.000000</td>
+      <td>50.000000</td>
+      <td>25.000000</td>
+      <td>40.000000</td>
+      <td>75.000000</td>
+      <td>33.333332</td>
+      <td>0.000000</td>
+      <td>75.000000</td>
+      <td>0.000000</td>
+      <td>50.000000</td>
+      <td>100.000000</td>
+    </tr>
+    <tr>
+      <th>mark esper</th>
+      <td>26.666666</td>
+      <td>40.000000</td>
+      <td>100.000000</td>
+      <td>50.000000</td>
+      <td>28.571428</td>
+      <td>22.222221</td>
+      <td>22.222221</td>
+      <td>37.500000</td>
+      <td>33.333332</td>
+      <td>30.769230</td>
+      <td>40.000000</td>
+      <td>40.000000</td>
+      <td>33.333332</td>
+    </tr>
+    <tr>
+      <th>Christopher c . miller</th>
+      <td>30.000000</td>
+      <td>50.000000</td>
+      <td>50.000000</td>
+      <td>100.000000</td>
+      <td>27.272728</td>
+      <td>22.222221</td>
+      <td>42.857143</td>
+      <td>35.294117</td>
+      <td>33.333332</td>
+      <td>33.333332</td>
+      <td>40.000000</td>
+      <td>100.000000</td>
+      <td>40.000000</td>
+    </tr>
+    <tr>
+      <th>Donald Trump</th>
+      <td>22.222221</td>
+      <td>25.000000</td>
+      <td>28.571428</td>
+      <td>27.272728</td>
+      <td>100.000000</td>
+      <td>100.000000</td>
+      <td>18.181818</td>
+      <td>25.000000</td>
+      <td>80.000000</td>
+      <td>25.000000</td>
+      <td>100.000000</td>
+      <td>33.333332</td>
+      <td>25.000000</td>
+    </tr>
+    <tr>
+      <th>Donald</th>
+      <td>25.000000</td>
+      <td>40.000000</td>
+      <td>22.222221</td>
+      <td>22.222221</td>
+      <td>100.000000</td>
+      <td>100.000000</td>
+      <td>28.571428</td>
+      <td>18.181818</td>
+      <td>0.000000</td>
+      <td>25.000000</td>
+      <td>0.000000</td>
+      <td>22.222221</td>
+      <td>33.333332</td>
+    </tr>
+    <tr>
+      <th>J. biden</th>
+      <td>26.666666</td>
+      <td>75.000000</td>
+      <td>22.222221</td>
+      <td>42.857143</td>
+      <td>18.181818</td>
+      <td>28.571428</td>
+      <td>100.000000</td>
+      <td>26.666666</td>
+      <td>0.000000</td>
+      <td>100.000000</td>
+      <td>0.000000</td>
+      <td>40.000000</td>
+      <td>88.888885</td>
+    </tr>
+    <tr>
+      <th>jim mattis</th>
+      <td>23.529411</td>
+      <td>33.333332</td>
+      <td>40.000000</td>
+      <td>35.294117</td>
+      <td>25.000000</td>
+      <td>18.181818</td>
+      <td>26.666666</td>
+      <td>100.000000</td>
+      <td>44.444443</td>
+      <td>30.769230</td>
+      <td>25.000000</td>
+      <td>33.333332</td>
+      <td>28.571428</td>
+    </tr>
+    <tr>
+      <th>trumps</th>
+      <td>25.000000</td>
+      <td>0.000000</td>
+      <td>33.333332</td>
+      <td>33.333332</td>
+      <td>80.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>44.444443</td>
+      <td>100.000000</td>
+      <td>0.000000</td>
+      <td>80.000000</td>
+      <td>28.571428</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>joe biden</th>
+      <td>35.294117</td>
+      <td>75.000000</td>
+      <td>30.769230</td>
+      <td>33.333332</td>
+      <td>25.000000</td>
+      <td>25.000000</td>
+      <td>100.000000</td>
+      <td>30.769230</td>
+      <td>0.000000</td>
+      <td>100.000000</td>
+      <td>0.000000</td>
+      <td>40.000000</td>
+      <td>80.000000</td>
+    </tr>
+    <tr>
+      <th>Trump</th>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>40.000000</td>
+      <td>40.000000</td>
+      <td>100.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>25.000000</td>
+      <td>80.000000</td>
+      <td>0.000000</td>
+      <td>100.000000</td>
+      <td>33.333332</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>miller</th>
+      <td>28.571428</td>
+      <td>50.000000</td>
+      <td>40.000000</td>
+      <td>100.000000</td>
+      <td>33.333332</td>
+      <td>25.000000</td>
+      <td>40.000000</td>
+      <td>33.333332</td>
+      <td>25.000000</td>
+      <td>40.000000</td>
+      <td>33.333332</td>
+      <td>100.000000</td>
+      <td>40.000000</td>
+    </tr>
+    <tr>
+      <th>Biden</th>
+      <td>33.333332</td>
+      <td>100.000000</td>
+      <td>33.333332</td>
+      <td>40.000000</td>
+      <td>25.000000</td>
+      <td>33.333332</td>
+      <td>88.888885</td>
+      <td>28.571428</td>
+      <td>0.000000</td>
+      <td>80.000000</td>
+      <td>0.000000</td>
+      <td>40.000000</td>
+      <td>100.000000</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The different string representations of e.g. Donald Trump and Joe Biden have high mutual fuzzy ratios. In comparision representations of different persons have relatively small fuzzy ratios.</p>
+<p>You can think of this matrix as a correlation matrix, that shows the correlation between strings.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="step-2-forming-clusters">Step 2: Forming Clusters</h3>
+<p>Clusters of entities can be formed using the output from (1) using a naive approach clustering two string entities together, if their mutual fuzzy ratio exceeds a certain threshold.</p>
+<p>Computing the pairwise fuzzy ratios and forming the clusters can be done in one take by simply invoking the <code>fuzzy_cluster</code> function.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+
+<pre><code class="language-python">clusters = fuzzy_cluster(PERSONS_NER, 
+                         scorer=partial_token_set_ratio, 
+                         cutoff=70,
+                         merge_output=True)
+pd.DataFrame.from_records(clusters)
+</code></pre>
+
+
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="scoped">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+<thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>word</th>
+      <th>entity_group</th>
+      <th>score</th>
+      <th>start</th>
+      <th>end</th>
+      <th>placement</th>
+      <th>cluster_id</th>
+    </tr>
+  </thead>
+<tbody>
+    <tr>
+      <th>0</th>
+      <td>Donald Trump</td>
+      <td>PER</td>
+      <td>0.293968</td>
+      <td>96</td>
+      <td>13</td>
+      <td>lead</td>
+      <td>Donald Trump</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Donald Trump</td>
+      <td>PER</td>
+      <td>0.981178</td>
+      <td>45</td>
+      <td>22</td>
+      <td>body</td>
+      <td>Donald Trump</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>J. biden</td>
+      <td>PER</td>
+      <td>0.084998</td>
+      <td>10</td>
+      <td>54</td>
+      <td>body</td>
+      <td>joe biden</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>joe biden</td>
+      <td>PER</td>
+      <td>0.607045</td>
+      <td>83</td>
+      <td>66</td>
+      <td>title</td>
+      <td>joe biden</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Biden</td>
+      <td>PER</td>
+      <td>0.535421</td>
+      <td>45</td>
+      <td>58</td>
+      <td>lead</td>
+      <td>joe biden</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Bide</td>
+      <td>PER</td>
+      <td>0.304502</td>
+      <td>67</td>
+      <td>77</td>
+      <td>lead</td>
+      <td>joe biden</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>mark esper</td>
+      <td>PER</td>
+      <td>0.949895</td>
+      <td>43</td>
+      <td>60</td>
+      <td>body</td>
+      <td>mark esper</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Christopher c . miller</td>
+      <td>PER</td>
+      <td>0.388053</td>
+      <td>76</td>
+      <td>97</td>
+      <td>title</td>
+      <td>Christopher c . miller</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>jim mattis</td>
+      <td>PER</td>
+      <td>0.365383</td>
+      <td>78</td>
+      <td>72</td>
+      <td>title</td>
+      <td>jim mattis</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Nancy Pelosi</td>
+      <td>PER</td>
+      <td>0.313847</td>
+      <td>34</td>
+      <td>49</td>
+      <td>lead</td>
+      <td>Nancy Pelosi</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>trumps</td>
+      <td>PER</td>
+      <td>0.557752</td>
+      <td>36</td>
+      <td>24</td>
+      <td>title</td>
+      <td>Donald Trump</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>Trump</td>
+      <td>PER</td>
+      <td>0.048489</td>
+      <td>24</td>
+      <td>6</td>
+      <td>body</td>
+      <td>Donald Trump</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>Donald</td>
+      <td>PER</td>
+      <td>0.285257</td>
+      <td>80</td>
+      <td>46</td>
+      <td>title</td>
+      <td>Donald Trump</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>miller</td>
+      <td>PER</td>
+      <td>0.078196</td>
+      <td>46</td>
+      <td>56</td>
+      <td>title</td>
+      <td>Christopher c . miller</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Note, that the original entities are now equipped with a 'cluster_id', assigning each of the entities to an entity cluster.</p>
+<p>We see from the results, that different string representations of e.g. 'Donald Trump' have been clustered together. As you see, the 'cluster_id' of each cluster is the longest string within the entity cluster.</p>
+<p>In this case we applied a <code>partial_token_set_ratio</code> and a cutoff threshold value of 75 on the pairwise fuzzy ratios. Depending on your use case, you should choose an appropriate scorer from <code>rapidfuzz.fuzz</code> and 'fine-tune' the cutoff threshold value on your own data.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="step-3-compute-prominence-of-entity-clusters">Step 3: Compute Prominence of Entity Clusters</h3>
+<p>A naïve approach for computing the 'prominence' of the different string clusters is to just count the number of nodes/strings in each cluster. This is the default behaviour of <code>compute_prominence()</code>.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+
+<pre><code class="language-python">clusters = compute_prominence(clusters,
+                              merge_output=True)
+pd.DataFrame.from_records(clusters).sort_values('prominence_rank', ascending=True)
+</code></pre>
+
+
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="scoped">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+<thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>word</th>
+      <th>entity_group</th>
+      <th>score</th>
+      <th>start</th>
+      <th>end</th>
+      <th>placement</th>
+      <th>cluster_id</th>
+      <th>prominence_score</th>
+      <th>prominence_rank</th>
+    </tr>
+  </thead>
+<tbody>
+    <tr>
+      <th>0</th>
+      <td>Donald Trump</td>
+      <td>PER</td>
+      <td>0.293968</td>
+      <td>96</td>
+      <td>13</td>
+      <td>lead</td>
+      <td>Donald Trump</td>
+      <td>5.0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Donald Trump</td>
+      <td>PER</td>
+      <td>0.981178</td>
+      <td>45</td>
+      <td>22</td>
+      <td>body</td>
+      <td>Donald Trump</td>
+      <td>5.0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>trumps</td>
+      <td>PER</td>
+      <td>0.557752</td>
+      <td>36</td>
+      <td>24</td>
+      <td>title</td>
+      <td>Donald Trump</td>
+      <td>5.0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>Trump</td>
+      <td>PER</td>
+      <td>0.048489</td>
+      <td>24</td>
+      <td>6</td>
+      <td>body</td>
+      <td>Donald Trump</td>
+      <td>5.0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>Donald</td>
+      <td>PER</td>
+      <td>0.285257</td>
+      <td>80</td>
+      <td>46</td>
+      <td>title</td>
+      <td>Donald Trump</td>
+      <td>5.0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>J. biden</td>
+      <td>PER</td>
+      <td>0.084998</td>
+      <td>10</td>
+      <td>54</td>
+      <td>body</td>
+      <td>joe biden</td>
+      <td>4.0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>joe biden</td>
+      <td>PER</td>
+      <td>0.607045</td>
+      <td>83</td>
+      <td>66</td>
+      <td>title</td>
+      <td>joe biden</td>
+      <td>4.0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Biden</td>
+      <td>PER</td>
+      <td>0.535421</td>
+      <td>45</td>
+      <td>58</td>
+      <td>lead</td>
+      <td>joe biden</td>
+      <td>4.0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Bide</td>
+      <td>PER</td>
+      <td>0.304502</td>
+      <td>67</td>
+      <td>77</td>
+      <td>lead</td>
+      <td>joe biden</td>
+      <td>4.0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Christopher c . miller</td>
+      <td>PER</td>
+      <td>0.388053</td>
+      <td>76</td>
+      <td>97</td>
+      <td>title</td>
+      <td>Christopher c . miller</td>
+      <td>2.0</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>miller</td>
+      <td>PER</td>
+      <td>0.078196</td>
+      <td>46</td>
+      <td>56</td>
+      <td>title</td>
+      <td>Christopher c . miller</td>
+      <td>2.0</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>mark esper</td>
+      <td>PER</td>
+      <td>0.949895</td>
+      <td>43</td>
+      <td>60</td>
+      <td>body</td>
+      <td>mark esper</td>
+      <td>1.0</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>jim mattis</td>
+      <td>PER</td>
+      <td>0.365383</td>
+      <td>78</td>
+      <td>72</td>
+      <td>title</td>
+      <td>jim mattis</td>
+      <td>1.0</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Nancy Pelosi</td>
+      <td>PER</td>
+      <td>0.313847</td>
+      <td>34</td>
+      <td>49</td>
+      <td>lead</td>
+      <td>Nancy Pelosi</td>
+      <td>1.0</td>
+      <td>4</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>In this case, the 'prominence score' of the 'Donald Trump' entity cluster is 5, because Donald Trump is mentioned 5 times in different variations. This is the highest frequency among the clusters and therefore the 'Donald Trump' cluster is scored as the most prominent cluster.</p>
+<p>The clusters are ranked by their prominence scores in the 'prominence rank' column.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="step-4-matching-with-whitelists">Step 4: Matching with Whitelists</h3>
+<p>It can be useful to have one or more whitelists with specific entities of interest, when analyzing the output from NER. Assume, that we are only interested in Donald Trump and Joe Biden.</p>
+<p>We construct a minimal whitelist.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+
+<pre><code class="language-python">whitelist = ['Donald Trump', 'Joe Biden']
+</code></pre>
+
+
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now, we can match it with our predicted entities using function <code>match_whitelist</code>.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+
+<pre><code class="language-python">match_whitelist(clusters,
+                whitelist,
+                scorer=partial_token_set_ratio,
+                score_cutoff=80,
+                aggregate_cluster=True,
+                to_dataframe=True).sort_values('prominence_rank', ascending=True)
+</code></pre>
+
+
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="scoped">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+<thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>word</th>
+      <th>entity_group</th>
+      <th>score</th>
+      <th>start</th>
+      <th>end</th>
+      <th>placement</th>
+      <th>cluster_id</th>
+      <th>prominence_score</th>
+      <th>prominence_rank</th>
+      <th>matches</th>
+    </tr>
+  </thead>
+<tbody>
+    <tr>
+      <th>0</th>
+      <td>Donald Trump</td>
+      <td>PER</td>
+      <td>0.293968</td>
+      <td>96</td>
+      <td>13</td>
+      <td>lead</td>
+      <td>Donald Trump</td>
+      <td>5.0</td>
+      <td>1</td>
+      <td>[Donald Trump]</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Donald Trump</td>
+      <td>PER</td>
+      <td>0.981178</td>
+      <td>45</td>
+      <td>22</td>
+      <td>body</td>
+      <td>Donald Trump</td>
+      <td>5.0</td>
+      <td>1</td>
+      <td>[Donald Trump]</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>trumps</td>
+      <td>PER</td>
+      <td>0.557752</td>
+      <td>36</td>
+      <td>24</td>
+      <td>title</td>
+      <td>Donald Trump</td>
+      <td>5.0</td>
+      <td>1</td>
+      <td>[Donald Trump]</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>Trump</td>
+      <td>PER</td>
+      <td>0.048489</td>
+      <td>24</td>
+      <td>6</td>
+      <td>body</td>
+      <td>Donald Trump</td>
+      <td>5.0</td>
+      <td>1</td>
+      <td>[Donald Trump]</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>Donald</td>
+      <td>PER</td>
+      <td>0.285257</td>
+      <td>80</td>
+      <td>46</td>
+      <td>title</td>
+      <td>Donald Trump</td>
+      <td>5.0</td>
+      <td>1</td>
+      <td>[Donald Trump]</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>J. biden</td>
+      <td>PER</td>
+      <td>0.084998</td>
+      <td>10</td>
+      <td>54</td>
+      <td>body</td>
+      <td>joe biden</td>
+      <td>4.0</td>
+      <td>2</td>
+      <td>[Joe Biden]</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>joe biden</td>
+      <td>PER</td>
+      <td>0.607045</td>
+      <td>83</td>
+      <td>66</td>
+      <td>title</td>
+      <td>joe biden</td>
+      <td>4.0</td>
+      <td>2</td>
+      <td>[Joe Biden]</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Biden</td>
+      <td>PER</td>
+      <td>0.535421</td>
+      <td>45</td>
+      <td>58</td>
+      <td>lead</td>
+      <td>joe biden</td>
+      <td>4.0</td>
+      <td>2</td>
+      <td>[Joe Biden]</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Bide</td>
+      <td>PER</td>
+      <td>0.304502</td>
+      <td>67</td>
+      <td>77</td>
+      <td>lead</td>
+      <td>joe biden</td>
+      <td>4.0</td>
+      <td>2</td>
+      <td>[Joe Biden]</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Whitelist matching can also be conducted using <code>Whitelist</code> subclasses. In the example below, NER output is compared to a <code>Whitelist</code> consisting of <code>Cities</code>.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+
+<pre><code class="language-python">from fuzzup.whitelists import Cities
+
+LOCATIONS = [{'word': 'Viborg', 'entity_group': 'LOC', 'cluster_id' : 'Viborg'}, 
+             {'word': 'Uldum', 'entity_group': 'ORG', 'cluster_id' : 'Uldum' }]
+
+# initialize whitelist
+cities = Cities()
+
+# clustering and whitelist matching
+clusters = fuzzy_cluster(LOCATIONS)
+matches = cities(clusters,
+                 score_cutoff=90)
+
+matches
+</code></pre>
+
+
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>
+<code>INFO:fuzzup.whitelists:Loading whitelist: city
+INFO:fuzzup.whitelists:Done loading.
+</code>
+</pre>
+</div>
+</div>
+<div class="output_area">
+<div class="output_text output_subarea output_execute_result">
+<pre>
+<code>[{&#39;word&#39;: &#39;Viborg&#39;,
+  &#39;entity_group&#39;: &#39;LOC&#39;,
+  &#39;cluster_id&#39;: &#39;Viborg&#39;,
+  &#39;matches&#39;: [&#39;Visborg&#39;, &#39;Viborg&#39;],
+  &#39;versions&#39;: {None},
+  &#39;mappings&#39;: [{&#39;municipality&#39;: &#39;Mariagerfjord Kommune&#39;,
+    &#39;eblocal_id&#39;: 10887,
+    &#39;dawa_id&#39;: &#39;12337669-ca46-6b98-e053-d480220a5a3f&#39;,
+    &#39;lon_lat&#39;: (10.15028458, 56.73531236)},
+   {&#39;municipality&#39;: &#39;Silkeborg Kommune&#39;,
+    &#39;eblocal_id&#39;: 10790,
+    &#39;dawa_id&#39;: nan,
+    &#39;lon_lat&#39;: (9.36897659, 56.41681148)}]}]</code>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href=".." class="md-footer__link md-footer__link--prev" aria-label="Previous: Home" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Home
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../code_reference/" class="md-footer__link md-footer__link--next" aria-label="Next: Code Reference" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Code Reference
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.bd0b6b67.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.9f3ca3d1.min.js"></script>
+      
+    
+  </body>
+</html>

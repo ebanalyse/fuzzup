@@ -18,6 +18,8 @@ from fuzzup.utils import complist
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+EBLOCAL_ENDPOINT = "https://eb-magna.com/api"
+
 # helper function
 def clean_string(x):
     out = re.sub(r"\([^()]*\)", "", x)
@@ -78,30 +80,8 @@ def get_cvrdev_company(name: str) -> Dict:
     return record_list
 
 
-def get_eblocal_names():
-    url = "https://misty-beirut-ryz6j4qt64tt.vapor-farm-b1.com/api/eblocal_aliases?big_cities=true"
-    eblocals = requests.get(url).json()
-    # remove "hits"
-    meta = eblocals[0]
-    meta["list_type"] = "eblocal_aliases_big_cities"
-    eblocals.pop(0)
-
-    out = {
-        x["name"]: {
-            "id": x["eblocal_id"],
-            "label": x["name"],
-            "type": "id_eblocal",
-            "version": meta.get("version"),
-        }
-        for x in eblocals
-    }
-    return out
-
-
 def get_eblocal_organizations():
-    url = (
-        "https://misty-beirut-ryz6j4qt64tt.vapor-farm-b1.com/api/eblocal_organisations"
-    )
+    url = EBLOCAL_ENDPOINT + "/eblocal_organisations"
     eblocal_organizations = requests.get(url).json()
     # remove "hits"
     meta = eblocal_organizations[0]
@@ -111,7 +91,7 @@ def get_eblocal_organizations():
         x["name"]: {
             "id": x["eblocal_id"],
             "label": x["eblocal_name"],
-            "type": "id_eblocal_organization",
+            "type": "id_eblocal",
             "version": str(meta.get("version_number"))
             + "_"
             + str(meta.get("list_type")),
@@ -147,7 +127,6 @@ def get_politicians():
     )
     ccount = 0
     print(f"# records: {totalcount}")
-
     results = []
     while ccount < totalcount:
         r = requests.get(url, params={"$skip": ccount})
@@ -253,7 +232,7 @@ def get_municipalities():
 
 
 def get_eblocal_names():
-    url = "https://misty-beirut-ryz6j4qt64tt.vapor-farm-b1.com/api/eblocal_aliases?big_cities=true"
+    url = EBLOCAL_ENDPOINT + "/eblocal_aliases?big_cities=true"
     eblocals = requests.get(url).json()
     # remove "hits"
     meta = eblocals[0]
@@ -586,7 +565,6 @@ class EBLocalNames(Whitelist):
     """
 
     def __init__(self, **kwargs):
-
         super().__init__(
             function_load=get_eblocal_names,
             title="eblocal_name",
@@ -603,7 +581,6 @@ class Neighborhoods(Whitelist):
     """
 
     def __init__(self, **kwargs):
-
         super().__init__(
             function_load=get_eblocal_neighborhoods,
             title="neighborhood",
@@ -614,7 +591,6 @@ class Neighborhoods(Whitelist):
 
 class Companies(Whitelist):
     def __init__(self, **kwargs):
-
         super().__init__(
             function_load=get_eblocal_organizations,
             title="company",
@@ -625,7 +601,6 @@ class Companies(Whitelist):
 
 class Politicians(Whitelist):
     def __init__(self, **kwargs):
-
         super().__init__(
             function_load=get_politicians,
             title="politician",
